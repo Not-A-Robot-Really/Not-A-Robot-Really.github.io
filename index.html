@@ -23,11 +23,11 @@
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden; -webkit-font-smoothing: antialiased; position: relative;}
 
-/* ─── MATH WATERFALL (SPEED REDUCED) ─── */
+/* ─── MATH WATERFALL (EXTENDED TO CENTER & SPREAD OUT) ─── */
 .math-waterfall {
   position: absolute;
   top: 0;
-  width: 120px;
+  width: 25%; /* Increased width to extend further toward the center */
   height: 100%;
   pointer-events: none;
   z-index: 100;
@@ -39,9 +39,10 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;ove
   position: absolute;
   font-family: 'Playfair Display', serif;
   font-weight: 900;
-  color: rgba(0, 0, 0, 0.35);
+  color: rgba(0, 0, 0, 0.5); 
   user-select: none;
   transition: transform 0.1s linear;
+  white-space: nowrap;
 }
 
 /* ─── NAV & LOGO ─── */
@@ -58,7 +59,6 @@ nav{
 
 nav ul{list-style:none;display:flex;gap:3rem}
 
-/* ─── NAV HOVER EFFECTS (SUBTLE ENLARGE & DARK WHITE/GREY) ─── */
 nav a.nav-link{
   display: inline-block;
   color: #FFFFFF; 
@@ -67,8 +67,8 @@ nav a.nav-link{
   transition: transform 0.3s ease, color 0.3s ease;
 }
 nav a.nav-link:hover {
-  transform: scale(1.1); /* Less dramatic enlargement */
-  color: #CCCCCC; /* Darker white / Grey */
+  transform: scale(1.1);
+  color: #CCCCCC;
 }
 
 /* ─── ANIMATION CLASSES ─── */
@@ -151,8 +151,16 @@ nav a.nav-link:hover {
 /* ─── HERO & SECTIONS ─── */
 .hero{ min-height:95vh;display:flex;flex-direction:column; justify-content:center;align-items:center;text-align:center; padding:10rem 2rem 6rem; position:relative; z-index: 2;}
 .hero-quote{ font-family:'DM Sans', sans-serif; font-weight: 400; font-size: clamp(1.4rem, 2.5vw, 1.8rem); color:var(--text-muted); max-width:850px; line-height:1.6; margin-bottom:4rem; opacity:0; transform:translateY(20px); animation:fadeUp .9s .2s forwards; }
-.hero-title{ font-family:'Playfair Display',serif;font-size:clamp(4rem,11vw,9.5rem); font-weight:900;letter-spacing:.12em;text-transform:uppercase; line-height:1;margin-bottom:3rem; color: var(--text); opacity:0;animation:fadeUp .9s .5s forwards; }
-.hero-title .r{color:var(--red)}.hero-title .b{color:var(--blue)}
+
+.hero-logo {
+  max-width: 650px; 
+  width: 90%;
+  height: auto;
+  margin-bottom: 3rem;
+  opacity: 0;
+  animation: fadeUp .9s .5s forwards;
+}
+
 .hero-sub{ font-size:clamp(1.1rem,1.8vw,1.3rem);color:var(--text); max-width:750px;line-height:1.8;margin-bottom:4rem; opacity:0;animation:fadeUp .9s .8s forwards; }
 
 .wide-bg{width:100%;padding:10rem 2rem; position: relative; z-index: 2;}
@@ -186,6 +194,15 @@ nav a.nav-link:hover {
 footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-top:1px solid var(--border); }
 .footer-logo { height: 80px; margin: 0 auto 2.5rem; }
 
+/* ─── FOOTER TEXT UPDATE ─── */
+.footer-copy {
+  margin-top: 4rem;
+  font-size: 0.9rem;
+  color: #000000; /* All black */
+  opacity: 0.8;
+  font-weight: 400; /* Non-bolded */
+}
+
 @keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
 .rv{opacity:0;transform:translateY(40px);transition:all .8s ease}
 .rv.vis{opacity:1;transform:translateY(0)}
@@ -195,7 +212,8 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
   .wide-bg{padding:7rem 1.5rem}
   .heading{font-size: 3rem;}
   .side-by-side { grid-template-columns: 1fr; }
-  .math-waterfall { width: 40px; }
+  .math-waterfall { width: 60px; }
+  .hero-logo { max-width: 80%; }
 }
 </style>
 </head>
@@ -217,8 +235,8 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
 
 <section class="hero">
   <p class="hero-quote">"Wisdom is not a product of schooling but of the lifelong attempt to acquire it." — Albert Einstein</p>
-  <h1 class="hero-title"><span class="r">C</span>ONCEPTI<span class="b">O</span>N</h1>
-  <p class="hero-sub">Providing young learners the <span class="phrase-bold">spark of learning</span> by helping to provide new, <span class=\"phrase-bold\">hands-on perspectives</span> on high level mathematics that will increase the students' interest in learning math in a classroom setting.</p>
+  <img src="transparent logo.png" alt="Conception Logo" class="hero-logo">
+  <p class="hero-sub">Providing young learners the <span class="phrase-bold">spark of learning</span> by helping to provide new, <span class="phrase-bold">hands-on perspectives</span> on high level mathematics that will increase the students' interest in learning math in a classroom setting.</p>
   <div class="inner">
     <img src="school.avif" alt="Classroom setting" class="inline-img hero-img rv">
   </div>
@@ -349,32 +367,44 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
     <img src="transparent logo.png" alt="Conception Logo" class="logo-img footer-logo">
   </a>
   <p style="font-weight: 600; color: var(--text-muted); font-size: 1.1rem;">Hands-on math education for the <span class="phrase-bold">next generation of thinkers</span>.</p>
-  <p style="margin-top:4rem; font-size:0.9rem; color: var(--text-muted); opacity: 0.8;">© <span class="stat-highlight-red">2025</span> Conception · Research provided via July <span class="stat-highlight-red">2025</span> RAND Study & NIH <span class="stat-highlight-red">2018</span></p>
+  <p class="footer-copy">© 2025 Conception · Research provided via July 2025 RAND Study & NIH 2018</p>
 </footer>
 
 <script>
-// Updated Logic: Slower Waterfall + Adjusted Frequency
+// WATERFALL LOGIC - UPDATED FOR CENTER SPREAD & OFF-TAB PREVENTION
 const symbolsList = ['+', '−', '÷', '×', 'e', 'π', 'x', 'x²', '√', '∫', '∞', '∑', 'Δ', 'θ', 'λ', 'Ω'];
 const containers = [document.getElementById('leftWaterfall'), document.getElementById('rightWaterfall')];
 
 function createSymbol() {
+  // PREVENT STACKING: If the user is on a different tab, stop spawning
+  if (document.hidden) return;
+
   containers.forEach(container => {
-    // Density: Spawning 2 symbols per call for cleaner look
     for(let i=0; i<2; i++){
       const sym = document.createElement('div');
       sym.className = 'math-symbol';
       sym.textContent = symbolsList[Math.floor(Math.random() * symbolsList.length)];
       const currentScroll = window.scrollY;
       const startY = currentScroll - 100;
-      const leftPos = Math.random() * 100; 
-      const size = 16 + Math.random() * 18;
-      const speed = 2 + Math.random() * 2.5; // Slower Fall Speed
-      sym.style.left = leftPos + 'px';
+      
+      // Spreads symbols across the 25% width of the container
+      const leftPos = Math.random() * 95; 
+      const size = 20 + Math.random() * 22; 
+      const speed = 1 + Math.random() * 1.5; 
+      
+      sym.style.left = leftPos + '%';
       sym.style.fontSize = size + 'px';
       sym.style.top = startY + 'px';
       container.appendChild(sym);
+      
       let posY = startY;
       function animate() {
+          // If tab is hidden during existing animation, wait
+          if (document.hidden) {
+            requestAnimationFrame(animate);
+            return;
+          }
+          
           posY += speed;
           sym.style.transform = `translateY(${posY - startY}px) rotate(${posY * 0.15}deg)`;
           if (posY < window.scrollY + window.innerHeight + 200) {
@@ -387,8 +417,7 @@ function createSymbol() {
     }
   });
 }
-// Interval increased to 500ms for slightly slower generation rate
-setInterval(createSymbol, 500);
+setInterval(createSymbol, 600);
 
 const io = new IntersectionObserver(entries=>{
   entries.forEach(e=>{
