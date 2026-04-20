@@ -47,7 +47,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;ove
 
 /* ─── NAV & LOGO ─── */
 nav{
-  position:fixed;top:0;left:0;right:0;z-index:200;
+  position:fixed;top:0;left:0;right:0;z-index:1500;
   padding:0.8rem 4rem;
   display:flex;justify-content:space-between;align-items:center;
   background: var(--navy);
@@ -259,6 +259,391 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
   .def-box{padding:1.5rem}
   .math-waterfall{display:none}
 }
+
+/* ═══════════════════════════════════════════════════
+   DEMO INTEGRATION STYLES
+   ═══════════════════════════════════════════════════ */
+
+/* Wrapper that hosts the full demo, overlaid over the site */
+#demo-wrapper {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    inset: 0;
+    z-index: 150;
+    background-color: #f0f2f5;
+    overflow-x: hidden;
+    overflow-y: auto;
+    min-height: 100vh;
+    padding-top: 66px; /* push content below nav bar */
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+#demo-wrapper.active { display: flex; }
+
+/* ── All demo CSS below (body/html rules absorbed into #demo-wrapper above) ── */
+
+:root {
+    --bg-color: #f0f2f5;
+    --apple-color: #e74c3c;
+    --candy-color: #ff4081;
+    --action-add: #27ae60;
+    --action-remove: #e74c3c;
+    --metal-dark: #7f8c8d;
+    --pan-color: rgba(255, 255, 255, 0.95);
+    --color-balanced: #27ae60;
+    --color-unbalanced: #e74c3c;
+}
+
+#main-logo {
+    position: fixed; top: 15px; left: 15px; width: 220px; z-index: 110;
+}
+
+#history-controls {
+    position: fixed; top: 22px; left: 310px; z-index: 110;
+    display: flex; gap: 12px;
+}
+.btn-history {
+    background: white; border: 2.5px solid #000; border-radius: 10px;
+    width: 50px; height: 50px; cursor: pointer; display: flex;
+    align-items: center; justify-content: center; transition: all 0.2s;
+}
+.btn-history:hover:not(:disabled) { background: #f8f9fa; transform: translateY(-2px); }
+.btn-history:disabled { opacity: 0.3; cursor: not-allowed; box-shadow: none; }
+.btn-history svg { width: 28px; height: 28px; fill: #444; }
+
+#left-panel { position: fixed; top: 105px; left: 15px; z-index: 100; display: flex; flex-direction: column; gap: 12px; }
+
+#variable-legend {
+    background: white; padding: 18px 22px; border-radius: 18px;
+    display: flex; flex-direction: column; gap: 13px; border: 2.5px solid #000;
+}
+
+.legend-item { display: flex; align-items: center; gap: 15px; font-weight: 800; font-size: 1.6rem; }
+.legend-img { width: 45px; height: 45px; }
+
+#equation-container {
+    margin-top: 20px; position: relative; left: 22px; background: white;
+    padding: 15px 45px; border-radius: 60px; display: flex;
+    align-items: center; gap: 25px; font-size: 2.2rem; font-weight: 800;
+    z-index: 5; border: 2.5px solid #000;
+}
+
+#stage {
+    position: relative; width: 1100px; height: 520px; margin-top: 10px;
+}
+
+#piles-area {
+    position: absolute; left: -210px; bottom: -30px; width: 400px;
+    height: 120px; display: flex; gap: 60px; align-items: flex-end; z-index: 10;
+}
+
+.pile-container {
+    position: relative; width: 150px; height: 80px; cursor: grab;
+    display: flex; justify-content: center;
+}
+
+.pile-item { position: absolute; width: 50px; height: 50px; pointer-events: none; }
+
+#base {
+    position: absolute; bottom: 0; left: 52%; transform: translateX(-50%);
+    width: 240px; height: 25px; background: var(--metal-dark); border-radius: 12px 12px 0 0;
+}
+
+#pillar {
+    position: absolute; bottom: 25px; left: 52%; transform: translateX(-50%);
+    width: 35px; height: 320px; background: linear-gradient(to right, #7f8c8d, #bdc3c7, #7f8c8d);
+}
+
+#pivot-point {
+    position: absolute; top: 180px; left: 52%; transform: translate(-50%, -50%);
+    width: 18px; height: 18px; background: #f1c40f; border-radius: 50%; z-index: 10;
+}
+
+#beam {
+    position: absolute; top: 180px; left: calc(52% - 325px); width: 650px; height: 14px;
+    background: #34495e; border-radius: 7px; transform-origin: center center;
+    transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+    display: flex; justify-content: space-between;
+}
+
+.pan-assembly {
+    width: 180px; display: flex; flex-direction: column; align-items: center;
+    transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+}
+
+.hanger { width: 3px; height: 140px; background: #95a5a6; }
+
+.pan {
+    width: 190px; min-height: 110px; background: var(--pan-color);
+    border: 3px solid #000; border-radius: 0 0 55px 55px;
+    display: flex; flex-wrap: wrap-reverse; justify-content: center;
+    padding: 12px; gap: 6px;
+}
+
+#val-compare {
+    position: absolute; bottom: 90px; left: 52%; transform: translateX(-50%);
+    font-size: 3.2rem; font-weight: 900; color: #2c3e50;
+    background: rgba(255,255,255,0.9); padding: 6px 16px;
+    border-radius: 10px; line-height: 1; z-index: 5;
+    min-width: 48px; text-align: center;
+    border: 3px solid #000;
+}
+
+.pan-value {
+    margin-top: 15px; font-size: 2rem; font-weight: 900; color: #2c3e50;
+    background: rgba(255,255,255,0.8); padding: 5px 15px;
+    border-radius: 10px; min-width: 40px; text-align: center; border: 2.5px solid #000;
+}
+
+.item-img { width: 45px; height: 45px; cursor: grab; position: relative; z-index: 2; }
+.tossed { pointer-events: none; z-index: 999; transition: none !important; }
+.falling { position: fixed; pointer-events: none; z-index: 1000; }
+
+#bottom-bar {
+    position: relative; z-index: 100; background: white; width: 100%; 
+    padding: 25px 20px; display: flex; justify-content: center; gap: 15px;
+    align-items: center; margin-top: auto; border-top: 2.5px solid #000;
+    box-shadow: none;
+}
+
+.control-group {
+    padding: 0 20px;
+    display: flex; flex-direction: column; gap: 10px; align-items: center;
+    border-right: 2.5px solid #000; 
+}
+
+.btn-action {
+    color: white; border: none; padding: 12px 18px; border-radius: 10px;
+    cursor: pointer; font-weight: 700; font-size: 0.9rem; width: 100%;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: none;
+}
+.btn-action:active { transform: translateY(2px); box-shadow: none; }
+
+.btn-rem { background: var(--action-remove); } 
+.btn-add { background: var(--action-add); }
+
+.btn-icon {
+    background: white; border: 2.5px solid #000; border-radius: 14px;
+    width: 60px; height: 60px; display: flex; align-items: center;
+    justify-content: center; cursor: pointer; transition: all 0.2s;
+    flex-shrink: 0;
+    box-shadow: none;
+}
+.btn-icon:hover { background: #f8f9fa; border-color: #000; transform: translateY(-2px); }
+.btn-icon.active { background: #2c3e50; border-color: #000; }
+.btn-icon.active svg { fill: white; }
+.btn-icon svg { width: 32px; height: 32px; fill: #555; }
+
+#eq-input {
+    padding: 12px; border-radius: 10px; border: 2.5px solid #000; width: 160px; 
+    text-align: center; font-weight: bold; font-size: 1rem;
+}
+
+#drag-ghost { position: absolute; top: -1000px; left: -1000px; width: 50px; height: 50px; }
+
+/* MOVED UP: Reduced 'top' from 25px to 15px */
+#side-calculator, #action-journal {
+    position: fixed; top: 15px; right: -340px; width: 280px; 
+    background: white; transition: right 0.5s cubic-bezier(0.77, 0, 0.175, 1); 
+    z-index: 1000; padding: 20px; border: 2.5px solid #000; border-radius: 18px;
+    overflow: hidden;
+}
+#side-calculator.open  { right: 25px; }
+#action-journal        { display: flex; flex-direction: column; }
+#action-journal.visible { right: 25px; }
+
+.calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.c-btn { padding: 12px 5px; border-radius: 8px; border: 2px solid #000; cursor: pointer; font-weight: bold; font-size: 1rem; background: #fafafa; }
+.c-btn-op { background: var(--apple-color); color: white; border: none; }
+.c-btn-pink { background: var(--candy-color); color: white; border: none; }
+
+#journal-header, #calc-header {
+    padding: 14px; font-weight: 900; font-size: 0.9rem; text-transform: uppercase;
+    color: #444; background: #fafafa; border-bottom: 2px solid #f0f0f0;
+    display: flex; align-items: center; gap: 7px;
+    margin: -20px -20px 15px -20px;
+    flex-shrink: 0;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+#journal-entries {
+    flex: 1 1 auto; min-height: 150px; max-height: 400px; overflow-y: auto;
+    display: flex; flex-direction: column; scroll-behavior: smooth;
+}
+
+.je-eq-row, .je-op-row {
+    display: grid; grid-template-columns: 1fr 20px 1fr;
+    font-family: 'Courier New', monospace; font-size: 1.15rem;
+    font-weight: 800; color: #2c3e50; padding: 2px 0;
+}
+.je-cell-l { text-align: right; padding-right: 5px; }
+.je-cell-m { text-align: center; color: #555; }
+.je-cell-r { text-align: left; padding-left: 5px; }
+
+.je-eq-row.je-first {
+    background: #eaf4ff; border-radius: 10px; padding: 8px 12px; margin-bottom: 8px;
+}
+.je-eq-row.je-first .je-cell-l, .je-eq-row.je-first .je-cell-m, .je-eq-row.je-first .je-cell-r {
+    color: #3498db;
+}
+
+.je-op-row .je-cell-l.balanced, .je-op-row .je-cell-r.balanced { color: var(--color-balanced); }
+.je-op-row .je-cell-l.unbalanced, .je-op-row .je-cell-r.unbalanced { color: var(--color-unbalanced); }
+
+.je-rule { border: none; border-top: 2px solid #bbb; margin: 4px 0 6px; }
+.je-step-block { margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed #eee; }
+#journal-empty { color: #bbb; text-align: center; padding: 25px 0; font-style: italic; }
+#journal-clear { font-size: 0.8rem; color: #aaa; cursor: pointer; margin-left: auto; background: none; border: 1px solid #ddd; border-radius: 4px; padding: 2px 6px; }
+#calc-close { font-size: 0.8rem; color: #aaa; cursor: pointer; margin-left: auto; background: none; border: 1px solid #ddd; border-radius: 4px; padding: 2px 6px; }
+
+/* ── MODE TOGGLE ── */
+#mode-toggle-group {
+    display: flex; align-items: center; gap: 8px;
+    padding-left: 15px;
+}
+.mode-btn {
+    padding: 10px 20px; border-radius: 10px; border: 2.5px solid #000;
+    font-weight: 700; font-size: 0.82rem; cursor: pointer; background: white;
+    color: #666; transition: all 0.2s; white-space: nowrap;
+}
+.mode-btn.active {
+    background: #2c3e50; color: white; border-color: #2c3e50;
+    box-shadow: none;
+}
+.mode-btn:hover:not(.active) { border-color: #000; background: #f8f9fa; }
+
+/* ── PRACTICE MODE OVERRIDES ── */
+body.practice-mode #val-l,
+body.practice-mode #val-r,
+body.practice-mode #val-compare { display: none !important; }
+
+body.practice-mode #btn-add-apple,
+body.practice-mode #btn-add-candy { display: none !important; }
+
+body.practice-mode #cg-equation,
+body.practice-mode #cg-slider { display: none !important; }
+
+body.practice-mode #piles-area { display: none !important; }
+
+body.practice-mode #legend-x-exp { display: none !important; }
+body.practice-mode #legend-x-prac { display: inline !important; }
+#legend-x-prac { display: none; }
+
+body.practice-mode #practice-answer-card { display: flex !important; }
+#practice-answer-card { display: none; }
+
+#practice-answer-card {
+    background: white; padding: 10px 14px 4px 14px; border-radius: 16px;
+    flex-direction: row; gap: 0; border: 2.5px solid #000;
+    align-items: stretch; text-align: center;
+}
+#practice-card-label {
+    display: flex; flex-direction: row; align-items: center; flex-wrap: nowrap;
+    justify-content: center; gap: 5px;
+    padding: 4px 16px 4px 4px;
+    font-size: 1.15rem; font-weight: 900; color: var(--apple-color);
+    white-space: nowrap;
+}
+#practice-card-label img { width: 32px; height: 32px; flex-shrink: 0; }
+#practice-card-right {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 5px; padding-left: 12px; flex: 1;
+}
+#practice-answer-input {
+    width: 90px; padding: 6px 4px; border-radius: 10px;
+    border: 2.5px solid #000; font-size: 1.4rem; font-weight: 900;
+    text-align: center; color: #2c3e50; transition: border-color 0.2s;
+    -moz-appearance: textfield;
+}
+#practice-answer-input::-webkit-outer-spin-button,
+#practice-answer-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+#practice-answer-input:focus { outline: none; border-color: #27ae60; }
+#btn-check-answer {
+    background: #27ae60; color: white; border: none; padding: 7px 10px;
+    border-radius: 10px; font-weight: 900; font-size: 0.85rem; cursor: pointer;
+    transition: all 0.2s; width: 90px;
+    margin-top: 10px;
+}
+#btn-check-answer:hover { background: #219a52; transform: translateY(-1px); }
+#btn-check-answer:active { transform: translateY(3px); box-shadow: none; }
+#btn-check-answer:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+#practice-feedback {
+    font-size: 0.75rem; font-weight: 800; text-align: center;
+    min-height: 16px; color: #e74c3c; max-width: 90px;
+}
+
+#congrats-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    display: none; align-items: center; justify-content: center;
+    z-index: 2000; backdrop-filter: blur(4px);
+}
+#congrats-overlay.show { display: flex; }
+#congrats-box {
+    background: white; border-radius: 24px; padding: 50px 60px;
+    text-align: center; border: 2.5px solid #000;
+    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); max-width: 420px;
+}
+@keyframes popIn {
+    from { transform: scale(0.6); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+}
+#congrats-box .big-emoji { font-size: 5rem; display: block; margin-bottom: 10px; }
+#congrats-box h2 { font-size: 2rem; color: #2c3e50; margin: 0 0 8px; }
+#congrats-box p  { color: #7f8c8d; font-size: 1.1rem; margin: 0 0 28px; }
+#btn-congrats-restart {
+    background: #27ae60; color: white; border: none; padding: 14px 36px;
+    border-radius: 14px; font-weight: 800; font-size: 1.1rem; cursor: pointer;
+    box-shadow: none; transition: all 0.2s;
+}
+#btn-congrats-restart:hover { background: #219a52; transform: translateY(-2px); }
+#btn-congrats-restart:active { transform: translateY(2px); box-shadow: none; }
+
+#gameover-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+    display: none; align-items: center; justify-content: center;
+    z-index: 2000; backdrop-filter: blur(4px);
+}
+#gameover-overlay.show { display: flex; }
+#gameover-box {
+    background: white; border-radius: 24px; padding: 50px 60px;
+    text-align: center; border: 2.5px solid #000;
+    animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); max-width: 420px;
+}
+#gameover-box .big-emoji { font-size: 5rem; display: block; margin-bottom: 10px; }
+#gameover-box h2 { font-size: 2rem; color: #2c3e50; margin: 0 0 8px; }
+#gameover-box .answer-reveal {
+    font-size: 2.5rem; font-weight: 900; color: #e74c3c;
+    background: #fdf0f0; border-radius: 14px; padding: 14px 30px;
+    margin: 10px 0 28px; display: inline-block;
+}
+#gameover-box p { color: #7f8c8d; font-size: 1rem; margin: 0 0 10px; }
+#btn-gameover-restart {
+    background: #e74c3c; color: white; border: none; padding: 14px 36px;
+    border-radius: 14px; font-weight: 800; font-size: 1.1rem; cursor: pointer;
+    box-shadow: none; transition: all 0.2s;
+}
+#btn-gameover-restart:hover { background: #c0392b; transform: translateY(-2px); }
+#btn-gameover-restart:active { transform: translateY(2px); box-shadow: none; }
+
+#cg-practice-actions { 
+    display: none; flex-direction: column; gap: 8px; align-items: center; 
+    padding: 0 20px 0 16px; 
+    border-right: 2.5px solid #000;
+}
+body.practice-mode #cg-practice-actions { display: flex; }
+.btn-practice-util {
+    color: white; border: none; padding: 11px 18px; border-radius: 10px;
+    cursor: pointer; font-weight: 700; font-size: 0.88rem; width: 140px;
+    transition: all 0.2s; box-shadow: none;
+}
+.btn-practice-util:active { transform: translateY(2px); box-shadow: none; }
+#btn-give-up   { background: #e74c3c; }
+#btn-give-up:hover { background: #c0392b; }
+#btn-refresh-eq { background: #7f8c8d; }
+#btn-refresh-eq:hover { background: #636e72; }
 </style>
 </head>
 <body>
@@ -274,6 +659,7 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
     <li><a href="#problem" class="nav-link">The Problem</a></li>
     <li><a href="#research" class="nav-link">Research</a></li>
     <li><a href="#mission" class="nav-link">Mission</a></li>
+    <li><a href="#" class="nav-link" id="demo-nav-link">Demo</a></li>
   </ul>
 </nav>
 
@@ -414,7 +800,190 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
   <p class="footer-copy">© 2025 Conception · Research provided via July 2025 RAND Study & NIH 2018</p>
 </footer>
 
+<!-- ═══════════════════════════════════════════════════
+     DEMO WRAPPER — Apples & Candy Balance Scale Demo
+     ═══════════════════════════════════════════════════ -->
+<div id="demo-wrapper" ondragover="allow(event)" ondrop="trash(event)">
+
+    <img id="main-logo" src="transparent logo.png" alt="Logo" onerror="this.style.display='none'">
+    
+    <div id="history-controls">
+        <button class="btn-history" id="undo-btn" onclick="undo()" title="Undo" disabled>
+            <svg viewBox="0 0 24 24"><path d="M12.5,8C9.85,8 7.45,9 5.6,10.6L2,7V16H11L7.38,12.38C8.77,11.22 10.54,10.5 12.5,10.5C16.04,10.5 19.05,12.81 20.1,16L22.47,15.22C21.08,11.03 17.15,8 12.5,8Z"/></svg>
+        </button>
+        <button class="btn-history" id="redo-btn" onclick="redo()" title="Redo" disabled>
+            <svg viewBox="0 0 24 24"><path d="M18.4,10.6C16.55,9 14.15,8 11.5,8C6.85,8 2.92,11.03 1.53,15.22L3.9,16C4.95,12.81 7.96,10.5 11.5,10.5C13.46,10.5 15.23,11.22 16.62,12.38L13,16H22V7L18.4,10.6Z"/></svg>
+        </button>
+    </div>
+
+    <img id="drag-ghost" src="" alt="ghost">
+
+    <div id="left-panel">
+        <div id="variable-legend">
+            <div class="legend-item" style="color: var(--candy-color);">
+                CANDY <img src="candy.avif" class="legend-img"> = 1
+            </div>
+            <div class="legend-item" style="color: var(--apple-color);">
+                APPLE <img src="apple.webp" class="legend-img"> =&nbsp;
+                <span id="legend-x-exp"><span id="legend-x">3</span></span>
+                <span id="legend-x-prac">?</span>
+            </div>
+        </div>
+
+        <div id="practice-answer-card">
+            <div id="practice-card-label">
+                <span>What is</span>
+                <img src="apple.webp" alt="apple"><span>?</span>
+            </div>
+            <div id="practice-card-right">
+                <input type="number" id="practice-answer-input" placeholder="?" min="1">
+                <button id="btn-check-answer" onclick="checkAnswer()">✓ Check!</button>
+                <div id="practice-feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="equation-container">
+        <span id="txt-left">0</span>
+        <div id="status-light" class="indicator">?</div>
+        <span id="txt-right">0</span>
+    </div>
+
+    <div id="stage">
+        <div id="piles-area">
+            <div class="pile-container" draggable="true" ondragstart="drag(event, 'apple')">
+                <div id="apple-pile-visual"></div>
+            </div>
+            <div class="pile-container" draggable="true" ondragstart="drag(event, 'candy')">
+                <div id="candy-pile-visual"></div>
+            </div>
+        </div>
+
+        <div id="base"></div>
+        <div id="pillar"></div>
+        <div id="pivot-point"></div>
+        <div id="val-compare">=</div>
+        <div id="beam">
+            <div id="left-assembly" class="pan-assembly">
+                <div class="hanger"></div>
+                <div id="pan-l" class="pan" ondrop="drop(event, 'l')" ondragover="allow(event)"></div>
+                <div id="val-l" class="pan-value">0</div>
+            </div>
+            <div id="right-assembly" class="pan-assembly">
+                <div class="hanger"></div>
+                <div id="pan-r" class="pan" ondrop="drop(event, 'r')" ondragover="allow(event)"></div>
+                <div id="val-r" class="pan-value">0</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="bottom-bar">
+
+        <div id="cg-practice-actions">
+            <button id="btn-give-up" class="btn-practice-util" onclick="giveUp()">Give Up</button>
+            <button id="btn-refresh-eq" class="btn-practice-util" onclick="generatePracticeEquation()">↺ New Puzzle</button>
+        </div>
+
+        <div class="control-group">
+            <strong>Algebra Actions</strong>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 440px;">
+                <button class="btn-action btn-rem" onclick="tossFromBoth('apple')">Remove 1 🍎 Both Sides</button>
+                <button id="btn-add-apple" class="btn-action btn-add" onclick="dropIntoBoth('apple')">Add 1 🍎 Both Sides</button>
+                <button class="btn-action btn-rem" onclick="tossFromBoth('candy')">Remove 1 🍬 Both Sides</button>
+                <button id="btn-add-candy" class="btn-action btn-add" onclick="dropIntoBoth('candy')">Add 1 🍬 Both Sides</button>
+            </div>
+        </div>
+
+        <div id="cg-equation" class="control-group">
+            <strong>Equation</strong>
+            <input type="text" id="eq-input" placeholder="ex: 3x+2=1x+8">
+            <button class="btn-action" style="background:#34495e" onclick="parseEquation()">Set Scale</button>
+        </div>
+
+        <div id="cg-slider" class="control-group" style="margin-right: 5px;">
+            <strong>Value of 🍎:</strong>
+            <input type="range" id="x-range" min="0" max="10" value="3" oninput="sync()">
+            <div id="x-label" style="font-weight:bold; color:#3498db;">x = 3</div>
+        </div>
+
+        <button class="btn-icon" id="btn-journal-icon" title="Action Journal" onclick="toggleJournal()">
+            <svg viewBox="0 0 24 24"><path d="M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3M7,7H17V9H7V7M7,11H17V13H7V11M7,15H14V17H7V15Z" /></svg>
+        </button>
+
+        <button class="btn-icon" id="btn-calc-icon" title="Calculator" onclick="toggleCalcPanel()">
+            <svg viewBox="0 0 24 24"><path d="M19,3H5C3.89,3 3,3.9 3,5V19C3,20.1 3.89,21 5,21H19C20.1,21 21,20.1 21,19V5C21,3.9 20.1,3 19,3M7,6H17V9H7V6M7,11H9V13H7V11M7,15H9V17H7V15M11,11H13V13H11V11M11,15H13V17H11V15M15,11H17V17H15V11Z" /></svg>
+        </button>
+
+        <div id="mode-toggle-group">
+            <button id="mode-btn-exp" class="mode-btn active" onclick="setMode('experimental')">Experimental</button>
+            <button id="mode-btn-prac" class="mode-btn" onclick="setMode('practice')">Practice</button>
+        </div>
+    </div>
+
+    <div id="action-journal">
+        <div id="journal-header">
+            Steps
+        </div>
+        <div id="journal-entries">
+            <div id="journal-empty">Actions will appear here...</div>
+        </div>
+    </div>
+
+    <div id="side-calculator">
+        <div id="calc-header">
+            Calculator
+        </div>
+        <input type="text" id="calc-screen" readonly style="width:100%; height:45px; font-size:1.4rem; text-align:right; margin-bottom:12px; border: 2.5px solid #000; border-radius:10px; padding: 5px;">
+        <div class="calc-grid">
+            <button class="c-btn c-btn-pink" onclick="cls()">C</button>
+            <button class="c-btn" onclick="press('(')">(</button>
+            <button class="c-btn" onclick="press(')')">)</button>
+            <button class="c-btn c-btn-op" onclick="press('/')">÷</button>
+            <button class="c-btn" onclick="press('7')">7</button>
+            <button class="c-btn" onclick="press('8')">8</button>
+            <button class="c-btn" onclick="press('9')">9</button>
+            <button class="c-btn c-btn-op" onclick="press('*')">×</button>
+            <button class="c-btn" onclick="press('4')">4</button>
+            <button class="c-btn" onclick="press('5')">5</button>
+            <button class="c-btn" onclick="press('6')">6</button>
+            <button class="c-btn c-btn-op" onclick="press('-')">-</button>
+            <button class="c-btn" onclick="press('1')">1</button>
+            <button class="c-btn" onclick="press('2')">2</button>
+            <button class="c-btn" onclick="press('3')">3</button>
+            <button class="c-btn c-btn-op" onclick="press('+')">+</button>
+            <button class="c-btn" onclick="press('0')">0</button>
+            <button class="c-btn" onclick="press('.')">.</button>
+            <button class="c-btn c-btn-pink" style="grid-column: span 2;" onclick="solve()">=</button>
+        </div>
+    </div>
+
+    <div id="congrats-overlay">
+        <div id="congrats-box">
+            <span class="big-emoji">🎉</span>
+            <h2>Correct!</h2>
+            <p id="congrats-msg">Great job!</p>
+            <button id="btn-congrats-restart" onclick="restartPractice()">Play Again</button>
+        </div>
+    </div>
+
+    <div id="gameover-overlay">
+        <div id="gameover-box">
+            <span class="big-emoji">😔</span>
+            <h2>You Gave Up!</h2>
+            <p>The correct answer was:</p>
+            <div class="answer-reveal" id="gameover-answer">Apple = ?</div>
+            <p style="color:#bbb; font-size:0.85rem; margin-bottom:24px;">Keep practising — you've got this!</p>
+            <button id="btn-gameover-restart" onclick="restartPractice()">Try Again</button>
+        </div>
+    </div>
+
+</div><!-- end #demo-wrapper -->
+
 <script>
+// ═══════════════════════════════════════════════════
+// MAIN SITE JAVASCRIPT (unchanged)
+// ═══════════════════════════════════════════════════
+
 // WATERFALL LOGIC - UPDATED FOR CENTER SPREAD & OFF-TAB PREVENTION
 const symbolsList = ['+', '−', '÷', '×', 'e', 'π', 'x', 'x²', '√', '∫', '∞', '∑', 'Δ', 'θ', 'λ', 'Ω'];
 const containers = [document.getElementById('leftWaterfall'), document.getElementById('rightWaterfall')];
@@ -493,6 +1062,457 @@ function countUp(el,target,sfx){
     el.textContent=Math.round(c)+sfx;
   },20);
 }
+
+// ═══════════════════════════════════════════════════
+// DEMO NAV TAB SWITCHING
+// ═══════════════════════════════════════════════════
+
+document.getElementById('demo-nav-link').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('demo-wrapper').classList.add('active');
+});
+
+document.querySelectorAll('.nav-link:not(#demo-nav-link)').forEach(function(link) {
+    link.addEventListener('click', function() {
+        document.getElementById('demo-wrapper').classList.remove('active');
+    });
+});
+
+// ═══════════════════════════════════════════════════
+// DEMO JAVASCRIPT (unchanged from applesandcandydemo.html)
+// ═══════════════════════════════════════════════════
+
+        let data = { l: { a: 0, c: 0 }, r: { a: 0, c: 0 } };
+        let historyStack = [], redoStack = [], journalStack = [], redoJournalStack = [];
+
+        function pushState() {
+            historyStack.push(JSON.parse(JSON.stringify(data)));
+            journalStack.push(document.getElementById('journal-entries').innerHTML);
+            redoStack = []; redoJournalStack = [];
+            updateHistoryButtons();
+        }
+
+        function undo() {
+            if (!historyStack.length) return;
+            redoStack.push(JSON.parse(JSON.stringify(data)));
+            redoJournalStack.push(document.getElementById('journal-entries').innerHTML);
+            data = historyStack.pop();
+            document.getElementById('journal-entries').innerHTML = journalStack.pop();
+            renderItems(); sync(); updateHistoryButtons();
+        }
+
+        function redo() {
+            if (!redoStack.length) return;
+            historyStack.push(JSON.parse(JSON.stringify(data)));
+            journalStack.push(document.getElementById('journal-entries').innerHTML);
+            data = redoStack.pop();
+            document.getElementById('journal-entries').innerHTML = redoJournalStack.pop();
+            renderItems(); sync(); updateHistoryButtons();
+        }
+
+        function updateHistoryButtons() {
+            document.getElementById('undo-btn').disabled = historyStack.length === 0;
+            document.getElementById('redo-btn').disabled = redoStack.length === 0;
+        }
+
+        function buildLargePile(id, imgPath) {
+            const container = document.getElementById(id);
+            let idx = 0;
+            [6,5,4,3,2,1].forEach((rowSize, level) => {
+                for (let i = 0; i < rowSize; i++) {
+                    const img = document.createElement('img');
+                    img.src = imgPath; img.className = 'pile-item';
+                    const x = (i*22)+(level*11)-65+(Math.random()*8-4);
+                    const y = (level*-16)+(Math.random()*6-3);
+                    img.style.transform = `translate(${x}px,${y}px) rotate(${Math.random()*40-20}deg)`;
+                    img.style.zIndex = idx++;
+                    container.appendChild(img);
+                }
+            });
+        }
+        buildLargePile('apple-pile-visual', 'apple.webp');
+        buildLargePile('candy-pile-visual', 'candy.avif');
+
+        function allow(e) { e.preventDefault(); }
+
+        function drag(e, type, originSide = 'source') {
+            e.dataTransfer.setData("type", type);
+            e.dataTransfer.setData("origin", originSide);
+            const ghost = document.getElementById('drag-ghost');
+            ghost.src = type === 'apple' ? 'apple.webp' : 'candy.avif';
+            e.dataTransfer.setDragImage(ghost, 25, 25);
+        }
+
+        function drop(e, targetSide) {
+            e.preventDefault(); e.stopPropagation();
+            const origin = e.dataTransfer.getData("origin");
+            if (currentMode === 'practice' && origin === 'source') return;
+            pushState();
+            const type = e.dataTransfer.getData("type");
+            const key = type === 'apple' ? 'a' : 'c';
+            const before = { l: {...data.l}, r: {...data.r} };
+            if (origin === 'l' || origin === 'r') data[origin][key]--;
+            data[targetSide][key]++;
+            renderItems(); sync();
+            logStep(`${origin === 'source' ? '+' : '-'} ${type === 'apple' ? 'x' : '1'}`, before, { l: {...data.l}, r: {...data.r} }, targetSide);
+        }
+
+        function trash(e) {
+            e.preventDefault();
+            const origin = e.dataTransfer.getData("origin");
+            const type   = e.dataTransfer.getData("type");
+            if (origin === 'l' || origin === 'r') {
+                pushState();
+                const key = type === 'apple' ? 'a' : 'c';
+                const before = { l: {...data.l}, r: {...data.r} };
+                if (data[origin][key] > 0) {
+                    data[origin][key]--;
+                    renderItems(); sync();
+                    logStep(`- ${type === 'apple' ? 'x' : '1'}`, before, { l: {...data.l}, r: {...data.r} }, origin);
+                }
+            }
+        }
+
+        function dropIntoBoth(type) {
+            pushState();
+            const before = { l: {...data.l}, r: {...data.r} };
+            const lRect = document.getElementById('pan-l').getBoundingClientRect();
+            const rRect = document.getElementById('pan-r').getBoundingClientRect();
+            const imgPath = type === 'apple' ? 'apple.webp' : 'candy.avif';
+            const ghostL = createFallingGhost(imgPath, lRect.left + lRect.width/2 - 25);
+            const ghostR = createFallingGhost(imgPath, rRect.left + rRect.width/2 - 25);
+            document.body.appendChild(ghostL); document.body.appendChild(ghostR);
+            animateFall(ghostL, lRect.top + 20);
+            animateFall(ghostR, rRect.top + 20, () => {
+                data.l[type === 'apple' ? 'a' : 'c']++;
+                data.r[type === 'apple' ? 'a' : 'c']++;
+                ghostL.remove(); ghostR.remove();
+                renderItems(); sync();
+                logStep(`+ ${type === 'apple' ? 'x' : '1'}`, before, { l: {...data.l}, r: {...data.r} }, 'both');
+            });
+        }
+
+        function createFallingGhost(path, x) {
+            const img = document.createElement('img');
+            img.src = path; img.className = 'falling';
+            img.style.left = x + 'px'; img.style.top = '-60px'; img.style.width = '50px';
+            return img;
+        }
+
+        function animateFall(el, targetY, callback) {
+            let currentY = -60, velocity = 0, gravity = 0.8;
+            function step() {
+                velocity += gravity; currentY += velocity;
+                el.style.top = currentY + 'px';
+                if (currentY < targetY) requestAnimationFrame(step);
+                else if (callback) callback();
+            }
+            requestAnimationFrame(step);
+        }
+
+        function tossFromBoth(type) {
+            const key = type === 'apple' ? 'a' : 'c';
+            if (data.l[key] > 0 && data.r[key] > 0) {
+                pushState();
+                const before = { l: {...data.l}, r: {...data.r} };
+                const leftItem  = document.querySelector(`#pan-l img[src*="${type}"]`);
+                const rightItem = document.querySelector(`#pan-r img[src*="${type}"]`);
+                if (leftItem && rightItem) {
+                    performToss(leftItem, -1); performToss(rightItem, 1);
+                    data.l[key]--; data.r[key]--;
+                    setTimeout(() => {
+                        renderItems(); sync();
+                        logStep(`- ${type === 'apple' ? 'x' : '1'}`, before, { l: {...data.l}, r: {...data.r} }, 'both');
+                    }, 700);
+                }
+            }
+        }
+
+        function performToss(el, dir) {
+            el.classList.add('tossed');
+            let posX = 0, posY = 0, rot = 0, velX = 10*dir, velY = -15, grav = 1.2;
+            function run() {
+                velY += grav; posX += velX; posY += velY; rot += 15*dir;
+                el.style.transform = `translate(${posX}px,${posY}px) rotate(${rot}deg)`;
+                if (posY < 1000) requestAnimationFrame(run);
+            }
+            run();
+        }
+
+        function fmtPlain(side) {
+            let res = [];
+            if (side.a > 0) res.push(side.a === 1 ? 'x' : side.a + 'x');
+            if (side.c > 0) res.push(String(side.c));
+            return res.length ? res.join(' + ') : '0';
+        }
+
+        let journalStepCount = 0;
+
+        function logStep(action, beforeSnap, afterSnap, scope) {
+            const entries = document.getElementById('journal-entries');
+            const empty   = document.getElementById('journal-empty');
+            if (empty) empty.remove();
+            if (journalStepCount === 0) {
+                const init = document.createElement('div');
+                init.className = 'je-eq-row je-first';
+                init.innerHTML = `<span class="je-cell-l">${fmtPlain(beforeSnap.l)}</span><span class="je-cell-m">=</span><span class="je-cell-r">${fmtPlain(beforeSnap.r)}</span>`;
+                entries.appendChild(init);
+            }
+            journalStepCount++;
+            const block = document.createElement('div');
+            block.className = 'je-step-block';
+            const sc = scope === 'both' ? 'balanced' : 'unbalanced';
+            const lo = (scope === 'both' || scope === 'l') ? action : '';
+            const ro = (scope === 'both' || scope === 'r') ? action : '';
+            block.innerHTML = `
+                <div class="je-op-row">
+                    <span class="je-cell-l ${sc}">${lo}</span>
+                    <span class="je-cell-m"></span>
+                    <span class="je-cell-r ${sc}">${ro}</span>
+                </div>
+                <hr class="je-rule">
+                <div class="je-eq-row">
+                    <span class="je-cell-l">${fmtPlain(afterSnap.l)}</span>
+                    <span class="je-cell-m">=</span>\
+                    <span class="je-cell-r">${fmtPlain(afterSnap.r)}</span>
+                </div>`;
+            entries.appendChild(block);
+            entries.scrollTop = entries.scrollHeight;
+        }
+
+        function toggleJournal() {
+            const j      = document.getElementById('action-journal');
+            const isOpen = j.classList.contains('visible');
+            if (!isOpen) {
+                document.getElementById('side-calculator').classList.remove('open');
+                document.getElementById('btn-calc-icon').classList.remove('active');
+            }
+            j.classList.toggle('visible');
+            document.getElementById('btn-journal-icon').classList.toggle('active', !isOpen);
+        }
+
+        function clearJournal() {
+            document.getElementById('journal-entries').innerHTML = '<div id="journal-empty">Actions will appear here...</div>';
+            journalStepCount = 0;
+        }
+
+        function parseEquation() {
+            const input = document.getElementById('eq-input').value.toLowerCase().replace(/\s+/g,'');
+            if (!input.includes('=')) return;
+            pushState();
+            const [lp, rp] = input.split('=');
+            function extract(str) {
+                let a = 0, c = 0;
+                str.split('+').filter(t => t !== '').forEach(t => {
+                    if (t.includes('x')) { let v = t.replace('x',''); a += (v==='')?1:parseInt(v); }
+                    else { c += parseInt(t) || 0; }
+                });
+                return { a, c };
+            }
+            data.l = extract(lp); data.r = extract(rp);
+            renderItems(); sync(); clearJournal();
+            const entries = document.getElementById('journal-entries');
+            const empty   = document.getElementById('journal-empty');
+            if (empty) empty.remove();
+            const init = document.createElement('div');
+            init.className = 'je-eq-row je-first';
+            init.innerHTML = `<span class="je-cell-l">${fmtPlain(data.l)}</span><span class="je-cell-m">=</span><span class="je-cell-r">${fmtPlain(data.r)}</span>`;
+            entries.appendChild(init);
+            journalStepCount = 1;
+            document.getElementById('side-calculator').classList.remove('open');
+            document.getElementById('action-journal').classList.add('visible');
+        }
+
+        function sync() {
+            const x = parseInt(document.getElementById('x-range').value);
+            document.getElementById('x-label').innerText = `x = ${x}`;
+            document.getElementById('legend-x').innerText = x;
+            const sumL = (data.l.a * x) + data.l.c;
+            const sumR = (data.r.a * x) + data.r.c;
+            document.getElementById('txt-left').innerHTML  = fmt(data.l);
+            document.getElementById('txt-right').innerHTML = fmt(data.r);
+            document.getElementById('val-l').innerText = sumL;
+            document.getElementById('val-r').innerText = sumR;
+            const cmp = sumL === sumR ? '=' : sumL < sumR ? '<' : '>';
+            const cmpEl = document.getElementById('val-compare');
+            cmpEl.innerText   = cmp;
+            cmpEl.style.color = sumL === sumR ? '#27ae60' : '#e74c3c';
+            const angle = Math.max(-20, Math.min(20, (sumR - sumL) * 2.5));
+            document.getElementById('beam').style.transform            = `rotate(${angle}deg)`;
+            document.getElementById('left-assembly').style.transform   = `rotate(${-angle}deg)`;
+            document.getElementById('right-assembly').style.transform  = `rotate(${-angle}deg)`;
+            const light = document.getElementById('status-light');
+            light.innerText    = sumL === sumR ? '=' : '≠';
+            light.style.color  = sumL === sumR ? '#2ecc71' : '#34495e';
+
+            if (currentMode === 'practice' && practiceAnswer > 0) {
+                const inputEl = document.getElementById('practice-answer-input');
+                if (!inputEl.disabled) {
+                    const solvedLeft  = data.l.a === 1 && data.l.c === 0 && data.r.a === 0 && data.r.c === practiceAnswer;
+                    const solvedRight = data.r.a === 1 && data.r.c === 0 && data.l.a === 0 && data.l.c === practiceAnswer;
+                    if (solvedLeft || solvedRight) {
+                        setTimeout(triggerCongrats, 300);
+                    }
+                }
+            }
+        }
+
+        function fmt(side) {
+            let res = [];
+            if (side.a > 0) res.push(`<span style="color:var(--apple-color)">${side.a===1?'x':side.a+'x'}</span>`);
+            if (side.c > 0) res.push(`<span style="color:var(--candy-color)">${side.c}</span>`);
+            return res.length ? res.join(' + ') : '0';
+        }
+
+        function renderItems() {
+            ['l','r'].forEach(side => {
+                const c = document.getElementById(`pan-${side}`); c.innerHTML = '';
+                for (let i = 0; i < data[side].a; i++) createImg(side, 'apple');
+                for (let i = 0; i < data[side].c; i++) createImg(side, 'candy');
+            });
+        }
+
+        function createImg(side, type) {
+            const img = document.createElement('img');
+            img.src = type === 'apple' ? 'apple.webp' : 'candy.avif';
+            img.className = 'item-img'; img.draggable = true;
+            img.ondragstart = e => drag(e, type, side);
+            img.onclick = () => {
+                pushState();
+                const key = type === 'apple' ? 'a' : 'c';
+                const before = { l: {...data.l}, r: {...data.r} };
+                if (data[side][key] > 0) {
+                    data[side][key]--; renderItems(); sync();
+                    logStep(`- ${type==='apple'?'x':'1'}`, before, { l: {...data.l}, r: {...data.r} }, side);
+                }
+            };
+            document.getElementById(`pan-${side}`).appendChild(img);
+        }
+
+        function toggleCalcPanel() {
+            const calc    = document.getElementById('side-calculator');
+            const journal = document.getElementById('action-journal');
+            const isOpen  = calc.classList.contains('open');
+            journal.classList.remove('visible');
+            document.getElementById('btn-journal-icon').classList.remove('active');
+            calc.classList.toggle('open', !isOpen);
+            document.getElementById('btn-calc-icon').classList.toggle('active', !isOpen);
+        }
+        function toggleCalc(show) {
+            const calc = document.getElementById('side-calculator');
+            if (show) document.getElementById('action-journal').classList.remove('visible');
+            calc.classList.toggle('open', show);
+            document.getElementById('btn-calc-icon').classList.toggle('active', show);
+            document.getElementById('btn-journal-icon').classList.remove('active');
+        }
+        function press(v) { document.getElementById('calc-screen').value += v; }
+        function cls()    { document.getElementById('calc-screen').value  = ''; }
+        function solve()  {
+            try {
+                let r = eval(document.getElementById('calc-screen').value);
+                document.getElementById('calc-screen').value = Math.round(r * 100) / 100;
+            } catch { document.getElementById('calc-screen').value = 'Error'; }
+        }
+
+        let currentMode = 'experimental';
+
+        function setMode(mode) {
+            currentMode = mode;
+            document.body.classList.toggle('practice-mode', mode === 'practice');
+            document.getElementById('mode-btn-exp').classList.toggle('active',  mode === 'experimental');
+            document.getElementById('mode-btn-prac').classList.toggle('active', mode === 'practice');
+            if (mode === 'practice') {
+                generatePracticeEquation();
+            } else {
+                data = { l:{a:0,c:0}, r:{a:0,c:0} };
+                historyStack = []; redoStack = []; journalStack = []; redoJournalStack = [];
+                updateHistoryButtons();
+                document.getElementById('x-range').value = 3;
+                renderItems(); sync(); clearJournal();
+                document.getElementById('action-journal').classList.remove('visible');
+                document.getElementById('btn-journal-icon').classList.remove('active');
+                document.getElementById('side-calculator').classList.remove('open');
+                document.getElementById('btn-calc-icon').classList.remove('active');
+            }
+        }
+
+        let practiceAnswer = 0;
+
+        function generatePracticeEquation() {
+            let a, b, c, d, x, tries = 0;
+            do {
+                x = Math.floor(Math.random() * 7) + 1;
+                c = Math.floor(Math.random() * 4) + 1;
+                a = c + 1;
+                b = Math.floor(Math.random() * 6);
+                d = x + b;
+                tries++;
+            } while ((d > 14 || d < 1) && tries < 200);
+
+            practiceAnswer = x;
+            document.getElementById('x-range').value = x;
+
+            data = { l:{a,c:b}, r:{a:c,c:d} };
+            historyStack = []; redoStack = []; journalStack = []; redoJournalStack = [];
+            updateHistoryButtons();
+            renderItems(); sync(); clearJournal();
+            document.getElementById('action-journal').classList.remove('visible');
+
+            document.getElementById('practice-answer-input').value   = '';
+            document.getElementById('practice-feedback').textContent = '';
+            document.getElementById('practice-answer-input').disabled = false;
+            document.getElementById('btn-check-answer').disabled      = false;
+            document.getElementById('congrats-overlay').classList.remove('show');
+            document.getElementById('gameover-overlay').classList.remove('show');
+        }
+
+        function giveUp() {
+            document.getElementById('gameover-answer').textContent = `Apple = ${practiceAnswer}`;
+            document.getElementById('gameover-overlay').classList.add('show');
+            document.getElementById('practice-answer-input').disabled = true;
+            document.getElementById('btn-check-answer').disabled = true;
+        }
+
+        function checkAnswer() {
+            const inputEl  = document.getElementById('practice-answer-input');
+            const feedback = document.getElementById('practice-feedback');
+            const guess    = parseInt(inputEl.value);
+
+            if (isNaN(guess) || inputEl.value.trim() === '') {
+                feedback.textContent = 'Type a number first! 🔢';
+                feedback.style.color = '#e67e22';
+                return;
+            }
+
+            if (guess === practiceAnswer) {
+                triggerCongrats();
+            } else {
+                feedback.textContent = 'Not quite! Try again! 💪';
+                feedback.style.color = '#e74c3c';
+                inputEl.value = '';
+                inputEl.focus();
+            }
+        }
+
+        function triggerCongrats() {
+            const inputEl = document.getElementById('practice-answer-input');
+            document.getElementById('congrats-msg').textContent = `Apple = ${practiceAnswer} 🍎 You got it!`;
+            document.getElementById('congrats-overlay').classList.add('show');
+            inputEl.disabled = true;
+            document.getElementById('btn-check-answer').disabled = true;
+        }
+
+        function restartPractice() {
+            document.getElementById('congrats-overlay').classList.remove('show');
+            document.getElementById('gameover-overlay').classList.remove('show');
+            generatePracticeEquation();
+        }
+
+        document.getElementById('practice-answer-input').addEventListener('keydown', e => {
+            if (e.key === 'Enter') checkAnswer();
+        });
+
+        sync();
 </script>
 </body>
 </html>
