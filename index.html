@@ -71,6 +71,57 @@ nav a.nav-link:hover {
   color: #CCCCCC;
 }
 
+/* ─── NAV DROPDOWN ─── */
+.nav-dropdown {
+  position: relative;
+  padding-bottom: 0.8rem;
+  margin-bottom: -0.8rem;
+}
+.nav-dropdown > .nav-link {
+  cursor: pointer;
+}
+.nav-dropdown > .nav-link::after {
+  content: ' ▾';
+  font-size: 0.7em;
+}
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--navy);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  min-width: 180px;
+  padding: 0.5rem 0;
+  list-style: none;
+  z-index: 300;
+}
+.nav-dropdown:hover .dropdown-menu,
+.nav-dropdown.open .dropdown-menu,
+.nav-dropdown:focus-within .dropdown-menu {
+  display: block;
+}
+.nav-dropdown.closed .dropdown-menu {
+  display: none !important;
+}
+.dropdown-menu li a {
+  display: block;
+  padding: 0.6rem 1.2rem;
+  color: #FFFFFF;
+  text-decoration: none;
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: background 0.2s ease;
+}
+.dropdown-menu li a:hover {
+  background: rgba(255,255,255,0.1);
+}
+
 /* ─── ANIMATION CLASSES ─── */
 .stat-highlight-red, .stat-highlight-blue {
   font-weight: 700;
@@ -244,6 +295,7 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
   .label{font-size:.8rem}
   footer{padding:5rem 1.5rem}
   .footer-logo{height:55px}
+  .dropdown-menu{left:0; transform:none; right:auto}
 }
 @media(max-width:400px){
   nav ul{gap:0.7rem}
@@ -273,8 +325,7 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
     inset: 0;
     z-index: 150;
     background-color: #f0f2f5;
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: auto;
     min-height: 100vh;
     padding-top: 66px; /* push content below nav bar */
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -333,9 +384,14 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
     position: relative; width: 1100px; height: 520px; margin-top: 10px;
 }
 
-#piles-area {
-    position: absolute; left: -210px; bottom: -30px; width: 400px;
-    height: 120px; display: flex; gap: 60px; align-items: flex-end; z-index: 10;
+#piles-area-left {
+    position: absolute; left: calc(52% - 545px); bottom: -30px; width: 200px;
+    height: 120px; display: flex; align-items: flex-end; z-index: 10;
+}
+
+#piles-area-right {
+    position: absolute; left: calc(52% + 345px); bottom: -30px; width: 200px;
+    height: 120px; display: flex; align-items: flex-end; z-index: 10;
 }
 
 .pile-container {
@@ -405,6 +461,7 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
     padding: 25px 20px; display: flex; justify-content: center; gap: 15px;
     align-items: center; margin-top: auto; border-top: 2.5px solid #000;
     box-shadow: none;
+    flex-wrap: wrap;
 }
 
 .control-group {
@@ -526,7 +583,8 @@ body.practice-mode #btn-add-candy { display: none !important; }
 body.practice-mode #cg-equation,
 body.practice-mode #cg-slider { display: none !important; }
 
-body.practice-mode #piles-area { display: none !important; }
+body.practice-mode #piles-area-left,
+body.practice-mode #piles-area-right { display: none !important; }
 
 body.practice-mode #legend-x-exp { display: none !important; }
 body.practice-mode #legend-x-prac { display: inline !important; }
@@ -644,6 +702,57 @@ body.practice-mode #cg-practice-actions { display: flex; }
 #btn-give-up:hover { background: #c0392b; }
 #btn-refresh-eq { background: #7f8c8d; }
 #btn-refresh-eq:hover { background: #636e72; }
+
+/* ═══════════════════════════════════════════════════
+   DEMO RESPONSIVE FIXES
+   ═══════════════════════════════════════════════════ */
+#demo-content-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+}
+
+@media(max-width:1400px) {
+    #main-logo { display: none; }
+    #history-controls { left: 15px; }
+    #left-panel { top: 80px; }
+}
+
+@media(max-width:1200px) {
+    #stage { transform: scale(0.8); transform-origin: top center; }
+    #left-panel { transform: scale(0.85); transform-origin: top left; top: 75px; left: 5px; }
+    #history-controls { left: 10px; top: 72px; }
+    #history-controls .btn-history { width: 38px; height: 38px; }
+}
+
+@media(max-width:1000px) {
+    #stage { transform: scale(0.65); transform-origin: top center; }
+    #left-panel { transform: scale(0.75); transform-origin: top left; }
+    #bottom-bar { padding: 15px 10px; gap: 10px; }
+    .control-group { padding: 0 10px; }
+    .control-group > div[style] { width: 300px !important; }
+    .btn-action { font-size: 0.78rem; padding: 10px 10px; }
+    #eq-input { width: 120px; }
+    #mode-toggle-group { padding-left: 8px; }
+    .mode-btn { padding: 8px 14px; font-size: 0.75rem; }
+}
+
+@media(max-width:768px) {
+    #stage { transform: scale(0.5); transform-origin: top center; margin-top: -20px; }
+    #left-panel { position: relative; top: auto; left: auto; transform: scale(0.85); flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 8px; z-index: 10; padding: 8px; }
+    #history-controls { position: relative; top: auto; left: auto; justify-content: center; margin: 8px 0; }
+    #equation-container { left: 0; font-size: 1.6rem; padding: 10px 25px; gap: 15px; }
+    #bottom-bar { flex-wrap: wrap; padding: 12px 8px; gap: 8px; }
+    .control-group { border-right: none; border-bottom: 2px solid #eee; padding: 8px 10px; width: 100%; }
+    .control-group > div[style] { width: 100% !important; }
+    #mode-toggle-group { width: 100%; justify-content: center; padding: 0; }
+    #side-calculator, #action-journal { width: 240px; }
+    #side-calculator.open { right: 10px; }
+    #action-journal.visible { right: 10px; }
+}
 </style>
 </head>
 <body>
@@ -659,7 +768,12 @@ body.practice-mode #cg-practice-actions { display: flex; }
     <li><a href="#problem" class="nav-link">The Problem</a></li>
     <li><a href="#research" class="nav-link">Research</a></li>
     <li><a href="#mission" class="nav-link">Mission</a></li>
-    <li><a href="#" class="nav-link" id="demo-nav-link">Demo</a></li>
+    <li class="nav-dropdown" id="nav-dropdown-lr" onmouseleave="this.classList.remove('closed')">
+      <a href="#" class="nav-link" onclick="event.preventDefault(); var dd=this.parentElement; dd.classList.toggle('open'); dd.classList.remove('closed');">Learning Resources</a>
+      <ul class="dropdown-menu">
+        <li><a href="#" id="demo-nav-link" onclick="var dd=document.getElementById('nav-dropdown-lr'); dd.classList.remove('open'); dd.classList.add('closed');">Demo</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
 
@@ -850,12 +964,14 @@ body.practice-mode #cg-practice-actions { display: flex; }
     </div>
 
     <div id="stage">
-        <div id="piles-area">
-            <div class="pile-container" draggable="true" ondragstart="drag(event, 'apple')">
-                <div id="apple-pile-visual"></div>
-            </div>
+        <div id="piles-area-left">
             <div class="pile-container" draggable="true" ondragstart="drag(event, 'candy')">
                 <div id="candy-pile-visual"></div>
+            </div>
+        </div>
+        <div id="piles-area-right">
+            <div class="pile-container" draggable="true" ondragstart="drag(event, 'apple')">
+                <div id="apple-pile-visual"></div>
             </div>
         </div>
 
