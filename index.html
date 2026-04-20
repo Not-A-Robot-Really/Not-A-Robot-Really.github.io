@@ -384,19 +384,27 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
     position: relative; width: 1100px; height: 520px; margin-top: 10px;
 }
 
+#demo-scene {
+    transform-origin: top center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+}
+
 #piles-area-left {
     position: absolute; left: calc(52% - 545px); bottom: -30px; width: 200px;
-    height: 120px; display: flex; align-items: flex-end; z-index: 10;
+    height: 180px; display: flex; align-items: flex-end; z-index: 10;
 }
 
 #piles-area-right {
     position: absolute; left: calc(52% + 345px); bottom: -30px; width: 200px;
-    height: 120px; display: flex; align-items: flex-end; z-index: 10;
+    height: 180px; display: flex; align-items: flex-end; z-index: 10;
 }
 
 .pile-container {
-    position: relative; width: 150px; height: 80px; cursor: grab;
-    display: flex; justify-content: center;
+    position: relative; width: 150px; height: 150px; cursor: grab;
+    display: flex; justify-content: center; align-items: flex-end;
 }
 
 .pile-item { position: absolute; width: 50px; height: 50px; pointer-events: none; }
@@ -435,6 +443,7 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
     border: 3px solid #000; border-radius: 0 0 55px 55px;
     display: flex; flex-wrap: wrap-reverse; justify-content: center;
     padding: 12px; gap: 6px;
+    position: relative;
 }
 
 #val-compare {
@@ -447,9 +456,11 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
 }
 
 .pan-value {
-    margin-top: 15px; font-size: 2rem; font-weight: 900; color: #2c3e50;
-    background: rgba(255,255,255,0.8); padding: 5px 15px;
-    border-radius: 10px; min-width: 40px; text-align: center; border: 2.5px solid #000;
+    position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
+    font-size: 1.6rem; font-weight: 900; color: #2c3e50;
+    background: rgba(255,255,255,0.85); padding: 3px 12px;
+    border-radius: 8px; min-width: 36px; text-align: center; border: 2px solid rgba(0,0,0,0.15);
+    z-index: 3; pointer-events: none;
 }
 
 .item-img { width: 45px; height: 45px; cursor: grab; position: relative; z-index: 2; }
@@ -722,14 +733,12 @@ body.practice-mode #cg-practice-actions { display: flex; }
 }
 
 @media(max-width:1200px) {
-    #stage { transform: scale(0.8); transform-origin: top center; }
     #left-panel { transform: scale(0.85); transform-origin: top left; top: 75px; left: 5px; }
     #history-controls { left: 10px; top: 72px; }
     #history-controls .btn-history { width: 38px; height: 38px; }
 }
 
 @media(max-width:1000px) {
-    #stage { transform: scale(0.65); transform-origin: top center; }
     #left-panel { transform: scale(0.75); transform-origin: top left; }
     #bottom-bar { padding: 15px 10px; gap: 10px; }
     .control-group { padding: 0 10px; }
@@ -741,7 +750,6 @@ body.practice-mode #cg-practice-actions { display: flex; }
 }
 
 @media(max-width:768px) {
-    #stage { transform: scale(0.5); transform-origin: top center; margin-top: -20px; }
     #left-panel { position: relative; top: auto; left: auto; transform: scale(0.85); flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 8px; z-index: 10; padding: 8px; }
     #history-controls { position: relative; top: auto; left: auto; justify-content: center; margin: 8px 0; }
     #equation-container { left: 0; font-size: 1.6rem; padding: 10px 25px; gap: 15px; }
@@ -957,6 +965,7 @@ body.practice-mode #cg-practice-actions { display: flex; }
         </div>
     </div>
 
+    <div id="demo-scene">
     <div id="equation-container">
         <span id="txt-left">0</span>
         <div id="status-light" class="indicator">?</div>
@@ -982,16 +991,19 @@ body.practice-mode #cg-practice-actions { display: flex; }
         <div id="beam">
             <div id="left-assembly" class="pan-assembly">
                 <div class="hanger"></div>
-                <div id="pan-l" class="pan" ondrop="drop(event, 'l')" ondragover="allow(event)"></div>
-                <div id="val-l" class="pan-value">0</div>
+                <div id="pan-l" class="pan" ondrop="drop(event, 'l')" ondragover="allow(event)">
+                    <div id="val-l" class="pan-value">0</div>
+                </div>
             </div>
             <div id="right-assembly" class="pan-assembly">
                 <div class="hanger"></div>
-                <div id="pan-r" class="pan" ondrop="drop(event, 'r')" ondragover="allow(event)"></div>
-                <div id="val-r" class="pan-value">0</div>
+                <div id="pan-r" class="pan" ondrop="drop(event, 'r')" ondragover="allow(event)">
+                    <div id="val-r" class="pan-value">0</div>
+                </div>
             </div>
         </div>
     </div>
+    </div><!-- end #demo-scene -->
 
     <div id="bottom-bar">
 
@@ -1186,12 +1198,19 @@ function countUp(el,target,sfx){
 document.getElementById('demo-nav-link').addEventListener('click', function(e) {
     e.preventDefault();
     document.getElementById('demo-wrapper').classList.add('active');
+    setTimeout(scaleDemoScene, 50);
 });
 
 document.querySelectorAll('.nav-link:not(#demo-nav-link)').forEach(function(link) {
     link.addEventListener('click', function() {
         document.getElementById('demo-wrapper').classList.remove('active');
     });
+});
+
+document.querySelector('.nav-brand').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('demo-wrapper').classList.remove('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
 // ═══════════════════════════════════════════════════
@@ -1248,6 +1267,25 @@ document.querySelectorAll('.nav-link:not(#demo-nav-link)').forEach(function(link
         }
         buildLargePile('apple-pile-visual', 'apple.webp');
         buildLargePile('candy-pile-visual', 'candy.avif');
+
+        // Auto-scale the demo scene to fit viewport width
+        function scaleDemoScene() {
+            const scene = document.getElementById('demo-scene');
+            if (!scene) return;
+            const nativeWidth = 1500; // stage (1100) + piles extending ~200 each side
+            const available = window.innerWidth - 20; // small margin
+            const scale = Math.min(1, available / nativeWidth);
+            scene.style.transform = 'scale(' + scale + ')';
+            // Adjust the wrapper height so layout doesn't leave a gap
+            const stageEl = document.getElementById('stage');
+            if (stageEl) {
+                const nativeHeight = scene.scrollHeight;
+                scene.style.height = (nativeHeight * scale) + 'px';
+                scene.style.marginBottom = (-nativeHeight * (1 - scale)) + 'px';
+            }
+        }
+        window.addEventListener('resize', scaleDemoScene);
+        scaleDemoScene();
 
         function allow(e) { e.preventDefault(); }
 
@@ -1482,7 +1520,10 @@ document.querySelectorAll('.nav-link:not(#demo-nav-link)').forEach(function(link
 
         function renderItems() {
             ['l','r'].forEach(side => {
-                const c = document.getElementById(`pan-${side}`); c.innerHTML = '';
+                const c = document.getElementById(`pan-${side}`);
+                const valEl = c.querySelector('.pan-value');
+                c.innerHTML = '';
+                if (valEl) c.appendChild(valEl);
                 for (let i = 0; i < data[side].a; i++) createImg(side, 'apple');
                 for (let i = 0; i < data[side].c; i++) createImg(side, 'candy');
             });
