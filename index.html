@@ -316,21 +316,20 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
    DEMO INTEGRATION STYLES
    ═══════════════════════════════════════════════════ */
 
-/* Wrapper that hosts the full demo, overlaid over the site */
+/* Wrapper that hosts the demo inline in the page scroll */
 #demo-wrapper {
-    display: none;
+    display: flex;
     flex-direction: column;
     align-items: center;
-    position: fixed;
-    inset: 0;
-    z-index: 150;
-    background-color: #f0f2f5;
-    overflow: auto;
+    position: relative;
+    width: 100%;
     min-height: 100vh;
-    padding-top: 66px; /* push content below nav bar */
+    padding-top: 66px; /* push content below fixed nav */
+    background-color: #f0f2f5;
+    overflow: hidden;
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    transform: translateZ(0); /* contain fixed children within this section */
 }
-#demo-wrapper.active { display: flex; }
 
 /* ── All demo CSS below (body/html rules absorbed into #demo-wrapper above) ── */
 
@@ -384,27 +383,14 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
     position: relative; width: 1100px; height: 520px; margin-top: 10px;
 }
 
-#demo-scene {
-    transform-origin: top center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex-shrink: 0;
-}
-
-#piles-area-left {
-    position: absolute; left: calc(52% - 545px); bottom: -30px; width: 200px;
-    height: 180px; display: flex; align-items: flex-end; z-index: 10;
-}
-
-#piles-area-right {
-    position: absolute; left: calc(52% + 345px); bottom: -30px; width: 200px;
-    height: 180px; display: flex; align-items: flex-end; z-index: 10;
+#piles-area {
+    position: absolute; left: -210px; bottom: -30px; width: 400px;
+    height: 120px; display: flex; gap: 60px; align-items: flex-end; z-index: 10;
 }
 
 .pile-container {
-    position: relative; width: 150px; height: 150px; cursor: grab;
-    display: flex; justify-content: center; align-items: flex-end;
+    position: relative; width: 150px; height: 80px; cursor: grab;
+    display: flex; justify-content: center;
 }
 
 .pile-item { position: absolute; width: 50px; height: 50px; pointer-events: none; }
@@ -443,7 +429,6 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
     border: 3px solid #000; border-radius: 0 0 55px 55px;
     display: flex; flex-wrap: wrap-reverse; justify-content: center;
     padding: 12px; gap: 6px;
-    position: relative;
 }
 
 #val-compare {
@@ -456,11 +441,9 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
 }
 
 .pan-value {
-    position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
-    font-size: 1.6rem; font-weight: 900; color: #2c3e50;
-    background: rgba(255,255,255,0.85); padding: 3px 12px;
-    border-radius: 8px; min-width: 36px; text-align: center; border: 2px solid rgba(0,0,0,0.15);
-    z-index: 3; pointer-events: none;
+    margin-top: 15px; font-size: 2rem; font-weight: 900; color: #2c3e50;
+    background: rgba(255,255,255,0.8); padding: 5px 15px;
+    border-radius: 10px; min-width: 40px; text-align: center; border: 2.5px solid #000;
 }
 
 .item-img { width: 45px; height: 45px; cursor: grab; position: relative; z-index: 2; }
@@ -594,8 +577,7 @@ body.practice-mode #btn-add-candy { display: none !important; }
 body.practice-mode #cg-equation,
 body.practice-mode #cg-slider { display: none !important; }
 
-body.practice-mode #piles-area-left,
-body.practice-mode #piles-area-right { display: none !important; }
+body.practice-mode #piles-area { display: none !important; }
 
 body.practice-mode #legend-x-exp { display: none !important; }
 body.practice-mode #legend-x-prac { display: inline !important; }
@@ -762,6 +744,36 @@ body.practice-mode #cg-practice-actions { display: flex; }
     #action-journal.visible { right: 10px; }
 }
 </style>
+<style>
+/* ─── PAGE SWITCHING ─── */
+#page-main  { display: block; }
+#page-demo  { display: none;  }
+body.demo-active #page-main { display: none; }
+body.demo-active #page-demo  { display: block; }
+
+/* ── Waterfall: fully hidden on demo page ── */
+body.demo-active #leftWaterfall,
+body.demo-active #rightWaterfall {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+/* ── Demo page fills viewport ── */
+#page-demo { min-height: 100vh; }
+
+/* ─────────────────────────────────────────────────────────
+   DEMO FIXED-ELEMENT OFFSETS
+   The main nav is position:fixed and ~76px tall.
+   Every fixed element inside the demo needs its top value
+   pushed down by that amount so they appear below the nav.
+   ───────────────────────────────────────────────────────── */
+body.demo-active #demo-wrapper         { padding-top: 76px; }
+body.demo-active #main-logo            { top: 91px;  }   /* was 15px  + 76 */
+body.demo-active #history-controls     { top: 98px;  }   /* was 22px  + 76 */
+body.demo-active #left-panel           { top: 181px; }   /* was 105px + 76 */
+body.demo-active #side-calculator,
+body.demo-active #action-journal       { top: 91px;  }   /* was 15px  + 76 */
+</style>
 </head>
 <body>
 
@@ -769,22 +781,23 @@ body.practice-mode #cg-practice-actions { display: flex; }
 <div class="math-waterfall right-side" id="rightWaterfall"></div>
 
 <nav>
-  <a href="#" class="nav-brand">
+  <a href="#" class="nav-brand" onclick="showPage('main'); return false;">
     <img src="transparent logo.png" alt="Conception Logo" class="logo-img nav-logo">
   </a>
   <ul>
-    <li><a href="#problem" class="nav-link">The Problem</a></li>
-    <li><a href="#research" class="nav-link">Research</a></li>
-    <li><a href="#mission" class="nav-link">Mission</a></li>
+    <li><a href="#problem" class="nav-link" onclick="showPage('main')">The Problem</a></li>
+    <li><a href="#research" class="nav-link" onclick="showPage('main')">Research</a></li>
+    <li><a href="#mission" class="nav-link" onclick="showPage('main')">Mission</a></li>
     <li class="nav-dropdown" id="nav-dropdown-lr" onmouseleave="this.classList.remove('closed')">
       <a href="#" class="nav-link" onclick="event.preventDefault(); var dd=this.parentElement; dd.classList.toggle('open'); dd.classList.remove('closed');">Learning Resources</a>
       <ul class="dropdown-menu">
-        <li><a href="#" id="demo-nav-link" onclick="var dd=document.getElementById('nav-dropdown-lr'); dd.classList.remove('open'); dd.classList.add('closed');">Demo</a></li>
+        <li><a href="#" id="demo-nav-link" onclick="showPage('demo'); var dd=document.getElementById('nav-dropdown-lr'); dd.classList.remove('open'); dd.classList.add('closed'); return false;">Demo</a></li>
       </ul>
     </li>
   </ul>
 </nav>
 
+<div id="page-main">
 <section class="hero">
   <p class="hero-quote">"Wisdom is not a product of schooling but of the lifelong attempt to acquire it." — Albert Einstein</p>
   <img src="transparent logo.png" alt="Conception Logo" class="hero-logo">
@@ -921,10 +934,9 @@ body.practice-mode #cg-practice-actions { display: flex; }
   <p style="font-weight: 600; color: var(--text-muted); font-size: 1.1rem;">Hands-on math education for the <span class="phrase-bold">next generation of thinkers</span>.</p>
   <p class="footer-copy">© 2025 Conception · Research provided via July 2025 RAND Study & NIH 2018</p>
 </footer>
+</div><!-- end #page-main -->
 
-<!-- ═══════════════════════════════════════════════════
-     DEMO WRAPPER — Apples & Candy Balance Scale Demo
-     ═══════════════════════════════════════════════════ -->
+<div id="page-demo">
 <div id="demo-wrapper" ondragover="allow(event)" ondrop="trash(event)">
 
     <img id="main-logo" src="transparent logo.png" alt="Logo" onerror="this.style.display='none'">
@@ -965,7 +977,6 @@ body.practice-mode #cg-practice-actions { display: flex; }
         </div>
     </div>
 
-    <div id="demo-scene">
     <div id="equation-container">
         <span id="txt-left">0</span>
         <div id="status-light" class="indicator">?</div>
@@ -973,14 +984,12 @@ body.practice-mode #cg-practice-actions { display: flex; }
     </div>
 
     <div id="stage">
-        <div id="piles-area-left">
-            <div class="pile-container" draggable="true" ondragstart="drag(event, 'candy')">
-                <div id="candy-pile-visual"></div>
-            </div>
-        </div>
-        <div id="piles-area-right">
+        <div id="piles-area">
             <div class="pile-container" draggable="true" ondragstart="drag(event, 'apple')">
                 <div id="apple-pile-visual"></div>
+            </div>
+            <div class="pile-container" draggable="true" ondragstart="drag(event, 'candy')">
+                <div id="candy-pile-visual"></div>
             </div>
         </div>
 
@@ -991,19 +1000,16 @@ body.practice-mode #cg-practice-actions { display: flex; }
         <div id="beam">
             <div id="left-assembly" class="pan-assembly">
                 <div class="hanger"></div>
-                <div id="pan-l" class="pan" ondrop="drop(event, 'l')" ondragover="allow(event)">
-                    <div id="val-l" class="pan-value">0</div>
-                </div>
+                <div id="pan-l" class="pan" ondrop="drop(event, 'l')" ondragover="allow(event)"></div>
+                <div id="val-l" class="pan-value">0</div>
             </div>
             <div id="right-assembly" class="pan-assembly">
                 <div class="hanger"></div>
-                <div id="pan-r" class="pan" ondrop="drop(event, 'r')" ondragover="allow(event)">
-                    <div id="val-r" class="pan-value">0</div>
-                </div>
+                <div id="pan-r" class="pan" ondrop="drop(event, 'r')" ondragover="allow(event)"></div>
+                <div id="val-r" class="pan-value">0</div>
             </div>
         </div>
     </div>
-    </div><!-- end #demo-scene -->
 
     <div id="bottom-bar">
 
@@ -1107,6 +1113,17 @@ body.practice-mode #cg-practice-actions { display: flex; }
 
 </div><!-- end #demo-wrapper -->
 
+<section id="demo-description" style="width:100%; padding:8rem 2rem; background:#ffffff; border-top:3px solid #e8ecf0;">
+  <div style="max-width:900px; margin:0 auto; font-family:'DM Sans',sans-serif;">
+    <h2 style="font-family:'Playfair Display',serif; font-size:clamp(2rem,4vw,3.2rem); font-weight:900; color:#1A2B45; margin-bottom:1.5rem;">Demo Title Here</h2>
+    <p style="font-size:1.2rem; line-height:1.85; color:#333333; margin-bottom:3rem;">Replace this paragraph with a description of the demo. Explain what the balance scale represents, how apples and candy map to algebraic variables, and how students can use the experimental and practice modes to build intuition for solving equations.</p>
+    <div style="width:100%; min-height:320px; background:#F9FBFF; border:2.5px dashed #4D9EFF; border-radius:14px; display:flex; align-items:center; justify-content:center;">
+      <span style="font-family:'DM Sans',sans-serif; font-size:1rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#4D9EFF;">[ Image placeholder — replace with &lt;img&gt; tag ]</span>
+    </div>
+  </div>
+</section>
+</div><!-- end #page-demo -->
+
 <script>
 // ═══════════════════════════════════════════════════
 // MAIN SITE JAVASCRIPT (unchanged)
@@ -1119,6 +1136,8 @@ const containers = [document.getElementById('leftWaterfall'), document.getElemen
 function createSymbol() {
   // PREVENT STACKING: If the user is on a different tab, stop spawning
   if (document.hidden) return;
+  // Disable waterfall on demo / learning resources page
+  if (document.body.classList.contains('demo-active')) return;
 
   containers.forEach(container => {
     for(let i=0; i<2; i++){
@@ -1143,6 +1162,11 @@ function createSymbol() {
           // If tab is hidden during existing animation, wait
           if (document.hidden) {
             requestAnimationFrame(animate);
+            return;
+          }
+          // Stop animating if we switched to the demo page
+          if (document.body.classList.contains('demo-active')) {
+            sym.remove();
             return;
           }
           
@@ -1192,26 +1216,22 @@ function countUp(el,target,sfx){
 }
 
 // ═══════════════════════════════════════════════════
-// DEMO NAV TAB SWITCHING
+// PAGE SWITCHING
 // ═══════════════════════════════════════════════════
 
-document.getElementById('demo-nav-link').addEventListener('click', function(e) {
-    e.preventDefault();
-    document.getElementById('demo-wrapper').classList.add('active');
-    setTimeout(scaleDemoScene, 50);
-});
+function showPage(page) {
+    if (page === 'demo') {
+        document.body.classList.add('demo-active');
+        // Purge any symbols currently in the waterfall containers
+        document.getElementById('leftWaterfall').innerHTML  = '';
+        document.getElementById('rightWaterfall').innerHTML = '';
+        window.scrollTo(0, 0);
+    } else {
+        document.body.classList.remove('demo-active');
+        window.scrollTo(0, 0);
+    }
+}
 
-document.querySelectorAll('.nav-link:not(#demo-nav-link)').forEach(function(link) {
-    link.addEventListener('click', function() {
-        document.getElementById('demo-wrapper').classList.remove('active');
-    });
-});
-
-document.querySelector('.nav-brand').addEventListener('click', function(e) {
-    e.preventDefault();
-    document.getElementById('demo-wrapper').classList.remove('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-});
 
 // ═══════════════════════════════════════════════════
 // DEMO JAVASCRIPT (unchanged from applesandcandydemo.html)
@@ -1267,25 +1287,6 @@ document.querySelector('.nav-brand').addEventListener('click', function(e) {
         }
         buildLargePile('apple-pile-visual', 'apple.webp');
         buildLargePile('candy-pile-visual', 'candy.avif');
-
-        // Auto-scale the demo scene to fit viewport width
-        function scaleDemoScene() {
-            const scene = document.getElementById('demo-scene');
-            if (!scene) return;
-            const nativeWidth = 1500; // stage (1100) + piles extending ~200 each side
-            const available = window.innerWidth - 20; // small margin
-            const scale = Math.min(1, available / nativeWidth);
-            scene.style.transform = 'scale(' + scale + ')';
-            // Adjust the wrapper height so layout doesn't leave a gap
-            const stageEl = document.getElementById('stage');
-            if (stageEl) {
-                const nativeHeight = scene.scrollHeight;
-                scene.style.height = (nativeHeight * scale) + 'px';
-                scene.style.marginBottom = (-nativeHeight * (1 - scale)) + 'px';
-            }
-        }
-        window.addEventListener('resize', scaleDemoScene);
-        scaleDemoScene();
 
         function allow(e) { e.preventDefault(); }
 
@@ -1520,10 +1521,7 @@ document.querySelector('.nav-brand').addEventListener('click', function(e) {
 
         function renderItems() {
             ['l','r'].forEach(side => {
-                const c = document.getElementById(`pan-${side}`);
-                const valEl = c.querySelector('.pan-value');
-                c.innerHTML = '';
-                if (valEl) c.appendChild(valEl);
+                const c = document.getElementById(`pan-${side}`); c.innerHTML = '';
                 for (let i = 0; i < data[side].a; i++) createImg(side, 'apple');
                 for (let i = 0; i < data[side].c; i++) createImg(side, 'candy');
             });
