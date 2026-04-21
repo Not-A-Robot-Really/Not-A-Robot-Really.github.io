@@ -550,6 +550,44 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
 #journal-clear { font-size: 0.8rem; color: #aaa; cursor: pointer; margin-left: auto; background: none; border: 1px solid #ddd; border-radius: 4px; padding: 2px 6px; }
 #calc-close { font-size: 0.8rem; color: #aaa; cursor: pointer; margin-left: auto; background: none; border: 1px solid #ddd; border-radius: 4px; padding: 2px 6px; }
 
+/* ── APPLE-REVEAL BUTTON (experimental only) ── */
+#btn-apple-reveal { }
+#btn-apple-reveal img { width: 32px; height: 32px; display: block; }
+#btn-apple-reveal.active { background: #2c3e50; border-color: #2c3e50; }
+#btn-apple-reveal.active img { filter: brightness(0) invert(1); }
+body.practice-mode #btn-apple-reveal { display: none !important; }
+
+/* ── REVEALED CANDY styling ── */
+.revealed-candy {
+    cursor: default !important;
+}
+
+/* ── CANDY GROUP (one group per apple) ── */
+.candy-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 30px);
+    gap: 0;
+    border: 3px dashed rgba(200, 30, 30, 0.85);
+    border-radius: 6px;
+    padding: 3px;
+    background: transparent;
+}
+.candy-group .item-img {
+    width: 30px;
+    height: 30px;
+}
+
+/* ── Bigger candies in the legend sign only ── */
+#legend-x.candy-group {
+    grid-template-columns: repeat(auto-fill, 45px);
+    gap: 4px;
+    padding: 6px;
+}
+#legend-x .item-img {
+    width: 45px;
+    height: 45px;
+}
+
 /* ── MODE TOGGLE ── */
 #mode-toggle-group {
     display: flex; align-items: center; gap: 8px;
@@ -593,12 +631,12 @@ body.practice-mode #practice-answer-card { display: flex !important; }
 }
 #practice-card-label {
     display: flex; flex-direction: row; align-items: center; flex-wrap: nowrap;
-    justify-content: center; gap: 5px;
+    justify-content: center; gap: 6px;
     padding: 4px 16px 4px 4px;
-    font-size: 1.15rem; font-weight: 900; color: var(--apple-color);
+    font-size: 1.6rem; font-weight: 900; color: var(--apple-color);
     white-space: nowrap;
 }
-#practice-card-label img { width: 32px; height: 32px; flex-shrink: 0; }
+#practice-card-label img { width: 44px; height: 44px; flex-shrink: 0; }
 #practice-card-right {
     display: flex; flex-direction: column; align-items: center;
     gap: 5px; padding-left: 12px; flex: 1;
@@ -957,17 +995,15 @@ body.demo-active #action-journal       { top: 91px;  }   /* was 15px  + 76 */
             <div class="legend-item" style="color: var(--candy-color);">
                 CANDY <img src="candy.avif" class="legend-img"> = 1
             </div>
-            <div class="legend-item" style="color: var(--apple-color);">
-                APPLE <img src="apple.webp" class="legend-img"> =&nbsp;
-                <span id="legend-x-exp"><span id="legend-x">3</span></span>
-                <span id="legend-x-prac">?</span>
+            <div class="legend-item" style="color: var(--apple-color); flex-direction: column; align-items: flex-start; gap: 8px;">
+                <span style="display:flex; align-items:center; gap:8px;">APPLE <img src="apple.webp" class="legend-img"> = <span id="legend-x-prac">?</span></span>
+                <span id="legend-x-exp"><div id="legend-x" class="candy-group"></div></span>
             </div>
         </div>
 
         <div id="practice-answer-card">
             <div id="practice-card-label">
-                <span>What is</span>
-                <img src="apple.webp" alt="apple"><span>?</span>
+                <img src="apple.webp" alt="apple"><span style="color:#000;"> = ? </span><img src="candy.avif" alt="candy">
             </div>
             <div id="practice-card-right">
                 <input type="number" id="practice-answer-input" placeholder="?" min="1">
@@ -1037,8 +1073,12 @@ body.demo-active #action-journal       { top: 91px;  }   /* was 15px  + 76 */
         <div id="cg-slider" class="control-group" style="margin-right: 5px;">
             <strong>Value of 🍎:</strong>
             <input type="range" id="x-range" min="0" max="10" value="3" oninput="sync()">
-            <div id="x-label" style="font-weight:bold; color:#3498db;">x = 3</div>
+            <div id="x-label" style="font-weight:bold; color:#3498db; display:flex; flex-wrap:wrap; justify-content:center; gap:2px; max-width:180px;"></div>
         </div>
+
+        <button id="btn-apple-reveal" class="btn-icon" onclick="toggleAppleReveal()" title="Show apples as candy">
+            <img src="siloute.png" alt="Show apples as candy">
+        </button>
 
         <button class="btn-icon" id="btn-journal-icon" title="Action Journal" onclick="toggleJournal()">
             <svg viewBox="0 0 24 24"><path d="M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3M7,7H17V9H7V7M7,11H17V13H7V11M7,15H14V17H7V15Z" /></svg>
@@ -1290,16 +1330,72 @@ function showPage(page) {
 
         function allow(e) { e.preventDefault(); }
 
+        let dragCursor = null;
+        let dragSourceEl = null;
+        let dragOriginSide = null;
+        let dragItemType = null;
+
         function drag(e, type, originSide = 'source') {
             e.dataTransfer.setData("type", type);
             e.dataTransfer.setData("origin", originSide);
-            const ghost = document.getElementById('drag-ghost');
-            ghost.src = type === 'apple' ? 'apple.webp' : 'candy.avif';
-            e.dataTransfer.setDragImage(ghost, 25, 25);
+            // Suppress native ghost image entirely
+            const blank = new Image();
+            e.dataTransfer.setDragImage(blank, 0, 0);
+            // Immediately hide the item being dragged from the pan so it vanishes at once
+            dragSourceEl = (originSide === 'l' || originSide === 'r') ? e.currentTarget : null;
+            if (dragSourceEl) dragSourceEl.style.visibility = 'hidden';
+            // Track origin so dragend can delete if dropped outside any pan
+            if (originSide === 'l' || originSide === 'r') {
+                dragOriginSide = originSide;
+                dragItemType = type;
+            } else {
+                dragOriginSide = null;
+                dragItemType = null;
+            }
+            // Create custom cursor element that follows the mouse
+            if (dragCursor) dragCursor.remove();
+            dragCursor = document.createElement('img');
+            dragCursor.src = type === 'apple' ? 'apple.webp' : 'candy.avif';
+            dragCursor.style.cssText = 'position:fixed;z-index:9999;pointer-events:none;width:50px;height:50px;transform:translate(-50%,-50%);left:' + e.clientX + 'px;top:' + e.clientY + 'px;';
+            document.body.appendChild(dragCursor);
         }
+
+        document.addEventListener('dragover', function(e) {
+            if (dragCursor) {
+                dragCursor.style.left = e.clientX + 'px';
+                dragCursor.style.top  = e.clientY + 'px';
+            }
+        });
+        document.addEventListener('dragend', function() {
+            // If drag ended without a successful drop (dragSourceEl still set),
+            // delete the item from the pan rather than restoring it
+            if (dragSourceEl) {
+                if (dragOriginSide && dragItemType) {
+                    // Dragged from a pan and released outside — delete the item
+                    pushState();
+                    const key = dragItemType === 'apple' ? 'a' : 'c';
+                    if (data[dragOriginSide][key] > 0) {
+                        const before = { l: {...data.l}, r: {...data.r} };
+                        data[dragOriginSide][key]--;
+                        renderItems(); sync();
+                        logStep(`- ${dragItemType === 'apple' ? 'x' : '1'}`, before, { l: {...data.l}, r: {...data.r} }, dragOriginSide);
+                    }
+                } else {
+                    // Dragged from the pile and released without a valid drop — just restore
+                    if (dragSourceEl.parentNode) dragSourceEl.style.visibility = '';
+                }
+                dragSourceEl = null;
+            }
+            dragOriginSide = null;
+            dragItemType = null;
+            if (dragCursor) { dragCursor.remove(); dragCursor = null; }
+        });
 
         function drop(e, targetSide) {
             e.preventDefault(); e.stopPropagation();
+            dragSourceEl = null; // item handled — don't restore on dragend
+            dragOriginSide = null;
+            dragItemType = null;
             const origin = e.dataTransfer.getData("origin");
             if (currentMode === 'practice' && origin === 'source') return;
             pushState();
@@ -1314,6 +1410,9 @@ function showPage(page) {
 
         function trash(e) {
             e.preventDefault();
+            dragSourceEl = null; // item handled — don't restore on dragend
+            dragOriginSide = null;
+            dragItemType = null;
             const origin = e.dataTransfer.getData("origin");
             const type   = e.dataTransfer.getData("type");
             if (origin === 'l' || origin === 'r') {
@@ -1480,8 +1579,16 @@ function showPage(page) {
 
         function sync() {
             const x = parseInt(document.getElementById('x-range').value);
-            document.getElementById('x-label').innerText = `x = ${x}`;
-            document.getElementById('legend-x').innerText = x;
+            const candyImg = (size) => `<img src="candy.avif" alt="🍬" style="width:${size}px;height:${size}px;vertical-align:middle;">`;
+            // Populate legend candy-group box: same grid layout as the scale groups
+            const legendGroup = document.getElementById('legend-x');
+            const cols = Math.ceil(Math.sqrt(x));
+            legendGroup.style.gridTemplateColumns = `repeat(${cols}, 45px)`;
+            legendGroup.innerHTML = Array(x).fill(`<img src="candy.avif" class="item-img" style="width:45px;height:45px;">`).join('');
+            // Slider label still shows individual candies
+            const candyRowLabel = Array(x).fill(candyImg(40)).join('');
+            document.getElementById('x-label').innerHTML = candyRowLabel;
+            if (applesRevealed) renderItems();
             const sumL = (data.l.a * x) + data.l.c;
             const sumR = (data.r.a * x) + data.r.c;
             document.getElementById('txt-left').innerHTML  = fmt(data.l);
@@ -1520,27 +1627,125 @@ function showPage(page) {
         }
 
         function renderItems() {
+            const x = parseInt(document.getElementById('x-range').value);
             ['l','r'].forEach(side => {
                 const c = document.getElementById(`pan-${side}`); c.innerHTML = '';
-                for (let i = 0; i < data[side].a; i++) createImg(side, 'apple');
+                if (applesRevealed && x > 0) {
+                    // One group per apple, each group contains x candies
+                    for (let i = 0; i < data[side].a; i++) {
+                        const group = document.createElement('div');
+                        group.className = 'candy-group';
+                        // Square cluster: cols = ceil(sqrt(x)), so items fill a compact grid
+                        const cols = Math.ceil(Math.sqrt(x));
+                        group.style.gridTemplateColumns = `repeat(${cols}, 30px)`;
+                        for (let j = 0; j < x; j++) {
+                            const img = document.createElement('img');
+                            img.src = 'candy.avif';
+                            img.className = 'item-img revealed-candy';
+                            img.draggable = false;
+                            group.appendChild(img);
+                        }
+                        c.appendChild(group);
+                    }
+                } else {
+                    for (let i = 0; i < data[side].a; i++) createImg(side, 'apple');
+                }
                 for (let i = 0; i < data[side].c; i++) createImg(side, 'candy');
             });
+        }
+
+        function toggleAppleReveal() {
+            applesRevealed = !applesRevealed;
+            const btn = document.getElementById('btn-apple-reveal');
+            btn.classList.toggle('active', applesRevealed);
+            renderItems();
         }
 
         function createImg(side, type) {
             const img = document.createElement('img');
             img.src = type === 'apple' ? 'apple.webp' : 'candy.avif';
-            img.className = 'item-img'; img.draggable = true;
-            img.ondragstart = e => drag(e, type, side);
-            img.onclick = () => {
-                pushState();
-                const key = type === 'apple' ? 'a' : 'c';
-                const before = { l: {...data.l}, r: {...data.r} };
-                if (data[side][key] > 0) {
-                    data[side][key]--; renderItems(); sync();
-                    logStep(`- ${type==='apple'?'x':'1'}`, before, { l: {...data.l}, r: {...data.r} }, side);
+            img.className = 'item-img';
+            img.draggable = false;
+            img.style.cursor = 'grab';
+
+            img.addEventListener('mousedown', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                // Hide the actual item in the pan immediately
+                img.style.visibility = 'hidden';
+
+                // Create a floating clone that follows the cursor
+                const floater = document.createElement('img');
+                floater.src = img.src;
+                floater.style.cssText = 'position:fixed;z-index:9999;pointer-events:none;width:50px;height:50px;transform:translate(-50%,-50%);left:' + e.clientX + 'px;top:' + e.clientY + 'px;cursor:grabbing;';
+                document.body.appendChild(floater);
+
+                function onMouseMove(ev) {
+                    floater.style.left = ev.clientX + 'px';
+                    floater.style.top  = ev.clientY + 'px';
                 }
-            };
+
+                function onMouseUp(ev) {
+                    document.removeEventListener('mousemove', onMouseMove);
+                    document.removeEventListener('mouseup', onMouseUp);
+
+                    // Check if the cursor is over one of the two pans
+                    const panL = document.getElementById('pan-l');
+                    const panR = document.getElementById('pan-r');
+                    const rL   = panL.getBoundingClientRect();
+                    const rR   = panR.getBoundingClientRect();
+                    const overL = ev.clientX >= rL.left && ev.clientX <= rL.right && ev.clientY >= rL.top && ev.clientY <= rL.bottom;
+                    const overR = ev.clientX >= rR.left && ev.clientX <= rR.right && ev.clientY >= rR.top && ev.clientY <= rR.bottom;
+
+                    if (overL || overR) {
+                        // Released over a pan — put it back (just restore visibility, no data change)
+                        floater.remove();
+                        img.style.visibility = '';
+                    } else {
+                        // Released outside — play a toss arc, then delete
+                        const dir = Math.random() > 0.5 ? 1 : -1;
+                        const startX = ev.clientX;
+                        const startY = ev.clientY;
+                        let posX = 0, posY = 0, rot = 0;
+                        let velX = 0;
+                        let velY = 2;
+                        const grav = 1.2;
+
+                        floater.style.transform = 'translate(-50%, -50%)';
+
+                        function animateToss() {
+                            velY += grav;
+                            posX += velX;
+                            posY += velY;
+                            rot  += 15 * dir;
+                            floater.style.left      = (startX + posX) + 'px';
+                            floater.style.top       = (startY + posY) + 'px';
+                            floater.style.transform = `translate(-50%, -50%) rotate(${rot}deg)`;
+                            if (posY < 1200) {
+                                requestAnimationFrame(animateToss);
+                            } else {
+                                floater.remove();
+                            }
+                        }
+                        requestAnimationFrame(animateToss);
+
+                        // Update data immediately so the scale rebalances right away
+                        pushState();
+                        const key = type === 'apple' ? 'a' : 'c';
+                        if (data[side][key] > 0) {
+                            const before = { l: {...data.l}, r: {...data.r} };
+                            data[side][key]--;
+                            renderItems(); sync();
+                            logStep(`- ${type==='apple'?'x':'1'}`, before, { l: {...data.l}, r: {...data.r} }, side);
+                        }
+                    }
+                }
+
+                document.addEventListener('mousemove', onMouseMove);
+                document.addEventListener('mouseup', onMouseUp);
+            });
+
             document.getElementById(`pan-${side}`).appendChild(img);
         }
 
@@ -1570,6 +1775,7 @@ function showPage(page) {
         }
 
         let currentMode = 'experimental';
+        let applesRevealed = false;
 
         function setMode(mode) {
             currentMode = mode;
@@ -1577,8 +1783,14 @@ function showPage(page) {
             document.getElementById('mode-btn-exp').classList.toggle('active',  mode === 'experimental');
             document.getElementById('mode-btn-prac').classList.toggle('active', mode === 'practice');
             if (mode === 'practice') {
+                applesRevealed = false;
+                const btn = document.getElementById('btn-apple-reveal');
+                if (btn) { btn.classList.remove('active'); }
                 generatePracticeEquation();
             } else {
+                applesRevealed = false;
+                const btn = document.getElementById('btn-apple-reveal');
+                if (btn) { btn.classList.remove('active'); }
                 data = { l:{a:0,c:0}, r:{a:0,c:0} };
                 historyStack = []; redoStack = []; journalStack = []; redoJournalStack = [];
                 updateHistoryButtons();
@@ -1651,7 +1863,7 @@ function showPage(page) {
 
         function triggerCongrats() {
             const inputEl = document.getElementById('practice-answer-input');
-            document.getElementById('congrats-msg').textContent = `Apple = ${practiceAnswer} 🍎 You got it!`;
+            document.getElementById('congrats-msg').textContent = `Apple = ${practiceAnswer} 🍬 You got it!`;
             document.getElementById('congrats-overlay').classList.add('show');
             inputEl.disabled = true;
             document.getElementById('btn-check-answer').disabled = true;
