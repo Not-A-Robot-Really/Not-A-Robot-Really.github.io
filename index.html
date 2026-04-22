@@ -588,6 +588,22 @@ body.practice-mode #btn-apple-reveal { display: none !important; }
     height: 45px;
 }
 
+.img-action-btn {
+    background: none; border: none; padding: 0; cursor: pointer;
+    border-radius: 10px; transition: transform 0.2s, box-shadow 0.2s;
+    display: block;
+}
+.img-action-btn img { width: 100%; display: block; border-radius: 10px; }
+.img-action-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.18); }
+.img-action-btn:active { transform: translateY(1px); box-shadow: none; }
+@keyframes btnPop {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(0.82); }
+    70%  { transform: scale(1.12); }
+    100% { transform: scale(1); }
+}
+.img-action-btn.popping { animation: btnPop 0.35s cubic-bezier(0.36, 0.07, 0.19, 0.97); }
+
 /* ── MODE TOGGLE ── */
 #mode-toggle-group {
     display: flex; align-items: center; gap: 8px;
@@ -1056,11 +1072,11 @@ body.demo-active #action-journal       { top: 91px;  }   /* was 15px  + 76 */
 
         <div class="control-group">
             <strong>Algebra Actions</strong>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 440px;">
-                <button class="btn-action btn-rem" onclick="tossFromBoth('apple')">Remove 1 🍎 Both Sides</button>
-                <button id="btn-add-apple" class="btn-action btn-add" onclick="dropIntoBoth('apple')">Add 1 🍎 Both Sides</button>
-                <button class="btn-action btn-rem" onclick="tossFromBoth('candy')">Remove 1 🍬 Both Sides</button>
-                <button id="btn-add-candy" class="btn-action btn-add" onclick="dropIntoBoth('candy')">Add 1 🍬 Both Sides</button>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 180px;">
+                <button id="btn-add-apple" onclick="this.classList.remove('popping'); void this.offsetWidth; this.classList.add('popping'); dropIntoBoth('apple')" class="img-action-btn"><img src="1.png"></button>
+                <button id="btn-add-candy" onclick="this.classList.remove('popping'); void this.offsetWidth; this.classList.add('popping'); dropIntoBoth('candy')" class="img-action-btn"><img src="2.png"></button>
+                <button onclick="this.classList.remove('popping'); void this.offsetWidth; this.classList.add('popping'); tossFromBoth('candy')" class="img-action-btn"><img src="3.png"></button>
+                <button onclick="this.classList.remove('popping'); void this.offsetWidth; this.classList.add('popping'); tossFromBoth('apple')" class="img-action-btn"><img src="4.png"></button>
             </div>
         </div>
 
