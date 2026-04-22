@@ -30,7 +30,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;ove
   width: 25%; /* Increased width to extend further toward the center */
   height: 100%;
   pointer-events: none;
-  z-index: 100;
+  z-index: 50;
   overflow: hidden;
 }
 .left-side { left: 0; }
@@ -49,7 +49,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;ove
 nav{
   position:fixed;top:0;left:0;right:0;z-index:1500;
   padding:0.8rem 4rem;
-  display:flex;justify-content:space-between;align-items:center;
+  display:flex;justify-content:flex-start;align-items:center;gap:2.5rem;
   background: var(--navy);
   box-shadow: 0 4px 20px rgba(0,0,0,0.15);
 }
@@ -57,12 +57,19 @@ nav{
 .logo-img { height: 50px; width: auto; display: block; }
 .nav-logo { filter: brightness(0) invert(1); }
 
-nav ul{list-style:none;display:flex;gap:3rem}
+.hero .phrase-bold { color: #ffffff; }
+
+nav ul{
+  list-style:none;
+  display:flex;
+  gap:3rem
+}
 
 nav a.nav-link{
   display: inline-block;
   color: #FFFFFF; 
-  text-decoration:none;font-size:.85rem;
+  text-decoration:none;
+  font-size:1.05rem;
   font-weight:700;letter-spacing:.1em;text-transform:uppercase;
   transition: transform 0.3s ease, color 0.3s ease;
 }
@@ -200,8 +207,35 @@ nav a.nav-link:hover {
 .def-box p{ font-family:'DM Sans', sans-serif; font-weight: 400; font-size:clamp(1.5rem,3.2vw,2.1rem); line-height:1.6; }
 
 /* ─── HERO & SECTIONS ─── */
-.hero{ min-height:95vh;display:flex;flex-direction:column; justify-content:center;align-items:center;text-align:center; padding:10rem 2rem 6rem; position:relative; z-index: 2;}
-.hero-quote{ font-family:'DM Sans', sans-serif; font-weight: 400; font-size: clamp(1.4rem, 2.5vw, 1.8rem); color:var(--text-muted); max-width:850px; line-height:1.6; margin-bottom:4rem; opacity:0; transform:translateY(20px); animation:fadeUp .9s .2s forwards; }
+.hero{ 
+  min-height:95vh;
+  display:flex;
+  flex-direction:column; 
+  justify-content:center;
+  align-items:center;
+  text-align:center; 
+  padding:10rem 2rem 6rem; 
+  position:relative; 
+  z-index: 60;
+  background-image: url('pexels-yankrukov-8618063.jpg');
+  background-size: cover;
+  background-position: center 30%;
+  background-repeat: no-repeat;
+  isolation: isolate;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 20, 40, 0.72) 0%,
+    rgba(10, 20, 40, 0.60) 60%,
+    rgba(10, 20, 40, 0.80) 100%
+  );
+  z-index: -1;
+}
+.hero-quote{ font-family:'DM Sans', sans-serif; font-weight: 400; font-size: clamp(1.4rem, 2.5vw, 1.8rem); color:rgba(255,255,255,0.82); max-width:850px; line-height:1.6; margin-bottom:4rem; opacity:0; transform:translateY(20px); animation:fadeUp .9s .2s forwards; }
 
 .hero-logo {
   max-width: 650px; 
@@ -210,9 +244,10 @@ nav a.nav-link:hover {
   margin-bottom: 3rem;
   opacity: 0;
   animation: fadeUp .9s .5s forwards;
+  background: transparent;
 }
 
-.hero-sub{ font-size:clamp(1.1rem,1.8vw,1.3rem);color:var(--text); max-width:750px;line-height:1.8;margin-bottom:4rem; opacity:0;animation:fadeUp .9s .8s forwards; }
+.hero-sub{ font-size:clamp(1.1rem,1.8vw,1.3rem);color:rgba(255,255,255,0.90); max-width:750px;line-height:1.8;margin-bottom:0; opacity:0;animation:fadeUp .9s .8s forwards; }
 
 .wide-bg{width:100%;padding:10rem 2rem; position: relative; z-index: 2;}
 .wide-bg.alt{background:var(--bg-alt)}
@@ -254,6 +289,115 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
   font-weight: 400; /* Non-bolded */
 }
 
+
+/* ─── HAMBURGER BUTTON ─── */
+.hamburger-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  padding: 4px;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+.hamburger-btn span {
+  display: block;
+  width: 22px;
+  height: 2.5px;
+  background: #FFFFFF;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+/* ─── HAMBURGER DRAWER ─── */
+#hamburger-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 1400;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+#hamburger-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+#hamburger-drawer {
+  position: fixed;
+  top: 0;
+  right: -320px;
+  width: 280px;
+  height: 100vh;
+  background: var(--navy);
+  z-index: 1600;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 1.5rem;
+  transition: right 0.35s cubic-bezier(0.77, 0, 0.175, 1);
+  box-shadow: -4px 0 24px rgba(0,0,0,0.25);
+}
+#hamburger-drawer.open { right: 0; }
+.hamburger-drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+.hamburger-drawer-title {
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+.hamburger-close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  font-size: 1.5rem;
+  line-height: 1;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+.hamburger-close-btn:hover { opacity: 1; }
+.hamburger-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.85rem 0.5rem;
+  color: #FFFFFF;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: 8px;
+  transition: background 0.2s;
+  opacity: 1; /* Changed to 1 to make text solid white */
+  cursor: default;
+}
+.hamburger-nav-item .hni-badge {
+  margin-left: auto;
+  font-size: 0.6rem;
+  background: rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.7);
+  padding: 2px 7px;
+  border-radius: 20px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
 @keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
 .rv{opacity:0;transform:translateY(40px);transition:all .8s ease}
 .rv.vis{opacity:1;transform:translateY(0)}
@@ -590,12 +734,17 @@ body.practice-mode #btn-apple-reveal { display: none !important; }
 
 .img-action-btn {
     background: none; border: none; padding: 0; cursor: pointer;
-    border-radius: 10px; transition: transform 0.2s, box-shadow 0.2s;
+    border-radius: 0; transition: transform 0.2s;
     display: block;
+    line-height: 0; font-size: 0;
+    width: 135px;
+    height: 82px;
 }
-.img-action-btn img { width: 100%; display: block; border-radius: 10px; }
-.img-action-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.18); }
-.img-action-btn:active { transform: translateY(1px); box-shadow: none; }
+.img-action-btn img { width: 100%; height: 100%; object-fit: contain; display: block; border-radius: 0; transition: filter 0.2s; }
+.img-action-btn:hover { transform: translateY(-3px); box-shadow: none; }
+.img-action-btn:hover img { filter: drop-shadow(0 6px 10px rgba(0,0,0,0.35)); }
+.img-action-btn:active { transform: translateY(1px); }
+.img-action-btn:active img { filter: none; }
 @keyframes btnPop {
     0%   { transform: scale(1); }
     40%  { transform: scale(0.82); }
@@ -838,10 +987,8 @@ body.demo-active #action-journal       { top: 91px;  }   /* was 15px  + 76 */
   <a href="#" class="nav-brand" onclick="showPage('main'); return false;">
     <img src="transparent logo.png" alt="Conception Logo" class="logo-img nav-logo">
   </a>
-  <ul>
-    <li><a href="#problem" class="nav-link" onclick="showPage('main')">The Problem</a></li>
-    <li><a href="#research" class="nav-link" onclick="showPage('main')">Research</a></li>
-    <li><a href="#mission" class="nav-link" onclick="showPage('main')">Mission</a></li>
+  <ul id="nav-center-links">
+    <li><a href="#" class="nav-link" onclick="showPage('main'); window.scrollTo({top:0,behavior:'smooth'}); return false;">Home</a></li>
     <li class="nav-dropdown" id="nav-dropdown-lr" onmouseleave="this.classList.remove('closed')">
       <a href="#" class="nav-link" onclick="event.preventDefault(); var dd=this.parentElement; dd.classList.toggle('open'); dd.classList.remove('closed');">Learning Resources</a>
       <ul class="dropdown-menu">
@@ -849,16 +996,39 @@ body.demo-active #action-journal       { top: 91px;  }   /* was 15px  + 76 */
       </ul>
     </li>
   </ul>
+  <button class="hamburger-btn" onclick="toggleHamburger()" aria-label="Open menu" id="hamburger-btn">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<div id="hamburger-overlay" onclick="closeHamburger()"></div>
+<div id="hamburger-drawer">
+  <div class="hamburger-drawer-header">
+    <span class="hamburger-drawer-title">Menu</span>
+    <button class="hamburger-close-btn" onclick="closeHamburger()" aria-label="Close menu">&#x2715;</button>
+  </div>
+  <a class="hamburger-nav-item">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+    About Us
+    <span class="hni-badge">Coming Soon</span>
+  </a>
+  <a class="hamburger-nav-item">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    Our Team
+    <span class="hni-badge">Coming Soon</span>
+  </a>
+  <a class="hamburger-nav-item">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    Contact
+    <span class="hni-badge">Coming Soon</span>
+  </a>
+</div>
 
 <div id="page-main">
 <section class="hero">
   <p class="hero-quote">"Wisdom is not a product of schooling but of the lifelong attempt to acquire it." — Albert Einstein</p>
-  <img src="transparent logo.png" alt="Conception Logo" class="hero-logo">
+  <img src="no9.png" alt="Conception Logo" class="hero-logo">
   <p class="hero-sub">Providing young learners the <span class="phrase-bold">spark of learning</span> by helping to provide new, <span class="phrase-bold">hands-on perspectives</span> on high level mathematics that will increase the students' interest in learning math in a classroom setting.</p>
-  <div class="inner">
-    <img src="school.avif" alt="Classroom setting" class="inline-img hero-img rv">
-  </div>
 </section>
 
 <div class="wide-bg alt" id="problem">
@@ -1070,11 +1240,11 @@ body.demo-active #action-journal       { top: 91px;  }   /* was 15px  + 76 */
 
         <div class="control-group">
             <strong>Algebra Actions</strong>
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 320px;">
-                <button id="btn-add-apple" onclick="this.classList.remove('popping'); void this.offsetWidth; this.classList.add('popping'); dropIntoBoth('apple')" class="img-action-btn"><img src="1new.png"></button>
-                <button id="btn-add-candy" onclick="this.classList.remove('popping'); void this.offsetWidth; this.classList.add('popping'); dropIntoBoth('candy')" class="img-action-btn"><img src="2new.png"></button>
-                <button onclick="this.classList.remove('popping'); void this.offsetWidth; this.classList.add('popping'); tossFromBoth('candy')" class="img-action-btn"><img src="3new.png"></button>
-                <button onclick="this.classList.remove('popping'); void this.offsetWidth; this.classList.add('popping'); tossFromBoth('apple')" class="img-action-btn"><img src="4new.png"></button>
+            <div style="display: flex; flex-direction: row; align-items: center; gap: 2px;">
+                <button id="btn-add-apple" onclick="this.classList.remove('popping'); void this.offsetWidth; this.classList.add('popping'); dropIntoBoth('apple')" class="img-action-btn"><img src="1.png"></button>
+                <button id="btn-add-candy" onclick="this.classList.remove('popping'); void this.offsetWidth; this.classList.add('popping'); dropIntoBoth('candy')" class="img-action-btn"><img src="2.png"></button>
+                <button onclick="this.classList.remove('popping'); void this.offsetWidth; this.classList.add('popping'); tossFromBoth('candy')" class="img-action-btn"><img src="3.png"></button>
+                <button onclick="this.classList.remove('popping'); void this.offsetWidth; this.classList.add('popping'); tossFromBoth('apple')" class="img-action-btn"><img src="4.png"></button>
             </div>
         </div>
 
@@ -1179,6 +1349,19 @@ body.demo-active #action-journal       { top: 91px;  }   /* was 15px  + 76 */
 // MAIN SITE JAVASCRIPT (unchanged)
 // ═══════════════════════════════════════════════════
 
+// ─── POSITION WATERFALL TO START BELOW HERO ───
+function positionWaterfalls() {
+  const heroEl = document.querySelector('.hero');
+  if (!heroEl) return;
+  const heroBottom = heroEl.offsetTop + heroEl.offsetHeight;
+  containers.forEach(c => {
+    c.style.top = heroBottom + 'px';
+    c.style.height = 'calc(100% - ' + heroBottom + 'px)';
+  });
+}
+window.addEventListener('load', positionWaterfalls);
+window.addEventListener('resize', positionWaterfalls);
+
 // WATERFALL LOGIC - UPDATED FOR CENTER SPREAD & OFF-TAB PREVENTION
 const symbolsList = ['+', '−', '÷', '×', 'e', 'π', 'x', 'x²', '√', '∫', '∞', '∑', 'Δ', 'θ', 'λ', 'Ω'];
 const containers = [document.getElementById('leftWaterfall'), document.getElementById('rightWaterfall')];
@@ -1189,50 +1372,44 @@ function createSymbol() {
   // Disable waterfall on demo / learning resources page
   if (document.body.classList.contains('demo-active')) return;
 
+  const heroEl = document.querySelector('.hero');
+  const heroBottom = heroEl ? (heroEl.offsetTop + heroEl.offsetHeight) : 0;
+  const currentScroll = window.scrollY;
+  // startY is relative to the waterfall container (which starts at heroBottom)
+  const startY = Math.max(0, currentScroll - heroBottom - 50);
+
   containers.forEach(container => {
-    for(let i=0; i<2; i++){
-      const sym = document.createElement('div');
-      sym.className = 'math-symbol';
-      sym.textContent = symbolsList[Math.floor(Math.random() * symbolsList.length)];
-      const currentScroll = window.scrollY;
-      const startY = currentScroll - 100;
-      
-      // Spreads symbols across the 25% width of the container
-      const leftPos = Math.random() * 95; 
-      const size = 20 + Math.random() * 22; 
-      const speed = 1 + Math.random() * 1.5; 
-      
-      sym.style.left = leftPos + '%';
-      sym.style.fontSize = size + 'px';
-      sym.style.top = startY + 'px';
-      container.appendChild(sym);
-      
-      let posY = startY;
-      function animate() {
-          // If tab is hidden during existing animation, wait
-          if (document.hidden) {
-            requestAnimationFrame(animate);
-            return;
-          }
-          // Stop animating if we switched to the demo page
-          if (document.body.classList.contains('demo-active')) {
-            sym.remove();
-            return;
-          }
-          
-          posY += speed;
-          sym.style.transform = `translateY(${posY - startY}px) rotate(${posY * 0.15}deg)`;
-          if (posY < window.scrollY + window.innerHeight + 200) {
-              requestAnimationFrame(animate);
-          } else {
-              sym.remove();
-          }
+    const sym = document.createElement('div');
+    sym.className = 'math-symbol';
+    sym.textContent = symbolsList[Math.floor(Math.random() * symbolsList.length)];
+
+    const leftPos = Math.random() * 95;
+    const size = 20 + Math.random() * 22;
+    const speed = 0.85 + Math.random() * 0.6;
+
+    sym.style.left = leftPos + '%';
+    sym.style.fontSize = size + 'px';
+    sym.style.top = startY + 'px';
+    container.appendChild(sym);
+
+    let posY = startY;
+    function animate() {
+      if (document.hidden) { requestAnimationFrame(animate); return; }
+      if (document.body.classList.contains('demo-active')) { sym.remove(); return; }
+
+      posY += speed;
+      sym.style.transform = `translateY(${posY - startY}px) rotate(${posY * 0.15}deg)`;
+      // posY is container-relative; add heroBottom for page-level comparison
+      if (posY + heroBottom < window.scrollY + window.innerHeight + 200) {
+        requestAnimationFrame(animate);
+      } else {
+        sym.remove();
       }
-      requestAnimationFrame(animate);
     }
+    requestAnimationFrame(animate);
   });
 }
-setInterval(createSymbol, 600);
+setInterval(createSymbol, 1300);
 
 const io = new IntersectionObserver(entries=>{
   entries.forEach(e=>{
@@ -1890,6 +2067,22 @@ function showPage(page) {
         });
 
         sync();
+
+        // ─── HAMBURGER MENU ───
+        function toggleHamburger() {
+            const drawer  = document.getElementById('hamburger-drawer');
+            const overlay = document.getElementById('hamburger-overlay');
+            const btn     = document.getElementById('hamburger-btn');
+            const isOpen  = drawer.classList.contains('open');
+            drawer.classList.toggle('open', !isOpen);
+            overlay.classList.toggle('open', !isOpen);
+            btn.classList.toggle('open', !isOpen);
+        }
+        function closeHamburger() {
+            document.getElementById('hamburger-drawer').classList.remove('open');
+            document.getElementById('hamburger-overlay').classList.remove('open');
+            document.getElementById('hamburger-btn').classList.remove('open');
+        }
 </script>
 </body>
 </html>
