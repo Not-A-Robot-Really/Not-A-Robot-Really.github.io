@@ -988,9 +988,7 @@ body.demo-active #action-journal       { top: 91px;  }   /* was 15px  + 76 */
   <p style="font-weight: 600; color: var(--text-muted); font-size: 1.1rem;">Hands-on math education for the <span class="phrase-bold">next generation of thinkers</span>.</p>
   <p class="footer-copy">© 2025 Conception · Research provided via July 2025 RAND Study & NIH 2018</p>
 </footer>
-</div><!-- end #page-main -->
-
-<div id="page-demo">
+</div><div id="page-demo">
 <div id="demo-wrapper" ondragover="allow(event)" ondrop="trash(event)">
 
     <img id="main-logo" src="transparent logo.png" alt="Logo" onerror="this.style.display='none'">
@@ -1072,11 +1070,11 @@ body.demo-active #action-journal       { top: 91px;  }   /* was 15px  + 76 */
 
         <div class="control-group">
             <strong>Algebra Actions</strong>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 180px;">
-                <button id="btn-add-apple" onclick="this.classList.remove('popping'); void this.offsetWidth; this.classList.add('popping'); dropIntoBoth('apple')" class="img-action-btn"><img src="1.png"></button>
-                <button id="btn-add-candy" onclick="this.classList.remove('popping'); void this.offsetWidth; this.classList.add('popping'); dropIntoBoth('candy')" class="img-action-btn"><img src="2.png"></button>
-                <button onclick="this.classList.remove('popping'); void this.offsetWidth; this.classList.add('popping'); tossFromBoth('candy')" class="img-action-btn"><img src="3.png"></button>
-                <button onclick="this.classList.remove('popping'); void this.offsetWidth; this.classList.add('popping'); tossFromBoth('apple')" class="img-action-btn"><img src="4.png"></button>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; width: 320px;">
+                <button id="btn-add-apple" onclick="this.classList.remove('popping'); void this.offsetWidth; this.classList.add('popping'); dropIntoBoth('apple')" class="img-action-btn"><img src="1new.png"></button>
+                <button id="btn-add-candy" onclick="this.classList.remove('popping'); void this.offsetWidth; this.classList.add('popping'); dropIntoBoth('candy')" class="img-action-btn"><img src="2new.png"></button>
+                <button onclick="this.classList.remove('popping'); void this.offsetWidth; this.classList.add('popping'); tossFromBoth('candy')" class="img-action-btn"><img src="3new.png"></button>
+                <button onclick="this.classList.remove('popping'); void this.offsetWidth; this.classList.add('popping'); tossFromBoth('apple')" class="img-action-btn"><img src="4new.png"></button>
             </div>
         </div>
 
@@ -1167,9 +1165,7 @@ body.demo-active #action-journal       { top: 91px;  }   /* was 15px  + 76 */
         </div>
     </div>
 
-</div><!-- end #demo-wrapper -->
-
-<section id="demo-description" style="width:100%; padding:8rem 2rem; background:#ffffff; border-top:3px solid #e8ecf0;">
+</div><section id="demo-description" style="width:100%; padding:8rem 2rem; background:#ffffff; border-top:3px solid #e8ecf0;">
   <div style="max-width:900px; margin:0 auto; font-family:'DM Sans',sans-serif;">
     <h2 style="font-family:'Playfair Display',serif; font-size:clamp(2rem,4vw,3.2rem); font-weight:900; color:#1A2B45; margin-bottom:1.5rem;">Demo Title Here</h2>
     <p style="font-size:1.2rem; line-height:1.85; color:#333333; margin-bottom:3rem;">Replace this paragraph with a description of the demo. Explain what the balance scale represents, how apples and candy map to algebraic variables, and how students can use the experimental and practice modes to build intuition for solving equations.</p>
@@ -1178,9 +1174,7 @@ body.demo-active #action-journal       { top: 91px;  }   /* was 15px  + 76 */
     </div>
   </div>
 </section>
-</div><!-- end #page-demo -->
-
-<script>
+</div><script>
 // ═══════════════════════════════════════════════════
 // MAIN SITE JAVASCRIPT (unchanged)
 // ═══════════════════════════════════════════════════
