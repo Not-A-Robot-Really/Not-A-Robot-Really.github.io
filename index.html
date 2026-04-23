@@ -269,9 +269,40 @@ nav a.nav-link:hover {
 .chart-grid-v div { height: 100%; border-left: 1px dashed rgba(0,0,0,0.15); width: 20%; }
 .bar-row{ position: absolute; inset: 0; display:flex; align-items:flex-end; justify-content: space-around; padding: 0 1rem; }
 .bar-col{flex:1; display:flex; flex-direction:column; align-items:center; height:100%; justify-content:flex-end; z-index: 10;}
-.bar{ width:100%; max-width:85px; border-radius:4px 4px 0 0; background:#DDE4ED; height:0; transition:height 1.4s cubic-bezier(.22,1,.36,1); position:relative; }
+.bar{ width:100%; max-width:85px; border-radius:4px 4px 0 0; background:#DDE4ED; height:0; transition:height 4.8s cubic-bezier(0.16,1,0.3,1); position:relative; overflow:hidden; }
 .bar.hot{background:var(--red)}
-.bar-num{ position:absolute; top:-35px; left:50%; transform:translateX(-50%); font-size:1.2rem; font-weight:800; color:var(--text); }
+.bar-num{ position:absolute; top:-35px; left:50%; transform:translateX(-50%); font-size:1.2rem; font-weight:800; color:var(--text); opacity:0; transition:opacity 0.4s ease; }
+.bar-num.vis { opacity:1; }
+
+/* shimmer sweep after bar rises */
+.bar::after {
+  content:'';
+  position:absolute;
+  inset:0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.45) 50%, transparent 100%);
+  background-size:200% 100%;
+  background-position:-200% 0;
+  border-radius:inherit;
+  pointer-events:none;
+  opacity:0;
+}
+.bar.shimmer-run::after {
+  opacity:1;
+  animation: barShimmer 0.8s ease-in-out forwards;
+}
+@keyframes barShimmer {
+  from { background-position:-200% 0; }
+  to   { background-position: 300% 0; }
+}
+
+/* glow pulse on hot bars after they land */
+.bar.hot.glow-pulse {
+  animation: hotGlow 1.4s ease-in-out 2;
+}
+@keyframes hotGlow {
+  0%,100% { box-shadow: 0 0 0px 0px rgba(255,28,28,0); }
+  50%      { box-shadow: 0 0 18px 6px rgba(255,28,28,0.35); }
+}
 .bar-txt-row { display: flex; justify-content: space-around; padding: 3rem 1rem 0; }
 .bar-txt-col { flex:1; font-size:.85rem; color:var(--text); text-align:center; line-height:1.4; font-weight: 700; padding: 0 8px;}
 
@@ -399,6 +430,54 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
   text-transform: uppercase;
 }
 @keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+
+/* ─── BAR CHART ANIMATIONS ─── */
+.bar-delay-1 { transition-delay: 0s    !important; }
+.bar-delay-2 { transition-delay: 0.35s !important; }
+.bar-delay-3 { transition-delay: 0.70s !important; }
+.bar-delay-4 { transition-delay: 1.05s !important; }
+.bar-delay-5 { transition-delay: 1.40s !important; }
+
+@keyframes gridFadeIn {
+  from { opacity: 0; transform: scaleX(0); transform-origin: left; }
+  to   { opacity: 1; transform: scaleX(1); }
+}
+.chart-box.chart-animated .chart-grid-h div {
+  opacity: 0;
+  animation: gridFadeIn 0.5s ease forwards;
+}
+.chart-box.chart-animated .chart-grid-h div:nth-child(1) { animation-delay: 0s; }
+.chart-box.chart-animated .chart-grid-h div:nth-child(2) { animation-delay: 0.12s; }
+.chart-box.chart-animated .chart-grid-h div:nth-child(3) { animation-delay: 0.24s; }
+.chart-box.chart-animated .chart-grid-h div:nth-child(4) { animation-delay: 0.36s; }
+
+/* ─── Y-AXIS LABELS ─── */
+.chart-area {
+  display: flex;
+  align-items: flex-end;
+}
+.chart-y-labels {
+  height: 300px;
+  position: relative;
+  width: 2.8rem;
+  flex-shrink: 0;
+}
+.chart-y-labels span {
+  position: absolute;
+  right: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  line-height: 1;
+  transform: translateY(50%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.chart-y-labels span:nth-child(1) { transition-delay: 0s; }
+.chart-y-labels span:nth-child(2) { transition-delay: 0.15s; }
+.chart-y-labels span:nth-child(3) { transition-delay: 0.30s; }
+.chart-y-labels span:nth-child(4) { transition-delay: 0.45s; }
+.chart-y-labels.labels-vis span { opacity: 1; }
 .rv{opacity:0;transform:translateY(40px);transition:all .8s ease}
 .rv.vis{opacity:1;transform:translateY(0)}
 
@@ -596,10 +675,10 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
 
 #bottom-bar {
     position: relative; z-index: 100; background: white; width: 100%; 
-    padding: 25px 20px; display: flex; justify-content: center; gap: 15px;
+    padding: 25px 20px; display: flex; justify-content: center; gap: 10px;
     align-items: center; margin-top: auto; border-top: 2.5px solid #000;
     box-shadow: none;
-    flex-wrap: wrap;
+    flex-wrap: nowrap; /* Prevents wrapping, forcing everything perfectly inline horizontally */
 }
 
 .control-group {
@@ -625,6 +704,7 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
     justify-content: center; cursor: pointer; transition: all 0.2s;
     flex-shrink: 0;
     box-shadow: none;
+    margin-top: 26px; /* Shifted down so centers align cleanly with the images */
 }
 .btn-icon:hover { background: #f8f9fa; border-color: #000; transform: translateY(-2px); }
 .btn-icon.active { background: #2c3e50; border-color: #000; }
@@ -737,8 +817,9 @@ body.practice-mode #btn-apple-reveal { display: none !important; }
     border-radius: 0; transition: transform 0.2s;
     display: block;
     line-height: 0; font-size: 0;
-    width: 135px;
-    height: 82px;
+    width: 180px;
+    height: 110px;
+    margin: 0 -18px; /* Slightly more spacing between images 1-4 */
 }
 .img-action-btn img { width: 100%; height: 100%; object-fit: contain; display: block; border-radius: 0; transition: filter 0.2s; }
 .img-action-btn:hover { transform: translateY(-3px); box-shadow: none; }
@@ -757,6 +838,7 @@ body.practice-mode #btn-apple-reveal { display: none !important; }
 #mode-toggle-group {
     display: flex; align-items: center; gap: 8px;
     padding-left: 15px;
+    margin-top: 26px; /* Align vertically with the rest */
 }
 .mode-btn {
     padding: 10px 20px; border-radius: 10px; border: 2.5px solid #000;
@@ -941,7 +1023,8 @@ body.practice-mode #cg-practice-actions { display: flex; }
     #bottom-bar { flex-wrap: wrap; padding: 12px 8px; gap: 8px; }
     .control-group { border-right: none; border-bottom: 2px solid #eee; padding: 8px 10px; width: 100%; }
     .control-group > div[style] { width: 100% !important; }
-    #mode-toggle-group { width: 100%; justify-content: center; padding: 0; }
+    #mode-toggle-group { width: 100%; justify-content: center; padding: 0; margin-top: 0px;}
+    .btn-icon { margin-top: 0px; }
     #side-calculator, #action-journal { width: 240px; }
     #side-calculator.open { right: 10px; }
     #action-journal.visible { right: 10px; }
@@ -1048,18 +1131,26 @@ body.demo-active #action-journal       { top: 91px;  }   /* was 15px  + 76 */
       <div style="text-align: center; margin-top: -3.5rem; margin-bottom: 3.5rem; font-size: 1.3rem; color: var(--red); font-weight: 900;">
         <span class="stat-highlight-red">49</span> percent lose interest about half of the time or more often
       </div>
-      <div class="chart-box">
-        <div class="chart-grid-h"><div></div><div></div><div></div><div></div></div>
-        <div class="chart-grid-v"><div></div><div></div><div></div><div></div><div></div></div>
-        <div class="bar-row">
-          <div class="bar-col"><div class="bar" data-h="150" data-v="25"><span class="bar-num">0%</span></div></div>
-          <div class="bar-col"><div class="bar" data-h="156" data-v="26"><span class="bar-num">0%</span></div></div>
-          <div class="bar-col"><div class="bar hot" data-h="138" data-v="23"><span class="bar-num">0%</span></div></div>
-          <div class="bar-col"><div class="bar hot" data-h="102" data-v="17"><span class="bar-num">0%</span></div></div>
-          <div class="bar-col"><div class="bar hot" data-h="54" data-v="9"><span class="bar-num">0%</span></div></div>
+      <div class="chart-area">
+        <div class="chart-y-labels" id="chart-y-labels">
+          <span style="bottom:180px">30%</span>
+          <span style="bottom:120px">20%</span>
+          <span style="bottom:60px">10%</span>
+          <span style="bottom:0px">0%</span>
+        </div>
+        <div class="chart-box" style="flex:1">
+          <div class="chart-grid-h"><div></div><div></div><div></div><div></div></div>
+          <div class="chart-grid-v"><div></div><div></div><div></div><div></div><div></div></div>
+          <div class="bar-row">
+            <div class="bar-col"><div class="bar" data-h="150" data-v="25"><span class="bar-num">0%</span></div></div>
+            <div class="bar-col"><div class="bar" data-h="156" data-v="26"><span class="bar-num">0%</span></div></div>
+            <div class="bar-col"><div class="bar hot" data-h="138" data-v="23"><span class="bar-num">0%</span></div></div>
+            <div class="bar-col"><div class="bar hot" data-h="102" data-v="17"><span class="bar-num">0%</span></div></div>
+            <div class="bar-col"><div class="bar hot" data-h="54" data-v="9"><span class="bar-num">0%</span></div></div>
+          </div>
         </div>
       </div>
-      <div class="bar-txt-row">
+      <div class="bar-txt-row" style="padding-left:3.3rem">
         <div class="bar-txt-col">Never or almost never</div>
         <div class="bar-txt-col">Less than half of the time</div>
         <div class="bar-txt-col">About half of the time</div>
@@ -1240,7 +1331,7 @@ body.demo-active #action-journal       { top: 91px;  }   /* was 15px  + 76 */
 
         <div class="control-group">
             <strong>Algebra Actions</strong>
-            <div style="display: flex; flex-direction: row; align-items: center; gap: 2px;">
+            <div style="display: flex; flex-direction: row; align-items: center; gap: 0px;">
                 <button id="btn-add-apple" onclick="this.classList.remove('popping'); void this.offsetWidth; this.classList.add('popping'); dropIntoBoth('apple')" class="img-action-btn"><img src="1.png"></button>
                 <button id="btn-add-candy" onclick="this.classList.remove('popping'); void this.offsetWidth; this.classList.add('popping'); dropIntoBoth('candy')" class="img-action-btn"><img src="2.png"></button>
                 <button onclick="this.classList.remove('popping'); void this.offsetWidth; this.classList.add('popping'); tossFromBoth('candy')" class="img-action-btn"><img src="3.png"></button>
@@ -1362,6 +1453,27 @@ function positionWaterfalls() {
 window.addEventListener('load', positionWaterfalls);
 window.addEventListener('resize', positionWaterfalls);
 
+// ─── HERO PARALLAX ───
+// Background moves at 30% of scroll speed — adjust the multiplier (0.3)
+// to taste: higher = more lag/parallax (bg moves slower), lower = less effect.
+(function() {
+  const hero = document.querySelector('.hero');
+  if (!hero) return;
+  const SPEED = 0.7; // higher = more lag (bg moves at ~30% of scroll speed)
+  let ticking = false;
+  function updateParallax() {
+    const scrollY = window.scrollY;
+    hero.style.backgroundPositionY = 'calc(30% + ' + (scrollY * SPEED) + 'px)';
+    ticking = false;
+  }
+  window.addEventListener('scroll', function() {
+    if (!ticking) {
+      requestAnimationFrame(updateParallax);
+      ticking = true;
+    }
+  }, { passive: true });
+})();
+
 // WATERFALL LOGIC - UPDATED FOR CENTER SPREAD & OFF-TAB PREVENTION
 const symbolsList = ['+', '−', '÷', '×', 'e', 'π', 'x', 'x²', '√', '∫', '∞', '∑', 'Δ', 'θ', 'λ', 'Ω'];
 const containers = [document.getElementById('leftWaterfall'), document.getElementById('rightWaterfall')];
@@ -1423,15 +1535,41 @@ const io = new IntersectionObserver(entries=>{
 document.querySelectorAll('.rv,.bar,.card,.m-card,.box-icon,.heading-animate,.stat-highlight-red,.stat-highlight-blue,.inline-img').forEach(el=>io.observe(el));
 
 function animBar(bar){
-  const h=bar.dataset.h, target=parseInt(bar.dataset.v), numSpan = bar.querySelector('.bar-num');
-  setTimeout(()=>{
-    bar.style.height=h+'px';
-    let c=0, frames=60, step=target/frames;
-    const t=setInterval(()=>{
-      c+=step; if(c>=target){c=target;clearInterval(t);}
-      numSpan.textContent=Math.round(c)+'%';
-    },20);
-  },100);
+  const allBars = Array.from(document.querySelectorAll('.bar'));
+  const idx = allBars.indexOf(bar);
+  bar.classList.add('bar-delay-' + (idx + 1));
+
+  const h          = bar.dataset.h;
+  const target     = parseInt(bar.dataset.v);
+  const numSpan    = bar.querySelector('.bar-num');
+  const staggerMs  = idx * 350;
+  const RISE_MS    = 4800;
+
+  // First bar triggers: grid-line sweep-in + y-axis label fade-in
+  if (idx === 0) {
+    const chartBox = bar.closest('.chart-box');
+    if (chartBox) chartBox.classList.add('chart-animated');
+    const yLabels = bar.closest('.chart-area') && bar.closest('.chart-area').querySelector('.chart-y-labels');
+    if (yLabels) yLabels.classList.add('labels-vis');
+  }
+
+  setTimeout(() => {
+    bar.style.height = h + 'px';
+
+    // Count-up synced to the bar's ease-out curve
+    const totalFrames = Math.round(RISE_MS / 20);
+    let frame = 0;
+    const t = setInterval(() => {
+      frame++;
+      const progress = 1 - Math.pow(1 - frame / totalFrames, 3);
+      numSpan.textContent = Math.round(progress * target) + '%';
+      if (frame >= totalFrames) {
+        numSpan.textContent = target + '%';
+        clearInterval(t);
+        numSpan.classList.add('vis');
+      }
+    }, 20);
+  }, staggerMs + 100);
 }
 
 function countUp(el,target,sfx){
@@ -2067,6 +2205,36 @@ function showPage(page) {
         });
 
         sync();
+
+        // ─── CHART SCROLL RESISTANCE ───
+        (function() {
+          const chartWrap = document.querySelector('.chart-wrap');
+          if (!chartWrap) return;
+          const RESISTANCE = 0.22;
+          const BUDGET     = 900;
+          let chartInView  = false;
+          let budget       = 0;
+          const obs = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting) { chartInView = true; budget = 0; }
+            else { chartInView = false; }
+          }, { threshold: 0.45 });
+          obs.observe(chartWrap);
+          window.addEventListener('wheel', function(ev) {
+            if (!chartInView) return;
+            const delta = ev.deltaY;
+            if (delta > 0 && budget < BUDGET) {
+              ev.preventDefault();
+              budget += delta;
+              window.scrollBy({ top: delta * RESISTANCE, behavior: 'instant' });
+              return;
+            }
+            if (delta < 0 && budget > 0) {
+              ev.preventDefault();
+              budget = Math.max(0, budget + delta);
+              window.scrollBy({ top: delta * RESISTANCE, behavior: 'instant' });
+            }
+          }, { passive: false });
+        })();
 
         // ─── HAMBURGER MENU ───
         function toggleHamburger() {
