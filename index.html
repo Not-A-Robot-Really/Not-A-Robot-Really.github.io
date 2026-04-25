@@ -10,7 +10,7 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#FFFFFF;
-  --bg-alt:#F9FBFF;
+  --bg-alt:#FFFFFF;
   --card-bg:#FFFFFF;
   --red:#FF1C1C; 
   --blue:#4D9EFF;
@@ -23,35 +23,41 @@
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden; -webkit-font-smoothing: antialiased; position: relative;}
 
-/* ─── MATH WATERFALL (EXTENDED TO CENTER & SPREAD OUT) ─── */
-.math-waterfall {
-  position: absolute;
-  top: 0;
-  width: 25%; /* Increased width to extend further toward the center */
-  height: 100%;
+/* ─── MATH PARALLAX SYMBOLS ─── */
+#math-fixed-layer {
+  position: fixed;
+  inset: 0;
   pointer-events: none;
-  z-index: 50;
+  z-index: 3;
   overflow: hidden;
 }
-.left-side { left: 0; }
-.right-side { right: 0; }
-.math-symbol {
+/* inner content must sit above the fixed symbol layer */
+.wide-bg > .inner { position: relative; z-index: 4; }
+.math-sym {
   position: absolute;
   font-family: 'Playfair Display', serif;
   font-weight: 900;
-  color: rgba(0, 0, 0, 0.5); 
+  color: rgba(0, 0, 0, 0.18);
   user-select: none;
-  transition: transform 0.1s linear;
   white-space: nowrap;
+  will-change: transform;
 }
 
 /* ─── NAV & LOGO ─── */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:1500;
-  padding:0.8rem 4rem;
+  padding:0.8rem 3rem;
   display:flex;justify-content:flex-start;align-items:center;gap:2.5rem;
   background: var(--navy);
   box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+.nav-inner-wrap {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 .nav-brand{ text-decoration: none; display: flex; align-items: center; }
 .logo-img { height: 50px; width: auto; display: block; }
@@ -217,11 +223,19 @@ nav a.nav-link:hover {
   padding:10rem 2rem 6rem; 
   position:relative; 
   z-index: 60;
+  overflow: hidden;
+  isolation: isolate;
+}
+/* GPU-composited parallax layer — avoids backgroundPositionY jank */
+.hero-parallax-bg {
+  position: absolute;
+  inset: -30% 0;
   background-image: url('pexels-yankrukov-8618063.jpg');
   background-size: cover;
   background-position: center 30%;
   background-repeat: no-repeat;
-  isolation: isolate;
+  will-change: transform;
+  z-index: -2;
 }
 .hero::before {
   content: '';
@@ -249,9 +263,9 @@ nav a.nav-link:hover {
 
 .hero-sub{ font-size:clamp(1.1rem,1.8vw,1.3rem);color:rgba(255,255,255,0.90); max-width:750px;line-height:1.8;margin-bottom:0; opacity:0;animation:fadeUp .9s .8s forwards; }
 
-.wide-bg{width:100%;padding:10rem 2rem; position: relative; z-index: 2;}
+.wide-bg{width:100%;padding:10rem 2rem; position: relative;}
 .wide-bg.alt{background:var(--bg-alt)}
-.inner{max-width:1100px;margin:0 auto}
+.inner{max-width:1100px;margin:0 auto; position: relative; z-index: 4;}
 
 .label{ font-size:.9rem;font-weight:800;letter-spacing:.25em; text-transform:uppercase;color:var(--red);margin-bottom:1.5rem; }
 .heading{ font-family:'Playfair Display',serif; font-size:clamp(3.5rem,6vw,5.5rem); font-weight:900;line-height:1.1; margin-bottom:3rem; color: var(--text); }
@@ -338,8 +352,8 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
 }
 .hamburger-btn span {
   display: block;
-  width: 22px;
-  height: 2.5px;
+  width: 24px;
+  height: 3px;
   background: #FFFFFF;
   border-radius: 2px;
   transition: all 0.3s ease;
@@ -471,7 +485,7 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
   line-height: 1;
   transform: translateY(50%);
   opacity: 0;
-  transition: opacity 0.5s ease;
+  transition: opacity 1.4s ease-in-out;
 }
 .chart-y-labels span:nth-child(1) { transition-delay: 0s; }
 .chart-y-labels span:nth-child(2) { transition-delay: 0.15s; }
@@ -483,8 +497,8 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
 
 @media(max-width:768px){
   nav{padding:0.8rem 1.2rem;}
+  .nav-inner-wrap{gap:1.2rem}
   nav ul{gap:1.2rem}
-  nav a.nav-link{font-size:.7rem; letter-spacing:.05em}
   .logo-img{height:36px}
   .hero{padding:7rem 1.2rem 4rem; min-height:auto}
   .hero-quote{font-size:1.1rem; margin-bottom:2rem}
@@ -512,7 +526,6 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
   .bar-txt-row{padding:1.5rem 0 0}
   .bar-txt-col{font-size:.65rem; padding:0 2px}
   .chart-sub-lbl{font-size:.9rem; margin-bottom:3rem}
-  .math-waterfall { width: 40px; }
   .m-title{font-size:1.5rem}
   .m-body{font-size:1.05rem}
   .label{font-size:.8rem}
@@ -1038,6 +1051,8 @@ body.demo-active #page-main { display: none; }
 body.demo-active #page-demo  { display: block; }
 
 /* ── Waterfall: fully hidden on demo page ── */
+body.demo-active #math-fixed-layer { opacity: 0 !important; }
+
 body.demo-active #leftWaterfall,
 body.demo-active #rightWaterfall {
     display: none !important;
@@ -1063,10 +1078,355 @@ body.demo-active #action-journal       { top: 91px;  }   /* was 15px  + 76 */
 </head>
 <body>
 
-<div class="math-waterfall left-side" id="leftWaterfall"></div>
-<div class="math-waterfall right-side" id="rightWaterfall"></div>
+<!-- ═══════════════════════════════════════════════════════════
+     CINEMATIC INTRO TRANSITION
+     Phase 1: Full-screen photo shown immediately
+     Phase 2: Scroll zooms into laptop screen (perspective-corrected)
+     Phase 3: Seamless dissolve into the actual website hero
+     ═══════════════════════════════════════════════════════════ -->
+
+<style>
+/* ─── INTRO WRAPPER ─── */
+#intro-scene {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  overflow: hidden;
+  background: #000;
+  cursor: default;
+  /* Smooth opacity transition for the final crossfade into the hero */
+  transition: opacity 1.4s ease-in-out;
+  /* Will be removed from DOM after transition completes */
+}
+
+/* The full-screen classroom photo */
+#intro-photo {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: high-quality;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  will-change: transform;
+  transform-origin: center center;
+  /* We'll animate transform via JS */
+}
+
+/* A subtle vignette that fades in/out during transition */
+#intro-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.55) 100%);
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+
+
+/* Scroll hint arrow at the bottom */
+#scroll-hint {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgba(255,255,255,0.85);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  animation: scrollHintFloat 2s ease-in-out infinite;
+  transition: opacity 1.4s ease-in-out;
+  z-index: 20;
+}
+#scroll-hint svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: rgba(255,255,255,0.85);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+@keyframes scrollHintFloat {
+  0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.85; }
+  50% { transform: translateX(-50%) translateY(8px); opacity: 0.5; }
+}
+
+/* When intro is done, we add class 'intro-done' to body
+   which removes the fixed scene and reveals the website */
+body.intro-done #intro-scene {
+  display: none;
+}
+
+/* During intro: freeze body scroll */
+body.intro-active {
+  overflow: hidden;
+}
+
+/* 1-second scroll freeze after intro dissolves — prevents over-scrolling */
+body.scroll-frozen {
+  overflow: hidden;
+}
+
+/* The main page content fades in after intro */
+body.intro-active > nav,
+body.intro-active > #math-fixed-layer,
+body.intro-active > #page-main,
+body.intro-active > #page-demo,
+body.intro-active > #hamburger-overlay,
+body.intro-active > #hamburger-drawer,
+body.intro-active > #drag-ghost {
+  opacity: 0;
+}
+
+body.intro-fade-in > nav,
+body.intro-fade-in > #math-fixed-layer,
+body.intro-fade-in > #page-main,
+body.intro-fade-in > #page-demo,
+body.intro-fade-in > #hamburger-overlay,
+body.intro-fade-in > #hamburger-drawer,
+body.intro-fade-in > #drag-ghost {
+  opacity: 1;
+  transition: opacity 0.8s ease;
+}
+</style>
+
+<!-- Intro Scene DOM -->
+<div id="intro-scene">
+  <!-- The classroom photo — src set by JS to embedded base64 or external path -->
+  <img id="intro-photo" src="425image.jpeg" alt="">
+  <div id="intro-vignette"></div>
+  <div id="scroll-hint">
+    <span>Scroll</span>
+    <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════════════
+   CONCEPTION INTRO ENGINE
+   
+   The laptop screen in the photo is perspective-distorted.
+   We need to:
+   1. Start with the full photo visible
+   2. As user scrolls, zoom toward the exact center of the 
+      laptop screen, correcting for perspective tilt
+   3. At the end, dissolve into the actual website hero
+   
+   Laptop screen approximate bounds in the 1456×816 source image:
+   - The laptop screen center is roughly at (795, 355) in image coords
+   - The image is perspective-tilted (left side closer, right side further)
+   - We zoom to that center point, slightly correcting angle
+   ════════════════════════════════════════════════════════════ */
+
+(function() {
+  'use strict';
+
+  const scene    = document.getElementById('intro-scene');
+  const photo    = document.getElementById('intro-photo');
+  const vignette = document.getElementById('intro-vignette');
+
+  const hint     = document.getElementById('scroll-hint');
+
+  // Lock body scroll during intro
+  document.body.classList.add('intro-active');
+
+  /* ── Tunable constants ──
+     TARGET_X/Y_PCT is the transform-origin: the point in the photo that
+     stays fixed at the center of the viewport during zoom.
+
+     At scale S, the visible window of the photo is:
+       x: TARGET_X_PCT ± (50% / S)
+       y: TARGET_Y_PCT ± (50% / S)
+
+     At MAX_ZOOM 2.2, window = ±22.7% around the target point.
+
+     Shift UP (show dark blue nav bar): TARGET_Y_PCT = 0.360
+       → visible y: 13.3% – 58.7%  (nav bar at top of screen clearly visible)
+     Shift RIGHT (center screen):       TARGET_X_PCT = 0.595
+       → visible x: 36.8% – 82.3%
+  */
+  const TARGET_X_PCT = 0.595;
+  const TARGET_Y_PCT = 0.235;
+
+  // Zoom level when laptop screen mostly fills the viewport
+  const MAX_ZOOM = 2.2;
+
+  // Total scroll distance (px) the transition occupies
+  const SCROLL_RANGE = window.innerHeight * 2.8;
+
+  function easeInOutCubic(t) {
+    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  }
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  let virtualScroll = 0;
+  let targetScroll  = 0;
+  let rafId = null;
+  let introDone = false;
+
+  function onWheel(e) {
+    if (introDone) return;
+    e.preventDefault();
+    targetScroll = Math.max(0, Math.min(SCROLL_RANGE, targetScroll + e.deltaY * 1.1));
+  }
+
+  let touchStartY = 0;
+  function onTouchStart(e) { touchStartY = e.touches[0].clientY; }
+  function onTouchMove(e) {
+    if (introDone) return;
+    e.preventDefault();
+    const dy = touchStartY - e.touches[0].clientY;
+    touchStartY = e.touches[0].clientY;
+    targetScroll = Math.max(0, Math.min(SCROLL_RANGE, targetScroll + dy * 2.2));
+  }
+
+  document.addEventListener('wheel', onWheel, { passive: false });
+  document.addEventListener('touchstart', onTouchStart, { passive: true });
+  document.addEventListener('touchmove', onTouchMove, { passive: false });
+
+  /* ── Main animation loop ── */
+  function tick() {
+    if (introDone) return;
+
+    virtualScroll += (targetScroll - virtualScroll) * 0.072;
+    const progress = Math.min(virtualScroll / SCROLL_RANGE, 1.0);
+
+    // Phase breakdown:
+    // 0.00 → 0.06 : static — full classroom photo, no movement
+    // 0.06 → 0.72 : zoom in — 1× → MAX_ZOOM, perfectly straight
+    // 0.72 → 0.84 : hold — vignette darkens to hero overlay colour (rgba(10,20,40))
+    //               This colour-matches both scenes before the cut.
+    // 0.84 → 1.00 : dissolve — zoom LOCKED at MAX_ZOOM, opacity 1→0
+    //               The frame is pixel-stable so it aligns exactly with the
+    //               hero section revealed beneath it.
+
+    const STATIC_END   = 0.06;
+    const ZOOM_END     = 0.72;
+    const HOLD_END     = 0.88;
+    const DISSOLVE_END = 1.00;
+
+    // Matches hero::before gradient (rgba(10,20,40, ~0.72))
+    const HERO_R = 10, HERO_G = 20, HERO_B = 40;
+
+    const originX = (TARGET_X_PCT * 100).toFixed(3) + '%';
+    const originY = (TARGET_Y_PCT * 100).toFixed(3) + '%';
+
+    // Fade scroll hint away as soon as zoom starts
+    if (progress > 0.08) {
+      hint.style.opacity = Math.max(0, 1 - (progress - 0.08) / 0.06).toString();
+    }
+
+    // All phases share this transform-origin
+    photo.style.transformOrigin = `${originX} ${originY}`;
+
+    if (progress <= STATIC_END) {
+      // ── Phase 1: Static ──
+      // Image sits still so the user can take in the full classroom photo.
+      photo.style.transformOrigin = '50% 50%';
+      photo.style.transform = 'scale(1)';
+      vignette.style.background = 'radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.55) 100%)';
+      vignette.style.opacity = '1';
+      scene.style.opacity = '1';
+
+    } else if (progress <= ZOOM_END) {
+      // ── Phase 2: Zoom ──
+      // Straight scale, no rotation. Eases in-out so it feels cinematic.
+      const t = (progress - STATIC_END) / (ZOOM_END - STATIC_END);
+      const e = easeInOutCubic(t);
+
+      const scale = lerp(1, MAX_ZOOM, e);
+      photo.style.transform = `scale(${scale.toFixed(4)})`;
+
+      // Vignette fades out so the laptop screen is cleanly visible
+      vignette.style.background = 'radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.55) 100%)';
+      vignette.style.opacity = Math.max(0, 1 - e * 1.4).toFixed(3);
+      scene.style.opacity = '1';
+
+    } else if (progress <= HOLD_END) {
+      // ── Phase 3: Hold + colour-match ──
+      // Zoom is locked at MAX_ZOOM. Vignette slowly shifts from transparent
+      // to the exact dark blue of the hero section overlay. By the time the
+      // dissolve starts, both scenes are visually identical in tone — the
+      // cut becomes invisible.
+      const t = (progress - ZOOM_END) / (HOLD_END - ZOOM_END);
+      const e = easeInOutCubic(t);
+
+      photo.style.transform = `scale(${MAX_ZOOM.toFixed(4)})`;
+      const vigAlpha = lerp(0, 0.90, e);
+      vignette.style.background = `rgba(${HERO_R},${HERO_G},${HERO_B},${vigAlpha.toFixed(3)})`;
+      vignette.style.opacity = '1';
+      scene.style.opacity = '1';
+
+    } else {
+      // ── Phase 4: Dissolve ──
+      // Zoom stays LOCKED at MAX_ZOOM for the entire dissolve.
+      // The intro frame is now pixel-stable and matches exactly what the
+      // hero section shows underneath — so as opacity drops to 0 the
+      // website simply materialises in place with no jump or shift.
+      const t = (progress - HOLD_END) / (DISSOLVE_END - HOLD_END);
+      const e = easeInOutCubic(t);
+
+      photo.style.transform = `scale(${MAX_ZOOM.toFixed(4)})`;
+      vignette.style.background = `rgba(${HERO_R},${HERO_G},${HERO_B},0.90)`;
+      vignette.style.opacity = '1';
+      scene.style.opacity = (1 - e).toFixed(4);
+
+      if (t > 0.80 && !introDone) {
+        finishIntro();
+      }
+    }
+
+    rafId = requestAnimationFrame(tick);
+  }
+
+  function finishIntro() {
+    introDone = true;
+    cancelAnimationFrame(rafId);
+
+    // Remove event listeners
+    document.removeEventListener('wheel', onWheel);
+    document.removeEventListener('touchstart', onTouchStart);
+    document.removeEventListener('touchmove', onTouchMove);
+
+    // Make sure we're scrolled to top of the actual page
+    window.scrollTo(0, 0);
+
+    // Reveal the website — it fades in as the scene finishes fading out
+    document.body.classList.remove('intro-active');
+    document.body.classList.add('intro-fade-in');
+
+    // ── 1-second scroll freeze so the user doesn't over-scroll into the page ──
+    document.body.classList.add('scroll-frozen');
+    setTimeout(function() {
+      document.body.classList.remove('scroll-frozen');
+    }, 1000);
+
+    // Let the RAF loop finish the opacity fade on scene naturally,
+    // then clean up once it's fully transparent.
+    setTimeout(() => {
+      document.body.classList.add('intro-done');
+      document.body.classList.remove('intro-fade-in');
+      scene.remove();
+    }, 1100);
+  }
+
+  // Start the RAF loop
+  rafId = requestAnimationFrame(tick);
+
+})();
+</script>
 
 <nav>
+  <div class="nav-inner-wrap">
   <a href="#" class="nav-brand" onclick="showPage('main'); return false;">
     <img src="transparent logo.png" alt="Conception Logo" class="logo-img nav-logo">
   </a>
@@ -1082,6 +1442,7 @@ body.demo-active #action-journal       { top: 91px;  }   /* was 15px  + 76 */
   <button class="hamburger-btn" onclick="toggleHamburger()" aria-label="Open menu" id="hamburger-btn">
     <span></span><span></span><span></span>
   </button>
+  </div>
 </nav>
 
 <div id="hamburger-overlay" onclick="closeHamburger()"></div>
@@ -1109,10 +1470,13 @@ body.demo-active #action-journal       { top: 91px;  }   /* was 15px  + 76 */
 
 <div id="page-main">
 <section class="hero">
+  <div class="hero-parallax-bg" id="heroBg"></div>
   <p class="hero-quote">"Wisdom is not a product of schooling but of the lifelong attempt to acquire it." — Albert Einstein</p>
   <img src="no9.png" alt="Conception Logo" class="hero-logo">
   <p class="hero-sub">Providing young learners the <span class="phrase-bold">spark of learning</span> by helping to provide new, <span class="phrase-bold">hands-on perspectives</span> on high level mathematics that will increase the students' interest in learning math in a classroom setting.</p>
 </section>
+
+<div id="white-content-area" style="position:relative; overflow:hidden;">
 
 <div class="wide-bg alt" id="problem">
   <div class="inner">
@@ -1241,6 +1605,8 @@ body.demo-active #action-journal       { top: 91px;  }   /* was 15px  + 76 */
     </div>
   </div>
 </div>
+
+</div><!-- end white-content-area -->
 
 <footer>
   <a href="#" class="foot-brand">
@@ -1440,88 +1806,104 @@ body.demo-active #action-journal       { top: 91px;  }   /* was 15px  + 76 */
 // MAIN SITE JAVASCRIPT (unchanged)
 // ═══════════════════════════════════════════════════
 
-// ─── POSITION WATERFALL TO START BELOW HERO ───
-function positionWaterfalls() {
-  const heroEl = document.querySelector('.hero');
-  if (!heroEl) return;
-  const heroBottom = heroEl.offsetTop + heroEl.offsetHeight;
-  containers.forEach(c => {
-    c.style.top = heroBottom + 'px';
-    c.style.height = 'calc(100% - ' + heroBottom + 'px)';
-  });
-}
-window.addEventListener('load', positionWaterfalls);
-window.addEventListener('resize', positionWaterfalls);
-
-// ─── HERO PARALLAX ───
-// Background moves at 30% of scroll speed — adjust the multiplier (0.3)
-// to taste: higher = more lag/parallax (bg moves slower), lower = less effect.
+// ─── MATH SYMBOLS (PARALLAX / UNIFIED DIRECTION) ───
+// All symbols move in the same direction as page content:
+//   scroll down → symbols move UP  (same as text/images)
+//   scroll up   → symbols move DOWN (same as text/images)
+// Symbols are seeded over 2× the viewport height so there is always
+// coverage even after significant scrolling — as symbols exit the top,
+// the ones that started below the viewport float up to fill the gap.
 (function() {
-  const hero = document.querySelector('.hero');
-  if (!hero) return;
-  const SPEED = 0.7; // higher = more lag (bg moves at ~30% of scroll speed)
-  let ticking = false;
-  function updateParallax() {
-    const scrollY = window.scrollY;
-    hero.style.backgroundPositionY = 'calc(30% + ' + (scrollY * SPEED) + 'px)';
-    ticking = false;
+  const layer = document.createElement('div');
+  layer.id = 'math-fixed-layer';
+  document.body.appendChild(layer);
+
+  const symbolsList = ['+', '−', '÷', '×', 'e', 'π', 'x', 'x²', '√', '∫', '∞', '∑', 'Δ', 'θ', 'λ', 'Ω', 'α', 'β', 'γ', 'f(x)', 'dx', 'lim', '∂', '∇', 'ℝ'];
+
+  // More symbols to maintain density once symbols above viewport
+  // have exited and symbols below viewport are still rising into view.
+  const COUNT   = 80;
+  const symbols = [];
+
+  const vh = window.innerHeight;
+
+  for (let i = 0; i < COUNT; i++) {
+    const el = document.createElement('div');
+    el.className = 'math-sym';
+    el.textContent = symbolsList[Math.floor(Math.random() * symbolsList.length)];
+    el.style.fontSize = (40 + Math.random() * 55) + 'px';
+
+    // Full-width including slight edge bleed; layer overflow:hidden clips cleanly.
+    el.style.left = (-3 + Math.random() * 101) + '%';
+
+    // Seed from -40% to +140% of viewport height (pixels).
+    // Symbols in 0–100% are visible immediately.
+    // Symbols in 100–140% rise into view as the user scrolls down.
+    // Symbols in -40–0% descend into view when the user scrolls back up.
+    const basePx = -vh * 0.4 + (i / COUNT) * vh * 1.8
+                   + Math.random() * (vh * 1.8 / COUNT);
+    el.style.top     = '0px';
+    el.style.opacity = (0.13 + Math.random() * 0.10).toFixed(3);
+
+    // Slight rate variation (0.06–0.10) adds subtle depth:
+    // faster symbols feel closer, slower ones feel further away.
+    // Negative: as scrollY increases (scroll down), dy decreases → symbol moves UP.
+    const rate = 0.06 + Math.random() * 0.04;
+
+    symbols.push({ el, basePx, rate });
+    layer.appendChild(el);
   }
-  window.addEventListener('scroll', function() {
-    if (!ticking) {
-      requestAnimationFrame(updateParallax);
-      ticking = true;
-    }
+
+  const hero = document.querySelector('.hero');
+  let heroBottom = 0;
+  function measureHero() {
+    heroBottom = hero ? hero.offsetTop + hero.offsetHeight : 0;
+  }
+  measureHero();
+  window.addEventListener('resize', measureHero, { passive: true });
+
+  let rafId = null;
+  function update() {
+    const scrollY  = window.scrollY;
+    const pastHero = scrollY > heroBottom - 80;
+    layer.style.opacity = pastHero ? '1' : '0';
+
+    symbols.forEach(({ el, basePx, rate }) => {
+      // Unified direction: subtract scrollY so all symbols move UP as page scrolls down.
+      const dy = basePx - scrollY * rate;
+      el.style.transform = 'translateY(' + dy.toFixed(2) + 'px)';
+    });
+    rafId = null;
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!rafId) rafId = requestAnimationFrame(update);
   }, { passive: true });
+
+  update();
 })();
 
-// WATERFALL LOGIC - UPDATED FOR CENTER SPREAD & OFF-TAB PREVENTION
-const symbolsList = ['+', '−', '÷', '×', 'e', 'π', 'x', 'x²', '√', '∫', '∞', '∑', 'Δ', 'θ', 'λ', 'Ω'];
-const containers = [document.getElementById('leftWaterfall'), document.getElementById('rightWaterfall')];
-
-function createSymbol() {
-  // PREVENT STACKING: If the user is on a different tab, stop spawning
-  if (document.hidden) return;
-  // Disable waterfall on demo / learning resources page
-  if (document.body.classList.contains('demo-active')) return;
-
-  const heroEl = document.querySelector('.hero');
-  const heroBottom = heroEl ? (heroEl.offsetTop + heroEl.offsetHeight) : 0;
-  const currentScroll = window.scrollY;
-  // startY is relative to the waterfall container (which starts at heroBottom)
-  const startY = Math.max(0, currentScroll - heroBottom - 50);
-
-  containers.forEach(container => {
-    const sym = document.createElement('div');
-    sym.className = 'math-symbol';
-    sym.textContent = symbolsList[Math.floor(Math.random() * symbolsList.length)];
-
-    const leftPos = Math.random() * 95;
-    const size = 20 + Math.random() * 22;
-    const speed = 0.85 + Math.random() * 0.6;
-
-    sym.style.left = leftPos + '%';
-    sym.style.fontSize = size + 'px';
-    sym.style.top = startY + 'px';
-    container.appendChild(sym);
-
-    let posY = startY;
-    function animate() {
-      if (document.hidden) { requestAnimationFrame(animate); return; }
-      if (document.body.classList.contains('demo-active')) { sym.remove(); return; }
-
-      posY += speed;
-      sym.style.transform = `translateY(${posY - startY}px) rotate(${posY * 0.15}deg)`;
-      // posY is container-relative; add heroBottom for page-level comparison
-      if (posY + heroBottom < window.scrollY + window.innerHeight + 200) {
-        requestAnimationFrame(animate);
-      } else {
-        sym.remove();
-      }
-    }
-    requestAnimationFrame(animate);
-  });
-}
-setInterval(createSymbol, 1300);
+// ─── HERO PARALLAX ───
+// Exact reference formula: translate3d(0, scrollY * SPEED, 0)
+// bg div is position:absolute inside the hero which scrolls at 100% with the page.
+// A positive translateY pushes it DOWN, counteracting the upward page scroll.
+// Net apparent speed of bg = 1 - SPEED. At 0.72 bg appears to move at only 28%.
+// Uses transform:translateY on a GPU-composited bg layer.
+// SPEED = how much the bg moves per scroll px. Higher = more dramatic lag.
+(function() {
+  const heroBg = document.getElementById('heroBg');
+  if (!heroBg) return;
+  const SPEED = 0.55; // bg moves at 55% of scroll speed — very visible lag
+  let rafId = null;
+  function updateParallax() {
+    heroBg.style.transform = 'translate3d(0,' + (window.scrollY * SPEED) + 'px,0)';
+    rafId = null;
+  }
+  window.addEventListener('scroll', function() {
+    if (!rafId) rafId = requestAnimationFrame(updateParallax);
+  }, { passive: true });
+  updateParallax();
+})();
 
 const io = new IntersectionObserver(entries=>{
   entries.forEach(e=>{
@@ -1587,9 +1969,6 @@ function countUp(el,target,sfx){
 function showPage(page) {
     if (page === 'demo') {
         document.body.classList.add('demo-active');
-        // Purge any symbols currently in the waterfall containers
-        document.getElementById('leftWaterfall').innerHTML  = '';
-        document.getElementById('rightWaterfall').innerHTML = '';
         window.scrollTo(0, 0);
     } else {
         document.body.classList.remove('demo-active');
@@ -2206,35 +2585,7 @@ function showPage(page) {
 
         sync();
 
-        // ─── CHART SCROLL RESISTANCE ───
-        (function() {
-          const chartWrap = document.querySelector('.chart-wrap');
-          if (!chartWrap) return;
-          const RESISTANCE = 0.22;
-          const BUDGET     = 900;
-          let chartInView  = false;
-          let budget       = 0;
-          const obs = new IntersectionObserver(entries => {
-            if (entries[0].isIntersecting) { chartInView = true; budget = 0; }
-            else { chartInView = false; }
-          }, { threshold: 0.45 });
-          obs.observe(chartWrap);
-          window.addEventListener('wheel', function(ev) {
-            if (!chartInView) return;
-            const delta = ev.deltaY;
-            if (delta > 0 && budget < BUDGET) {
-              ev.preventDefault();
-              budget += delta;
-              window.scrollBy({ top: delta * RESISTANCE, behavior: 'instant' });
-              return;
-            }
-            if (delta < 0 && budget > 0) {
-              ev.preventDefault();
-              budget = Math.max(0, budget + delta);
-              window.scrollBy({ top: delta * RESISTANCE, behavior: 'instant' });
-            }
-          }, { passive: false });
-        })();
+
 
         // ─── HAMBURGER MENU ───
         function toggleHamburger() {
@@ -2254,3 +2605,5 @@ function showPage(page) {
 </script>
 </body>
 </html>
+index_final_v3_v2__1_ (2).html
+Displaying index_final_v3_v2__1_ (2).html.
