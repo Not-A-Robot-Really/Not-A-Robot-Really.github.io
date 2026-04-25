@@ -1187,6 +1187,20 @@ body.intro-active > #drag-ghost {
   opacity: 0;
 }
 
+/* Freeze hero animations during intro so nothing shows through the dissolve */
+body.intro-active .hero-quote,
+body.intro-active .hero-logo,
+body.intro-active .hero-sub {
+  animation-play-state: paused;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Restart hero animations fresh after intro completes */
+body.intro-fade-in .hero-quote { animation: fadeUp 0.9s 0.1s forwards; animation-play-state: running; }
+body.intro-fade-in .hero-logo  { animation: fadeUp 0.9s 0.35s forwards; animation-play-state: running; }
+body.intro-fade-in .hero-sub   { animation: fadeUp 0.9s 0.6s forwards; animation-play-state: running; }
+
 body.intro-fade-in > nav,
 body.intro-fade-in > #math-fixed-layer,
 body.intro-fade-in > #page-main,
@@ -1311,7 +1325,7 @@ body.intro-fade-in > #drag-ghost {
 
     const STATIC_END   = 0.06;
     const ZOOM_END     = 0.72;
-    const HOLD_END     = 0.88;
+    const HOLD_END     = 0.78;
     const DISSOLVE_END = 1.00;
 
     // Matches hero::before gradient (rgba(10,20,40, ~0.72))
@@ -2605,5 +2619,5 @@ function showPage(page) {
 </script>
 </body>
 </html>
-index_final_v3_v2__1_ (2).html
-Displaying index_final_v3_v2__1_ (2).html.
+indexapr25_fixed (5).html
+Displaying indexapr25_fixed (5).html.
