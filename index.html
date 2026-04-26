@@ -1157,7 +1157,7 @@ body.demo-active #action-journal       { top: 91px;  }   /* was 15px  + 76 */
 }
 @keyframes scrollHintFloat {
   0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.85; }
-  50% { transform: translateX(-50%) translateY(8px); opacity: 0.5; }
+  50% { transform: translateX(-50%) translateY(-8px); opacity: 0.5; }
 }
 
 /* When intro is done, we add class 'intro-done' to body
@@ -1219,8 +1219,8 @@ body.intro-fade-in > #drag-ghost {
   <img id="intro-photo" src="425image.jpeg" alt="">
   <div id="intro-vignette"></div>
   <div id="scroll-hint">
-    <span>Scroll</span>
-    <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+    <svg viewBox="0 0 24 24"><polyline points="6 15 12 9 18 15"/></svg>
+    <span>Scroll Up</span>
   </div>
 </div>
 
@@ -1841,27 +1841,58 @@ body.intro-fade-in > #drag-ghost {
 
   const vh = window.innerHeight;
 
+  // Track placed positions to prevent stacking/overlap
+  const placed = []; // { leftPct, basePx, size }
+
+  function tooClose(leftPct, basePx, size) {
+    for (const p of placed) {
+      const dxPct = Math.abs(leftPct - p.leftPct);
+      const dyPx  = Math.abs(basePx - p.basePx);
+      const minDx = (size + p.size) * 0.55; // ~half combined width in px, converted loosely
+      const minDy = (size + p.size) * 0.55;
+      // Convert dxPct to rough px (assume 1400px wide screen)
+      if ((dxPct / 100) * 1400 < minDx && dyPx < minDy) return true;
+    }
+    return false;
+  }
+
   for (let i = 0; i < COUNT; i++) {
     const el = document.createElement('div');
     el.className = 'math-sym';
     el.textContent = symbolsList[Math.floor(Math.random() * symbolsList.length)];
-    el.style.fontSize = (40 + Math.random() * 55) + 'px';
+    const fontSize = 38 + Math.random() * 50;
+    el.style.fontSize = fontSize + 'px';
 
-    // Full-width including slight edge bleed; layer overflow:hidden clips cleanly.
-    el.style.left = (-3 + Math.random() * 101) + '%';
+    // Edge-biased placement:
+    // 38% chance → left edge zone (1–18%)
+    // 38% chance → right edge zone (82–99%)
+    // 24% chance → centre zone (18–82%)
+    let leftPct, basePx;
+    let attempts = 0;
+    do {
+      const zone = Math.random();
+      if (zone < 0.38) {
+        leftPct = 1 + Math.random() * 17;       // left edge
+      } else if (zone < 0.76) {
+        leftPct = 82 + Math.random() * 17;      // right edge
+      } else {
+        leftPct = 18 + Math.random() * 64;      // centre
+      }
 
-    // Seed from -40% to +140% of viewport height (pixels).
-    // Symbols in 0–100% are visible immediately.
-    // Symbols in 100–140% rise into view as the user scrolls down.
-    // Symbols in -40–0% descend into view when the user scrolls back up.
-    const basePx = -vh * 0.4 + (i / COUNT) * vh * 1.8
-                   + Math.random() * (vh * 1.8 / COUNT);
+      // Seed across -40% to +140% of viewport height (pixels).
+      basePx = -vh * 0.4 + (i / COUNT) * vh * 1.8
+               + Math.random() * (vh * 1.8 / COUNT);
+      attempts++;
+    } while (attempts < 12 && tooClose(leftPct, basePx, fontSize));
+
+    el.style.left    = leftPct + '%';
     el.style.top     = '0px';
-    el.style.opacity = (0.13 + Math.random() * 0.10).toFixed(3);
+    // Slightly less transparent than before (was 0.13–0.23, now 0.24–0.40)
+    el.style.opacity = (0.24 + Math.random() * 0.16).toFixed(3);
 
-    // Slight rate variation (0.06–0.10) adds subtle depth:
-    // faster symbols feel closer, slower ones feel further away.
-    // Negative: as scrollY increases (scroll down), dy decreases → symbol moves UP.
+    placed.push({ leftPct, basePx, size: fontSize });
+
+    // Slight rate variation (0.06–0.10) adds subtle depth.
     const rate = 0.06 + Math.random() * 0.04;
 
     symbols.push({ el, basePx, rate });
@@ -2621,3 +2652,5 @@ function showPage(page) {
 </html>
 indexapr25_fixed (5).html
 Displaying indexapr25_fixed (5).html.
+index (42).html
+Displaying index (42).html.
