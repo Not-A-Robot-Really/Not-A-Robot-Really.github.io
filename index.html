@@ -231,11 +231,12 @@ nav a.nav-link:hover {
   position: absolute;
   inset: -30% 0;
   background-image: url('pexels-yankrukov-8618063.jpg');
-  background-size: cover;
-  background-position: center 30%;
+  background-size: 120%;
+  background-position: center 40%;
   background-repeat: no-repeat;
   will-change: transform;
   z-index: -2;
+  top: -2.3cm;
 }
 .hero::before {
   content: '';
@@ -1311,7 +1312,7 @@ body.intro-fade-in > #drag-ghost {
   function tick() {
     if (introDone) return;
 
-    virtualScroll += (targetScroll - virtualScroll) * 0.072;
+    virtualScroll += (targetScroll - virtualScroll) * 0.12;
     const progress = Math.min(virtualScroll / SCROLL_RANGE, 1.0);
 
     // Phase breakdown:
@@ -1485,8 +1486,8 @@ body.intro-fade-in > #drag-ghost {
 <div id="page-main">
 <section class="hero">
   <div class="hero-parallax-bg" id="heroBg"></div>
-  <p class="hero-quote">"Wisdom is not a product of schooling but of the lifelong attempt to acquire it." — Albert Einstein</p>
-  <img src="no9.png" alt="Conception Logo" class="hero-logo">
+  <p class="hero-quote" style="margin-top:0.7cm; margin-left:1.5cm;">"Wisdom is not a product of schooling but of the lifelong attempt to acquire it." — Albert Einstein</p>
+  <img src="no9.png" alt="Conception Logo" class="hero-logo" style="margin-top:calc(3rem - 1.0cm); margin-left:0.34cm; width:94.5%; max-width:682px;">
   <p class="hero-sub">Providing young learners the <span class="phrase-bold">spark of learning</span> by helping to provide new, <span class="phrase-bold">hands-on perspectives</span> on high level mathematics that will increase the students' interest in learning math in a classroom setting.</p>
 </section>
 
@@ -2650,7 +2651,5 @@ function showPage(page) {
 </script>
 </body>
 </html>
-indexapr25_fixed (5).html
-Displaying indexapr25_fixed (5).html.
-index (42).html
-Displaying index (42).html.
+index_fixed (39).html
+Displaying index_fixed (39).html.
