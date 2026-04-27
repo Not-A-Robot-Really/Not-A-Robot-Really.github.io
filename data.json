@@ -26,6 +26,11 @@
   "page_subs": {
     "about": "Learn more about us!",
     "team": "Meet the people behind Conception!",
-    "contact": "We'd love to hear from you!"
+    "contact": "We'd love to hear from you!",
+    "member": "Join us and be part of something amazing!"
+  },
+  "member": {
+    "body": "",
+    "img": null
   }
 }
