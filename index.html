@@ -349,7 +349,7 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
   width: 36px;
   height: 36px;
   flex-shrink: 0;
-  margin-left: auto;
+  /* margin-left handled by signin-btn */
 }
 .hamburger-btn span {
   display: block;
@@ -360,6 +360,122 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
   transition: all 0.3s ease;
   transform-origin: center;
 }
+
+/* ─── SIGN IN BUTTON ─── */
+.signin-btn {
+  background: rgba(255,255,255,0.15);
+  border: 1.5px solid rgba(255,255,255,0.7);
+  color: #FFFFFF;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-left: auto;
+  margin-right: 10px;
+  flex-shrink: 0;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.signin-btn:hover {
+  background: rgba(255,255,255,0.28);
+}
+
+/* ─── SIGN IN MODAL ─── */
+#signin-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 2000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+#signin-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+#signin-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -48%);
+  background: #fff;
+  border-radius: 12px;
+  padding: 2rem 2rem 1.6rem;
+  width: 320px;
+  max-width: 90vw;
+  z-index: 2001;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.22);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+#signin-modal.open {
+  opacity: 1;
+  pointer-events: all;
+  transform: translate(-50%, -50%);
+}
+.signin-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: #888;
+  line-height: 1;
+}
+.signin-modal-close:hover { color: #333; }
+.signin-modal-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1a2a4a;
+  margin: 0 0 1.2rem 0;
+}
+.signin-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 0.9rem;
+}
+.signin-field label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #444;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.signin-field input {
+  border: 1.5px solid #ddd;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 0.95rem;
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.signin-field input:focus { border-color: #1a2a4a; }
+.signin-submit-btn {
+  width: 100%;
+  background: #1a2a4a;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  margin-top: 0.4rem;
+  transition: background 0.2s;
+}
+.signin-submit-btn:hover { background: #243d6e; }
 
 /* ─── HAMBURGER DRAWER ─── */
 #hamburger-overlay {
@@ -429,10 +545,18 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
   letter-spacing: 0.1em;
   text-transform: uppercase;
   border-radius: 8px;
-  transition: background 0.2s;
-  opacity: 1; /* Changed to 1 to make text solid white */
+  transition: background 0.2s, color 0.2s;
+  opacity: 1;
   cursor: default;
 }
+.hamburger-nav-item[href] {
+  cursor: pointer;
+}
+.hamburger-nav-item:hover {
+  background: rgba(255,255,255,1);
+  color: #1a2a4a;
+}
+.hamburger-nav-item:hover svg { filter: invert(1) sepia(1) saturate(5) hue-rotate(180deg); }
 .hamburger-nav-item .hni-badge {
   margin-left: auto;
   font-size: 0.6rem;
@@ -445,6 +569,111 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
   text-transform: uppercase;
 }
 @keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+
+/* ─── HAMBURGER ACCORDION ─── */
+.hni-accordion { user-select: none; }
+.hamburger-sub-menu { padding-left: 0.5rem; border-left: 2px solid rgba(255,255,255,0.2); margin-left: 1rem; }
+.hamburger-sub-item { padding: 0.55rem 0.5rem; font-size: 0.8rem; }
+
+/* ─── RICH TEXT TOOLBAR ─── */
+.rt-toolbar {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 6px 8px;
+  background: #f0f2f8;
+  border: 1.5px solid #ddd;
+  border-bottom: none;
+  border-radius: 7px 7px 0 0;
+}
+.rt-toolbar button {
+  background: #fff;
+  border: 1.5px solid #ccc;
+  border-radius: 5px;
+  padding: 3px 9px;
+  font-size: 0.85rem;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  color: #333;
+  line-height: 1.4;
+  transition: background 0.15s, border-color 0.15s;
+}
+.rt-toolbar button:hover { background: #e8ecf8; border-color: #1a2a4a; }
+.rt-toolbar button.rt-bold { font-weight: 900; }
+.rt-toolbar button.rt-italic { font-style: italic; }
+.rt-toolbar button.rt-underline { text-decoration: underline; }
+.rt-toolbar button.rt-link { font-size: 0.78rem; letter-spacing: 0.01em; }
+.rt-toolbar .rt-color-wrap {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 0.78rem; font-family: 'DM Sans', sans-serif; color: #666;
+}
+.rt-toolbar input[type="color"] {
+  width: 28px; height: 28px; border: 1.5px solid #ccc; border-radius: 5px;
+  cursor: pointer; padding: 1px; background: #fff;
+}
+.rt-editable {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1.5px solid #ddd;
+  border-top: none;
+  border-radius: 0 0 7px 7px;
+  padding: 9px 11px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.93rem;
+  outline: none;
+  min-height: 80px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  transition: border-color 0.2s;
+}
+.rt-editable:focus { border-color: #1a2a4a; }
+
+/* ─── PAGE SUBTITLE EDIT ─── */
+.page-sub-edit-btn {
+  background: none;
+  border: 1.5px dashed #aaa;
+  border-radius: 6px;
+  padding: 3px 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #888;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: background 0.2s, border-color 0.2s;
+  vertical-align: middle;
+}
+.page-sub-edit-btn:hover { background: #eef2ff; border-color: #3a6fd8; color: #3a6fd8; }
+.page-sub-inline-edit {
+  display: none;
+  align-items: center;
+  gap: 7px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+.page-sub-inline-edit input[type="text"] {
+  border: 1.5px solid #1a2a4a;
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+  min-width: 260px;
+}
+.page-sub-inline-edit button {
+  background: #1a2a4a;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 5px 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.page-sub-inline-edit button.cancel { background: #aaa; }
 
 /* ─── BAR CHART ANIMATIONS ─── */
 .bar-delay-1 { transition-delay: 0s    !important; }
@@ -1046,10 +1275,22 @@ body.practice-mode #cg-practice-actions { display: flex; }
 </style>
 <style>
 /* ─── PAGE SWITCHING ─── */
-#page-main  { display: block; }
-#page-demo  { display: none;  }
-body.demo-active #page-main { display: none; }
-body.demo-active #page-demo  { display: block; }
+#page-main    { display: block; }
+#page-demo    { display: none;  }
+#page-team    { display: none;  }
+#page-about   { display: none;  }
+#page-contact { display: none;  }
+#page-announcements { display: none; }
+body.demo-active    #page-main    { display: none; }
+body.demo-active    #page-demo    { display: block; }
+body.team-active    #page-main    { display: none; }
+body.team-active    #page-team    { display: block; }
+body.about-active   #page-main    { display: none; }
+body.about-active   #page-about   { display: block; }
+body.contact-active #page-main    { display: none; }
+body.contact-active #page-contact { display: block; }
+body.announcements-active #page-main          { display: none; }
+body.announcements-active #page-announcements { display: block; }
 
 /* ── Waterfall: fully hidden on demo page ── */
 body.demo-active #math-fixed-layer { opacity: 0 !important; }
@@ -1075,6 +1316,681 @@ body.demo-active #history-controls     { top: 98px;  }   /* was 22px  + 76 */
 body.demo-active #left-panel           { top: 181px; }   /* was 105px + 76 */
 body.demo-active #side-calculator,
 body.demo-active #action-journal       { top: 91px;  }   /* was 15px  + 76 */
+
+/* ─── TEAM PAGE ─── */
+#page-team {
+  min-height: 100vh;
+  padding-top: 100px;
+  background: #f4f6fb;
+}
+.team-page-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+.team-page-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  color: #1a2a4a;
+  margin: 0 0 0.4rem 0;
+  text-align: center;
+}
+.team-page-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.05rem;
+  color: #555;
+  text-align: center;
+  margin: 0 0 2.5rem 0;
+}
+#team-members-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.8rem;
+}
+.team-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.09);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.team-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.13);
+}
+.team-card-photo {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  background: #dde3f0;
+  display: block;
+}
+.team-card-photo-placeholder {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #dde3f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.team-card-body {
+  padding: 1rem 1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.team-card-name {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #1a2a4a;
+}
+.team-card-role {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #3a6fd8;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.team-card-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem;
+  color: #555;
+  margin-top: 6px;
+  line-height: 1.5;
+}
+.team-card-delete {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.team-card-delete:hover { background: #e74c3c; }
+.team-card-edit {
+  position: absolute;
+  top: 8px;
+  right: 38px;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.team-card-edit:hover { background: #3a6fd8; }
+
+/* Edit member modal */
+#edit-member-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 2000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+#edit-member-overlay.open {
+  opacity: 1;
+  pointer-events: all;
+}
+#edit-member-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -48%);
+  background: #fff;
+  border-radius: 12px;
+  padding: 2rem 2rem 1.6rem;
+  width: 380px;
+  max-width: 92vw;
+  max-height: 85vh;
+  overflow-y: auto;
+  z-index: 2001;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.22);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+#edit-member-modal.open {
+  opacity: 1;
+  pointer-events: all;
+  transform: translate(-50%, -50%);
+}
+.team-empty-msg {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #aaa;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  padding: 3rem 0;
+}
+/* Admin add-member panel */
+.team-admin-divider {
+  height: 2px;
+  background: #dde3f0;
+  margin: 3rem 0 2rem;
+  border-radius: 2px;
+}
+.team-admin-heading {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1a2a4a;
+  margin: 0 0 1.2rem 0;
+}
+.team-admin-form {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.8rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  max-width: 520px;
+}
+.team-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 1rem;
+}
+.team-form-field label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #444;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.team-form-field input,
+.team-form-field textarea {
+  border: 1.5px solid #ddd;
+  border-radius: 7px;
+  padding: 8px 10px;
+  font-size: 0.93rem;
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  resize: vertical;
+  transition: border-color 0.2s;
+}
+.team-form-field input:focus,
+.team-form-field textarea:focus { border-color: #1a2a4a; }
+.team-add-btn {
+  background: #1a2a4a;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 10px 22px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 0.3rem;
+}
+.team-add-btn:hover { background: #243d6e; }
+
+/* ─── ABOUT US PAGE ─── */
+#page-about {
+  min-height: 100vh;
+  padding-top: 100px;
+  background: #f4f6fb;
+}
+.about-page-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 5rem;
+}
+.about-page-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900;
+  color: #1a2a4a;
+  margin: 0 0 2rem 0;
+  text-align: center;
+}
+.about-body-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.9;
+  color: #333;
+  margin: 0 0 2rem 0;
+}
+.about-img-block {
+  width: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+  margin: 1.5rem 0 2rem;
+  background: #e8ecf5;
+  min-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.about-img-block img {
+  width: 100%;
+  display: block;
+  border-radius: 14px;
+  object-fit: cover;
+  max-height: 440px;
+}
+.about-img-placeholder {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #9aabcc;
+  padding: 3rem;
+  text-align: center;
+}
+.about-admin-bar {
+  display: none;
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.8rem;
+  box-shadow: 0 2px 14px rgba(0,0,0,0.08);
+  margin-top: 2.5rem;
+}
+.about-admin-bar h3 {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 800;
+  color: #1a2a4a;
+  font-size: 1.1rem;
+  margin: 0 0 1.2rem 0;
+}
+.about-section-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #666;
+  margin: 1rem 0 4px;
+}
+.about-admin-bar textarea,
+.about-admin-bar input[type="file"] {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1.5px solid #ddd;
+  border-radius: 7px;
+  padding: 9px 11px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.93rem;
+  outline: none;
+  resize: vertical;
+  transition: border-color 0.2s;
+}
+.about-admin-bar textarea:focus { border-color: #1a2a4a; }
+.about-save-btn {
+  background: #1a2a4a;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 10px 24px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  margin-top: 1.2rem;
+  transition: background 0.2s;
+}
+.about-save-btn:hover { background: #243d6e; }
+
+/* ─── CONTACT PAGE ─── */
+#page-contact {
+  min-height: 100vh;
+  padding-top: 100px;
+  background: #f4f6fb;
+}
+.contact-page-wrap {
+  max-width: 620px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 5rem;
+  text-align: center;
+}
+.contact-page-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900;
+  color: #1a2a4a;
+  margin: 0 0 0.5rem 0;
+}
+.contact-page-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  color: #777;
+  margin: 0 0 2.5rem 0;
+}
+.contact-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.09);
+  padding: 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  text-align: left;
+}
+.contact-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #eef2ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.contact-item-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #999;
+  margin: 0 0 2px 0;
+}
+.contact-item-value {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1a2a4a;
+  margin: 0;
+  word-break: break-all;
+}
+.contact-placeholder-text {
+  color: #bbb;
+  font-style: italic;
+  font-weight: 400;
+}
+.contact-admin-bar {
+  display: none;
+  background: #fff;
+  border-radius: 12px;
+  padding: 1.8rem;
+  box-shadow: 0 2px 14px rgba(0,0,0,0.08);
+  margin-top: 2rem;
+  text-align: left;
+}
+.contact-admin-bar h3 {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 800;
+  color: #1a2a4a;
+  font-size: 1.1rem;
+  margin: 0 0 1.2rem 0;
+}
+.contact-admin-bar input[type="text"],
+.contact-admin-bar input[type="email"],
+.contact-admin-bar input[type="tel"] {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1.5px solid #ddd;
+  border-radius: 7px;
+  padding: 9px 11px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s;
+  margin-bottom: 0.9rem;
+}
+.contact-admin-bar input:focus { border-color: #1a2a4a; }
+.contact-save-btn {
+  background: #1a2a4a;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  padding: 10px 24px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  margin-top: 0.4rem;
+  transition: background 0.2s;
+}
+.contact-save-btn:hover { background: #243d6e; }
+
+/* ─── ANNOUNCEMENTS PAGE ─── */
+#page-announcements {
+  min-height: 100vh;
+  padding-top: 100px;
+  background: #f4f6fb;
+}
+.ann-page-wrap {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 5rem;
+}
+.ann-page-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900;
+  color: #1a2a4a;
+  margin: 0 0 0.4rem 0;
+  text-align: center;
+}
+.ann-page-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.05rem;
+  color: #777;
+  text-align: center;
+  margin: 0 0 2.5rem 0;
+}
+
+/* Announcement cards */
+#ann-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  margin-bottom: 2.5rem;
+}
+.ann-empty-msg {
+  text-align: center;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  color: #bbb;
+  padding: 3rem 0;
+  font-style: italic;
+}
+.ann-card {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid rgba(0,0,0,0.07);
+  box-shadow: 0 4px 22px rgba(0,0,0,0.07);
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-left: 5px solid #1a2a4a;
+}
+.ann-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 32px rgba(0,0,0,0.11);
+}
+.ann-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 1.6rem 0.6rem;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.ann-card-date {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #FF1C1C;
+}
+.ann-card-delete {
+  background: none;
+  border: none;
+  color: #ccc;
+  font-size: 1rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: color 0.2s, background 0.2s;
+  display: none;
+}
+.ann-card-delete:hover { color: #e74c3c; background: #fef2f2; }
+.ann-card-body {
+  padding: 1.1rem 1.6rem 1.4rem;
+}
+.ann-card-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: #222;
+  margin: 0 0 0.4rem 0;
+}
+.ann-card-text a {
+  color: #3a6fd8;
+  text-decoration: underline;
+}
+.ann-card-img {
+  width: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+  max-height: 420px;
+  display: block;
+  margin-top: 0.6rem;
+}
+
+/* Admin compose panel */
+.ann-admin-panel {
+  display: none;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+  padding: 2rem 2rem 1.6rem;
+  margin-bottom: 2rem;
+}
+.ann-admin-panel h3 {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 800;
+  color: #1a2a4a;
+  font-size: 1.15rem;
+  margin: 0 0 1.3rem 0;
+}
+.ann-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 1rem;
+}
+.ann-form-field label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #555;
+}
+.ann-form-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1.5px solid #ddd;
+  border-radius: 9px;
+  padding: 11px 13px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  line-height: 1.65;
+  outline: none;
+  resize: vertical;
+  min-height: 110px;
+  transition: border-color 0.2s;
+}
+.ann-form-field textarea:focus { border-color: #1a2a4a; }
+.ann-form-field input[type="file"] {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem;
+  color: #555;
+}
+.ann-post-btn {
+  background: #1a2a4a;
+  color: #fff;
+  border: none;
+  border-radius: 9px;
+  padding: 11px 26px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 0.4rem;
+}
+.ann-post-btn:hover { background: #243d6e; }
+.ann-cancel-edit-btn {
+  background: #aaa;
+  color: #fff;
+  border: none;
+  border-radius: 9px;
+  padding: 11px 20px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  margin-left: 0.6rem;
+  transition: background 0.2s;
+}
+.ann-cancel-edit-btn:hover { background: #888; }
+/* Placeholder text for ann-editor contenteditable */
+#ann-editor:empty:before {
+  content: attr(placeholder);
+  color: #bbb;
+  pointer-events: none;
+}
+.ann-card-actions {
+  display: flex;
+  gap: 6px;
+}
+.ann-card-edit {
+  background: none;
+  border: none;
+  color: #4D9EFF;
+  font-size: 0.82rem;
+  cursor: pointer;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  transition: background 0.2s, color 0.2s;
+  display: none;
+}
+.ann-card-edit:hover { background: #eef5ff; color: #1a5cb0; }
+.ann-error {
+  display: none;
+  color: #e74c3c;
+  font-size: 0.85rem;
+  font-family: 'DM Sans', sans-serif;
+  margin: 0.3rem 0 0 0;
+}
 </style>
 </head>
 <body>
@@ -1453,7 +2369,12 @@ body.intro-fade-in > #drag-ghost {
         <li><a href="#" id="demo-nav-link" onclick="showPage('demo'); var dd=document.getElementById('nav-dropdown-lr'); dd.classList.remove('open'); dd.classList.add('closed'); return false;">Demo</a></li>
       </ul>
     </li>
+    <li><a href="#" class="nav-link" onclick="showPage('team'); return false;">Our Team</a></li>
+    <li><a href="#" class="nav-link" onclick="showPage('about'); return false;">About Us</a></li>
+    <li><a href="#" class="nav-link" onclick="showPage('announcements'); return false;">Announcements</a></li>
+    <li><a href="#" class="nav-link" onclick="showPage('contact'); return false;">Contact</a></li>
   </ul>
+  <button class="signin-btn" id="signin-btn" onclick="openSignIn()">Sign In</button>
   <button class="hamburger-btn" onclick="toggleHamburger()" aria-label="Open menu" id="hamburger-btn">
     <span></span><span></span><span></span>
   </button>
@@ -1466,21 +2387,92 @@ body.intro-fade-in > #drag-ghost {
     <span class="hamburger-drawer-title">Menu</span>
     <button class="hamburger-close-btn" onclick="closeHamburger()" aria-label="Close menu">&#x2715;</button>
   </div>
-  <a class="hamburger-nav-item">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-    About Us
-    <span class="hni-badge">Coming Soon</span>
+  <a class="hamburger-nav-item" href="#" onclick="showPage('main'); window.scrollTo({top:0,behavior:'smooth'}); closeHamburger(); return false;">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+    Home
   </a>
-  <a class="hamburger-nav-item">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+  <!-- Learning Resources accordion -->
+  <div class="hamburger-nav-item hni-accordion" onclick="toggleHamburgerAccordion(this)" style="cursor:pointer;">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M21 5c-1.11-.35-2.33-.5-3.5-.5-1.95 0-4.05.4-5.5 1.5-1.45-1.1-3.55-1.5-5.5-1.5S2.45 4.9 1 6v14.65c0 .25.25.5.5.5.1 0 .15-.05.25-.05C3.1 20.45 5.05 20 6.5 20c1.95 0 3.75.4 5.5 1.5 1.65-1.05 3.55-1.5 5.5-1.5 1.45 0 2.95.3 4.25 1.05.1.05.15.05.25.05.25 0 .5-.25.5-.5V6c-.6-.45-1.25-.75-2-1zm0 13.5c-1.1-.35-2.3-.5-3.5-.5-1.95 0-3.75.65-5 1.5V8c1.25-.85 3.05-1.5 5-1.5 1.2 0 2.4.15 3.5.5v11.5z"/></svg>
+    Learning Resources
+    <svg class="hni-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.5" stroke-linecap="round" style="margin-left:auto; transition:transform 0.25s;"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+  <div class="hamburger-sub-menu" id="hamburger-sub-lr" style="display:none;">
+    <a class="hamburger-nav-item hamburger-sub-item" href="#" onclick="showPage('demo'); closeHamburger(); return false;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M17 16h-4v-3h-2v3H7l-2 5h14l-2-5zm-5-2c.55 0 1-.45 1-1V5h3l-4-3-4 3h3v8c0 .55.45 1 1 1zM4.5 9L2 16h5L4.5 9zm15 0L17 16h5l-2.5-7z"/></svg>
+      Demo
+    </a>
+  </div>
+  <a class="hamburger-nav-item" href="#" onclick="showPage('team'); closeHamburger(); return false;">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
     Our Team
-    <span class="hni-badge">Coming Soon</span>
   </a>
-  <a class="hamburger-nav-item">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+  <a class="hamburger-nav-item" href="#" onclick="showPage('about'); closeHamburger(); return false;">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+    About Us
+  </a>
+  <a class="hamburger-nav-item" href="#" onclick="showPage('announcements'); closeHamburger(); return false;">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M18 11v2h4v-2h-4zm-2 6.61c.96.71 2.21 1.65 3.2 2.39.4-.53.8-1.07 1.2-1.6-.99-.74-2.24-1.68-3.2-2.4-.4.54-.8 1.08-1.2 1.61zM20.4 5.6c-.4-.53-.8-1.07-1.2-1.6-.99.74-2.24 1.68-3.2 2.4.4.53.8 1.07 1.2 1.6.96-.72 2.21-1.65 3.2-2.4zM4 9c-1.1 0-2 .9-2 2v2c0 1.1.9 2 2 2h1v4h2v-4h1l5 3V6L8 9H4zm11.5 3c0-1.33-.58-2.53-1.5-3.35v6.69c.92-.81 1.5-2.01 1.5-3.34z"/></svg>
+    Announcements
+  </a>
+  <a class="hamburger-nav-item" href="#" onclick="showPage('contact'); closeHamburger(); return false;">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
     Contact
-    <span class="hni-badge">Coming Soon</span>
   </a>
+</div>
+
+<!-- ─── SIGN IN MODAL ─── -->
+<div id="signin-overlay" onclick="closeSignIn()"></div>
+<div id="signin-modal">
+  <button class="signin-modal-close" onclick="closeSignIn()" aria-label="Close">&#x2715;</button>
+  <h2 class="signin-modal-title">Admin Sign In</h2>
+  <div class="signin-field">
+    <label for="signin-username">Username</label>
+    <input type="text" id="signin-username" autocomplete="username" placeholder="Enter username" />
+  </div>
+  <div class="signin-field">
+    <label for="signin-password">Password</label>
+    <input type="password" id="signin-password" autocomplete="current-password" placeholder="Enter password" />
+  </div>
+  <p id="signin-error" style="display:none; color:#e74c3c; font-size:0.85rem; margin:0 0 0.5rem 0;">Incorrect username or password.</p>
+  <button class="signin-submit-btn" onclick="attemptSignIn()">Sign In</button>
+</div>
+
+<!-- ─── EDIT MEMBER MODAL ─── -->
+<div id="edit-member-overlay" onclick="closeEditMember()"></div>
+<div id="edit-member-modal">
+  <button class="signin-modal-close" onclick="closeEditMember()" aria-label="Close">&#x2715;</button>
+  <h2 class="signin-modal-title">Edit Member</h2>
+  <div class="team-form-field">
+    <label>Full Name *</label>
+    <input type="text" id="eme-name" placeholder="e.g. Jane Smith" />
+  </div>
+  <div class="team-form-field">
+    <label>Role *</label>
+    <input type="text" id="eme-role" placeholder="e.g. Founder, Head of Marketing…" />
+  </div>
+  <div class="team-form-field">
+    <label>Brief Description *</label>
+    <div class="rt-toolbar">
+      <button class="rt-bold" onclick="rtFormat('eme-desc','bold')" title="Bold"><b>B</b></button>
+      <button class="rt-italic" onclick="rtFormat('eme-desc','italic')" title="Italic"><i>I</i></button>
+      <button class="rt-underline" onclick="rtFormat('eme-desc','underline')" title="Underline"><u>U</u></button>
+      <button class="rt-link" onclick="rtFormat('eme-desc','link')" title="Add Link"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Link</button>
+      <div class="rt-color-wrap">
+        <span>Color:</span>
+        <input type="color" id="rt-eme-color" value="#FF1C1C" title="Text color" />
+        <button onclick="rtFormat('eme-desc','color')" title="Apply color">A</button>
+      </div>
+    </div>
+    <div class="rt-editable" id="eme-desc" contenteditable="true" style="min-height:60px;"></div>
+  </div>
+  <div class="team-form-field">
+    <label>Photo (optional — leave blank to keep current)</label>
+    <input type="file" id="eme-photo" accept="image/*" />
+    <p id="eme-photo-current" style="font-size:0.8rem; color:#888; margin:4px 0 0 0;"></p>
+  </div>
+  <p id="eme-error" style="display:none; color:#e74c3c; font-size:0.85rem; margin:0 0 0.5rem 0;"></p>
+  <button class="signin-submit-btn" onclick="saveEditMember()">💾 Save Changes</button>
 </div>
 
 <div id="page-main">
@@ -1630,7 +2622,231 @@ body.intro-fade-in > #drag-ghost {
   <p style="font-weight: 600; color: var(--text-muted); font-size: 1.1rem;">Hands-on math education for the <span class="phrase-bold">next generation of thinkers</span>.</p>
   <p class="footer-copy">© 2025 Conception · Research provided via July 2025 RAND Study & NIH 2018</p>
 </footer>
-</div><div id="page-demo">
+</div><div id="page-team">
+  <div class="team-page-wrap">
+    <h1 class="team-page-title">Our Team</h1>
+    <p class="team-page-sub" id="team-page-sub">Meet the people behind Conception.</p>
+    <div id="team-sub-edit-wrap" style="display:none; justify-content:center; align-items:center; gap:7px; margin-bottom:2rem; flex-wrap:wrap;">
+      <input type="text" id="team-sub-input" style="border:1.5px solid #1a2a4a; border-radius:6px; padding:5px 10px; font-family:'DM Sans',sans-serif; font-size:0.95rem; outline:none; min-width:260px;" />
+      <button onclick="savePageSub('team')" style="background:#1a2a4a;color:#fff;border:none;border-radius:6px;padding:5px 14px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;">Save</button>
+      <button onclick="cancelPageSubEdit('team')" style="background:#aaa;color:#fff;border:none;border-radius:6px;padding:5px 14px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;">Cancel</button>
+    </div>
+    <div id="team-sub-editbtn-wrap" style="display:none; text-align:center; margin-bottom:1rem;">
+      <button class="page-sub-edit-btn" onclick="openPageSubEdit('team')">✏️ Edit subtitle</button>
+    </div>
+    <div id="team-members-grid"></div>
+
+    <!-- Admin: Add Member Panel -->
+    <div id="team-admin-panel" style="display:none;">
+      <div class="team-admin-divider"></div>
+      <h2 class="team-admin-heading">Add New Member</h2>
+      <div class="team-admin-form">
+        <div class="team-form-field">
+          <label>Full Name *</label>
+          <input type="text" id="tmf-name" placeholder="e.g. Jane Smith" />
+        </div>
+        <div class="team-form-field">
+          <label>Role *</label>
+          <input type="text" id="tmf-role" placeholder="e.g. Founder, Head of Marketing…" />
+        </div>
+        <div class="team-form-field">
+          <label>Brief Description *</label>
+          <div class="rt-toolbar">
+            <button class="rt-bold" onclick="rtFormat('tmf-desc','bold')" title="Bold"><b>B</b></button>
+            <button class="rt-italic" onclick="rtFormat('tmf-desc','italic')" title="Italic"><i>I</i></button>
+            <button class="rt-underline" onclick="rtFormat('tmf-desc','underline')" title="Underline"><u>U</u></button>
+            <button class="rt-link" onclick="rtFormat('tmf-desc','link')" title="Add Link"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Link</button>
+            <div class="rt-color-wrap">
+              <span>Color:</span>
+              <input type="color" id="rt-tmf-color" value="#FF1C1C" title="Text color" />
+              <button onclick="rtFormat('tmf-desc','color')" title="Apply color">A</button>
+            </div>
+          </div>
+          <div class="rt-editable" id="tmf-desc" contenteditable="true" style="min-height:60px;"></div>
+        </div>
+        <div class="team-form-field">
+          <label>Photo *</label>
+          <input type="file" id="tmf-photo" accept="image/*" />
+        </div>
+        <p id="tmf-error" style="display:none; color:#e74c3c; font-size:0.85rem; margin:0 0 0.5rem 0;"></p>
+        <button class="team-add-btn" onclick="addTeamMember()">Add Member</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ABOUT US PAGE ═══ -->
+<div id="page-about">
+  <div class="about-page-wrap">
+    <h1 class="about-page-title">About Us</h1>
+    <p class="about-page-sub" id="about-page-sub" style="font-family:'DM Sans',sans-serif; font-size:1rem; color:#777; text-align:center; margin:0 0 2rem 0;">Learn more about what we do and why we do it.</p>
+    <div id="about-sub-edit-wrap" style="display:none; justify-content:center; align-items:center; gap:7px; margin-bottom:2rem; flex-wrap:wrap;">
+      <input type="text" id="about-sub-input" style="border:1.5px solid #1a2a4a; border-radius:6px; padding:5px 10px; font-family:'DM Sans',sans-serif; font-size:0.95rem; outline:none; min-width:260px;" />
+      <button onclick="savePageSub('about')" style="background:#1a2a4a;color:#fff;border:none;border-radius:6px;padding:5px 14px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;">Save</button>
+      <button onclick="cancelPageSubEdit('about')" style="background:#aaa;color:#fff;border:none;border-radius:6px;padding:5px 14px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;">Cancel</button>
+    </div>
+    <div id="about-sub-editbtn-wrap" style="display:none; text-align:center; margin-bottom:1rem;">
+      <button class="page-sub-edit-btn" onclick="openPageSubEdit('about')">✏️ Edit subtitle</button>
+    </div>
+
+    <!-- View mode -->
+    <div id="about-view">
+      <p id="about-text-1" class="about-body-text">Tell your story here. Who are you, what do you do, and why does it matter? Add as much detail as you like — this section supports multiple paragraphs.</p>
+
+      <div class="about-img-block" id="about-img-1-wrap">
+        <img id="about-img-1" src="" alt="About image 1" style="display:none;" />
+        <p class="about-img-placeholder" id="about-img-1-placeholder">[ Image 1 — set by admin ]</p>
+      </div>
+
+      <p id="about-text-2" class="about-body-text">Continue your story here. This second block of text appears between the two images. Share your mission, history, or values.</p>
+
+      <div class="about-img-block" id="about-img-2-wrap">
+        <img id="about-img-2" src="" alt="About image 2" style="display:none;" />
+        <p class="about-img-placeholder" id="about-img-2-placeholder">[ Image 2 — set by admin ]</p>
+      </div>
+    </div>
+
+    <!-- Admin edit panel -->
+    <div class="about-admin-bar" id="about-admin-bar">
+      <h3>✏️ Edit About Us</h3>
+
+      <p class="about-section-label">First block of text</p>
+      <div class="rt-toolbar" id="rt-about1-bar">
+        <button class="rt-bold" onclick="rtFormat('about-edit-text-1','bold')" title="Bold"><b>B</b></button>
+        <button class="rt-italic" onclick="rtFormat('about-edit-text-1','italic')" title="Italic"><i>I</i></button>
+        <button class="rt-underline" onclick="rtFormat('about-edit-text-1','underline')" title="Underline"><u>U</u></button>
+        <button class="rt-link" onclick="rtFormat('about-edit-text-1','link')" title="Add Link"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Link</button>
+        <div class="rt-color-wrap">
+          <span>Color:</span>
+          <input type="color" id="rt-about1-color" value="#FF1C1C" title="Text color" />
+          <button onclick="rtFormat('about-edit-text-1','color')" title="Apply color">A</button>
+        </div>
+      </div>
+      <div class="rt-editable" id="about-edit-text-1" contenteditable="true"></div>
+
+      <p class="about-section-label">Image 1 (appears after first text block)</p>
+      <input type="file" id="about-edit-img-1" accept="image/*" />
+      <p id="about-edit-img-1-note" style="font-size:0.78rem;color:#999;margin:4px 0 0 0;"></p>
+
+      <p class="about-section-label">Second block of text</p>
+      <div class="rt-toolbar" id="rt-about2-bar">
+        <button class="rt-bold" onclick="rtFormat('about-edit-text-2','bold')" title="Bold"><b>B</b></button>
+        <button class="rt-italic" onclick="rtFormat('about-edit-text-2','italic')" title="Italic"><i>I</i></button>
+        <button class="rt-underline" onclick="rtFormat('about-edit-text-2','underline')" title="Underline"><u>U</u></button>
+        <button class="rt-link" onclick="rtFormat('about-edit-text-2','link')" title="Add Link"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Link</button>
+        <div class="rt-color-wrap">
+          <span>Color:</span>
+          <input type="color" id="rt-about2-color" value="#FF1C1C" title="Text color" />
+          <button onclick="rtFormat('about-edit-text-2','color')" title="Apply color">A</button>
+        </div>
+      </div>
+      <div class="rt-editable" id="about-edit-text-2" contenteditable="true"></div>
+
+      <p class="about-section-label">Image 2 (appears after second text block)</p>
+      <input type="file" id="about-edit-img-2" accept="image/*" />
+      <p id="about-edit-img-2-note" style="font-size:0.78rem;color:#999;margin:4px 0 0 0;"></p>
+
+      <br/>
+      <button class="about-save-btn" onclick="saveAbout()">💾 Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CONTACT PAGE ═══ -->
+<div id="page-contact">
+  <div class="contact-page-wrap">
+    <h1 class="contact-page-title">Contact Us</h1>
+    <p class="contact-page-sub" id="contact-page-sub">We'd love to hear from you.</p>
+    <div id="contact-sub-edit-wrap" style="display:none; justify-content:center; align-items:center; gap:7px; margin-bottom:2rem; flex-wrap:wrap;">
+      <input type="text" id="contact-sub-input" style="border:1.5px solid #1a2a4a; border-radius:6px; padding:5px 10px; font-family:'DM Sans',sans-serif; font-size:0.95rem; outline:none; min-width:260px;" />
+      <button onclick="savePageSub('contact')" style="background:#1a2a4a;color:#fff;border:none;border-radius:6px;padding:5px 14px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;">Save</button>
+      <button onclick="cancelPageSubEdit('contact')" style="background:#aaa;color:#fff;border:none;border-radius:6px;padding:5px 14px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;">Cancel</button>
+    </div>
+    <div id="contact-sub-editbtn-wrap" style="display:none; text-align:center; margin-bottom:1rem;">
+      <button class="page-sub-edit-btn" onclick="openPageSubEdit('contact')">✏️ Edit subtitle</button>
+    </div>
+
+    <div class="contact-card">
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#3a6fd8"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24 11.47 11.47 0 003.58.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1 11.47 11.47 0 00.57 3.58 1 1 0 01-.25 1.01l-2.2 2.2z"/></svg>
+        </div>
+        <div>
+          <p class="contact-item-label">Phone</p>
+          <p class="contact-item-value" id="contact-phone-display"><span class="contact-placeholder-text">Not set yet</span></p>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#3a6fd8"><path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        </div>
+        <div>
+          <p class="contact-item-label">Email</p>
+          <p class="contact-item-value" id="contact-email-display"><span class="contact-placeholder-text">Not set yet</span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin edit panel -->
+    <div class="contact-admin-bar" id="contact-admin-bar">
+      <h3>✏️ Edit Contact Info</h3>
+      <label class="about-section-label">Phone Number</label>
+      <input type="tel" id="contact-edit-phone" placeholder="e.g. (555) 123-4567" />
+      <label class="about-section-label">Email Address</label>
+      <input type="email" id="contact-edit-email" placeholder="e.g. hello@conception.org" />
+      <button class="contact-save-btn" onclick="saveContact()">💾 Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ANNOUNCEMENTS PAGE ═══ -->
+<div id="page-announcements">
+  <div class="ann-page-wrap">
+    <h1 class="ann-page-title">Announcements</h1>
+    <p class="ann-page-sub" id="ann-page-sub">Stay up to date with the latest news from Conception.</p>
+
+    <!-- Admin compose panel (only visible when signed in) -->
+    <div class="ann-admin-panel" id="ann-admin-panel">
+      <h3>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:6px;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Post an Announcement
+      </h3>
+      <div class="ann-form-field">
+        <label>Announcement Text *</label>
+        <div class="rt-toolbar">
+          <button class="rt-bold" onclick="rtFormat('ann-editor','bold')" title="Bold"><b>B</b></button>
+          <button class="rt-italic" onclick="rtFormat('ann-editor','italic')" title="Italic"><i>I</i></button>
+          <button class="rt-underline" onclick="rtFormat('ann-editor','underline')" title="Underline"><u>U</u></button>
+          <button class="rt-link" onclick="rtFormat('ann-editor','link')" title="Add Link"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Link</button>
+          <div class="rt-color-wrap">
+            <span>Color:</span>
+            <input type="color" id="rt-ann-color" value="#FF1C1C" title="Text color" />
+            <button onclick="rtFormat('ann-editor','color')" title="Apply color">A</button>
+          </div>
+        </div>
+        <div class="rt-editable" id="ann-editor" contenteditable="true" style="min-height:100px;" placeholder="Write your announcement here…"></div>
+      </div>
+      <div class="ann-form-field">
+        <label>Attach Image (optional)</label>
+        <input type="file" id="ann-img-input" accept="image/*" />
+      </div>
+      <p class="ann-error" id="ann-error">Please write an announcement before posting.</p>
+      <button class="ann-post-btn" id="ann-post-btn" onclick="postAnnouncement()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:5px;"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Post Announcement
+      </button>
+      <button class="ann-cancel-edit-btn" id="ann-cancel-edit-btn" onclick="cancelEditAnnouncement()" style="display:none;">Cancel Edit</button>
+      <input type="hidden" id="ann-edit-index" value="-1" />
+    </div>
+
+    <!-- Announcement cards list -->
+    <div id="ann-list">
+      <p class="ann-empty-msg" id="ann-empty-msg">No announcements yet.</p>
+    </div>
+  </div>
+</div>
+
+<div id="page-demo">
 <div id="demo-wrapper" ondragover="allow(event)" ondrop="trash(event)">
 
     <img id="main-logo" src="transparent logo.png" alt="Logo" onerror="this.style.display='none'">
@@ -1809,11 +3025,55 @@ body.intro-fade-in > #drag-ghost {
 
 </div><section id="demo-description" style="width:100%; padding:8rem 2rem; background:#ffffff; border-top:3px solid #e8ecf0;">
   <div style="max-width:900px; margin:0 auto; font-family:'DM Sans',sans-serif;">
-    <h2 style="font-family:'Playfair Display',serif; font-size:clamp(2rem,4vw,3.2rem); font-weight:900; color:#1A2B45; margin-bottom:1.5rem;">Demo Title Here</h2>
-    <p style="font-size:1.2rem; line-height:1.85; color:#333333; margin-bottom:3rem;">Replace this paragraph with a description of the demo. Explain what the balance scale represents, how apples and candy map to algebraic variables, and how students can use the experimental and practice modes to build intuition for solving equations.</p>
-    <div style="width:100%; min-height:320px; background:#F9FBFF; border:2.5px dashed #4D9EFF; border-radius:14px; display:flex; align-items:center; justify-content:center;">
-      <span style="font-family:'DM Sans',sans-serif; font-size:1rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#4D9EFF;">[ Image placeholder — replace with &lt;img&gt; tag ]</span>
+
+    <!-- View mode -->
+    <div id="demo-desc-view">
+      <h2 id="demo-desc-title" style="font-family:'Playfair Display',serif; font-size:clamp(2rem,4vw,3.2rem); font-weight:900; color:#1A2B45; margin-bottom:1.5rem;">Demo Title Here</h2>
+      <p id="demo-desc-body" style="font-size:1.2rem; line-height:1.85; color:#333333; margin-bottom:3rem;">Replace this paragraph with a description of the demo. Explain what the balance scale represents, how apples and candy map to algebraic variables, and how students can use the experimental and practice modes to build intuition for solving equations.</p>
+      <div id="demo-desc-img-wrap" style="width:100%; min-height:320px; background:#F9FBFF; border:2.5px dashed #4D9EFF; border-radius:14px; display:flex; align-items:center; justify-content:center;">
+        <span id="demo-desc-img-placeholder" style="font-family:'DM Sans',sans-serif; font-size:1rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#4D9EFF;">[ Image placeholder — replace with &lt;img&gt; tag ]</span>
+        <img id="demo-desc-img" src="" alt="Demo image" style="display:none; width:100%; border-radius:12px; object-fit:contain; max-height:480px;" />
+      </div>
+      <!-- Admin edit button (only visible when signed in) -->
+      <div id="demo-desc-edit-btn-wrap" style="display:none; margin-top:1.5rem;">
+        <button onclick="openDemoDescEdit()" style="background:#1a2a4a; color:#fff; border:none; border-radius:7px; padding:9px 20px; font-family:'DM Sans',sans-serif; font-weight:700; font-size:0.9rem; cursor:pointer;">✏️ Edit This Section</button>
+      </div>
     </div>
+
+    <!-- Edit mode (admin only) -->
+    <div id="demo-desc-edit" style="display:none; background:#f4f6fb; border-radius:14px; padding:2rem; margin-top:1rem;">
+      <h3 style="font-family:'DM Sans',sans-serif; font-weight:800; color:#1a2a4a; margin:0 0 1.2rem 0;">Edit Demo Description</h3>
+      <div class="team-form-field">
+        <label>Title</label>
+        <input type="text" id="dde-title" placeholder="Demo Title Here" />
+      </div>
+      <div class="team-form-field">
+        <label>Description</label>
+        <div class="rt-toolbar">
+          <button class="rt-bold" onclick="rtFormat('dde-body','bold')" title="Bold"><b>B</b></button>
+          <button class="rt-italic" onclick="rtFormat('dde-body','italic')" title="Italic"><i>I</i></button>
+          <button class="rt-underline" onclick="rtFormat('dde-body','underline')" title="Underline"><u>U</u></button>
+          <button class="rt-link" onclick="rtFormat('dde-body','link')" title="Add Link"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Link</button>
+          <div class="rt-color-wrap">
+            <span>Color:</span>
+            <input type="color" id="rt-dde-color" value="#FF1C1C" title="Text color" />
+            <button onclick="rtFormat('dde-body','color')" title="Apply color">A</button>
+          </div>
+        </div>
+        <div class="rt-editable" id="dde-body" contenteditable="true"></div>
+      </div>
+      <div class="team-form-field">
+        <label>Image (upload to replace placeholder)</label>
+        <input type="file" id="dde-img" accept="image/*" />
+        <p id="dde-img-current" style="font-size:0.8rem; color:#888; margin:4px 0 0 0;"></p>
+      </div>
+      <p id="dde-error" style="display:none; color:#e74c3c; font-size:0.85rem; margin:0 0 0.5rem 0;"></p>
+      <div style="display:flex; gap:0.8rem; flex-wrap:wrap; margin-top:0.5rem;">
+        <button onclick="saveDemoDesc()" style="background:#1a2a4a; color:#fff; border:none; border-radius:7px; padding:10px 22px; font-family:'DM Sans',sans-serif; font-weight:700; font-size:0.95rem; cursor:pointer;">💾 Save</button>
+        <button onclick="closeDemoDescEdit()" style="background:#ccc; color:#333; border:none; border-radius:7px; padding:10px 18px; font-family:'DM Sans',sans-serif; font-weight:700; font-size:0.95rem; cursor:pointer;">Cancel</button>
+      </div>
+    </div>
+
   </div>
 </section>
 </div><script>
@@ -1911,7 +3171,13 @@ body.intro-fade-in > #drag-ghost {
   let rafId = null;
   function update() {
     const scrollY  = window.scrollY;
-    const pastHero = scrollY > heroBottom - 80;
+    // Show symbols: always show on non-main pages, only show past hero on main page
+    const isMainPage = !document.body.classList.contains('team-active') &&
+                       !document.body.classList.contains('about-active') &&
+                       !document.body.classList.contains('contact-active') &&
+                       !document.body.classList.contains('announcements-active') &&
+                       !document.body.classList.contains('demo-active');
+    const pastHero = isMainPage ? (scrollY > heroBottom - 80) : true;
     layer.style.opacity = pastHero ? '1' : '0';
 
     symbols.forEach(({ el, basePx, rate }) => {
@@ -1926,6 +3192,7 @@ body.intro-fade-in > #drag-ghost {
     if (!rafId) rafId = requestAnimationFrame(update);
   }, { passive: true });
 
+  window._updateMathLayer = update;
   update();
 })();
 
@@ -2013,21 +3280,459 @@ function countUp(el,target,sfx){
 // ═══════════════════════════════════════════════════
 
 function showPage(page) {
+    document.body.classList.remove('demo-active','team-active','about-active','contact-active','announcements-active');
+    window.scrollTo(0, 0);
     if (page === 'demo') {
         document.body.classList.add('demo-active');
-        window.scrollTo(0, 0);
+    } else if (page === 'team') {
+        document.body.classList.add('team-active');
+        renderTeamMembers();
+    } else if (page === 'about') {
+        document.body.classList.add('about-active');
+        loadAboutPage();
+    } else if (page === 'contact') {
+        document.body.classList.add('contact-active');
+        loadContactPage();
+    } else if (page === 'announcements') {
+        document.body.classList.add('announcements-active');
+        loadAnnouncementsPage();
+    }
+    // Refresh math symbol layer visibility for the new page
+    if (window._updateMathLayer) setTimeout(window._updateMathLayer, 50);
+}
+
+// ─── TEAM MEMBERS (persistent via localStorage) ───
+function getTeamMembers() {
+    try { return JSON.parse(localStorage.getItem('conception_team') || '[]'); }
+    catch(e) { return []; }
+}
+function saveTeamMembers(members) {
+    localStorage.setItem('conception_team', JSON.stringify(members));
+}
+function renderTeamMembers() {
+    const grid = document.getElementById('team-members-grid');
+    const members = getTeamMembers();
+    const isAdmin = window._conceptionAdmin === true;
+    if (members.length === 0) {
+        grid.innerHTML = '<p class="team-empty-msg">No team members yet.</p>';
     } else {
-        document.body.classList.remove('demo-active');
-        window.scrollTo(0, 0);
+        grid.innerHTML = members.map((m, i) => `
+          <div class="team-card">
+            ${isAdmin ? `
+              <button class="team-card-delete" onclick="deleteTeamMember(${i})" title="Remove member">&#x2715;</button>
+              <button class="team-card-edit" onclick="openEditMember(${i})" title="Edit member">✏️</button>
+            ` : ''}
+            ${m.photo
+              ? `<img class="team-card-photo" src="${m.photo}" alt="${m.name}" />`
+              : `<div class="team-card-photo-placeholder"><svg width="60" height="60" viewBox="0 0 24 24" fill="#aaa"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg></div>`
+            }
+            <div class="team-card-body">
+              <div class="team-card-name">${m.name}</div>
+              <div class="team-card-role">${m.role}</div>
+              <div class="team-card-desc">${m.desc}</div>
+            </div>
+          </div>`).join('');
+    }
+    // Show/hide admin panel
+    document.getElementById('team-admin-panel').style.display = isAdmin ? 'block' : 'none';
+    document.getElementById('team-sub-editbtn-wrap').style.display = isAdmin ? 'block' : 'none';
+    // Load team page subtitle
+    try {
+        const subs = JSON.parse(localStorage.getItem('conception_page_subs') || '{}');
+        if (subs.team) document.getElementById('team-page-sub').textContent = subs.team;
+    } catch(e) {}
+}
+function deleteTeamMember(index) {
+    const members = getTeamMembers();
+    members.splice(index, 1);
+    saveTeamMembers(members);
+    renderTeamMembers();
+}
+function addTeamMember() {
+    const name  = document.getElementById('tmf-name').value.trim();
+    const role  = document.getElementById('tmf-role').value.trim();
+    const desc  = document.getElementById('tmf-desc').innerHTML.trim();
+    const file  = document.getElementById('tmf-photo').files[0];
+    const errEl = document.getElementById('tmf-error');
+    if (!name || !role || !desc || desc === '<br>') {
+        errEl.textContent = 'Please fill out all required fields.';
+        errEl.style.display = 'block';
+        return;
+    }
+    errEl.style.display = 'none';
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const members = getTeamMembers();
+            members.push({ name, role, desc, photo: e.target.result });
+            saveTeamMembers(members);
+            clearTeamForm();
+            renderTeamMembers();
+        };
+        reader.readAsDataURL(file);
+    } else {
+        const members = getTeamMembers();
+        members.push({ name, role, desc, photo: null });
+        saveTeamMembers(members);
+        clearTeamForm();
+        renderTeamMembers();
+    }
+}
+function clearTeamForm() {
+    document.getElementById('tmf-name').value = '';
+    document.getElementById('tmf-role').value = '';
+    document.getElementById('tmf-desc').innerHTML = '';
+    document.getElementById('tmf-photo').value = '';
+}
+
+// ─── EDIT TEAM MEMBER ───
+let _editingMemberIndex = -1;
+
+function openEditMember(index) {
+    const members = getTeamMembers();
+    const m = members[index];
+    _editingMemberIndex = index;
+    document.getElementById('eme-name').value = m.name;
+    document.getElementById('eme-role').value = m.role;
+    document.getElementById('eme-desc').innerHTML = m.desc;
+    document.getElementById('eme-photo-current').textContent = m.photo ? 'Current photo saved. Upload a new one to replace it.' : 'No photo set.';
+    document.getElementById('eme-photo').value = '';
+    document.getElementById('eme-error').style.display = 'none';
+    document.getElementById('edit-member-overlay').classList.add('open');
+    document.getElementById('edit-member-modal').classList.add('open');
+}
+function closeEditMember() {
+    document.getElementById('edit-member-overlay').classList.remove('open');
+    document.getElementById('edit-member-modal').classList.remove('open');
+    _editingMemberIndex = -1;
+}
+function saveEditMember() {
+    const name = document.getElementById('eme-name').value.trim();
+    const role = document.getElementById('eme-role').value.trim();
+    const desc = document.getElementById('eme-desc').innerHTML.trim();
+    const file = document.getElementById('eme-photo').files[0];
+    const errEl = document.getElementById('eme-error');
+    if (!name || !role || !desc || desc === '<br>') {
+        errEl.textContent = 'Please fill out all required fields.';
+        errEl.style.display = 'block';
+        return;
+    }
+    errEl.style.display = 'none';
+    const members = getTeamMembers();
+    const existing = members[_editingMemberIndex];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            members[_editingMemberIndex] = { name, role, desc, photo: e.target.result };
+            saveTeamMembers(members);
+            closeEditMember();
+            renderTeamMembers();
+        };
+        reader.readAsDataURL(file);
+    } else {
+        members[_editingMemberIndex] = { name, role, desc, photo: existing.photo || null };
+        saveTeamMembers(members);
+        closeEditMember();
+        renderTeamMembers();
     }
 }
 
+// ─── DEMO DESCRIPTION (persistent via localStorage) ───
+function loadDemoDesc() {
+    try {
+        const saved = JSON.parse(localStorage.getItem('conception_demo_desc') || '{}');
+        if (saved.title) document.getElementById('demo-desc-title').textContent = saved.title;
+        if (saved.body)  document.getElementById('demo-desc-body').innerHTML  = saved.body;
+        if (saved.img) {
+            document.getElementById('demo-desc-img').src = saved.img;
+            document.getElementById('demo-desc-img').style.display = 'block';
+            document.getElementById('demo-desc-img-placeholder').style.display = 'none';
+            document.getElementById('demo-desc-img-wrap').style.border = 'none';
+            document.getElementById('demo-desc-img-wrap').style.background = 'transparent';
+        }
+    } catch(e) {}
+}
+function openDemoDescEdit() {
+    const saved = (() => { try { return JSON.parse(localStorage.getItem('conception_demo_desc') || '{}'); } catch(e) { return {}; } })();
+    document.getElementById('dde-title').value = saved.title || document.getElementById('demo-desc-title').textContent;
+    document.getElementById('dde-body').innerHTML  = saved.body  || document.getElementById('demo-desc-body').innerHTML;
+    document.getElementById('dde-img-current').textContent = saved.img ? 'Current image saved. Upload a new one to replace.' : 'No image set yet.';
+    document.getElementById('dde-img').value = '';
+    document.getElementById('dde-error').style.display = 'none';
+    document.getElementById('demo-desc-view').style.display = 'none';
+    document.getElementById('demo-desc-edit').style.display = 'block';
+}
+function closeDemoDescEdit() {
+    document.getElementById('demo-desc-view').style.display = 'block';
+    document.getElementById('demo-desc-edit').style.display = 'none';
+}
+function saveDemoDesc() {
+    const title = document.getElementById('dde-title').value.trim();
+    const body  = document.getElementById('dde-body').innerHTML.trim();
+    const file  = document.getElementById('dde-img').files[0];
+    const errEl = document.getElementById('dde-error');
+    if (!title || !body || body === '<br>') {
+        errEl.textContent = 'Title and description cannot be empty.';
+        errEl.style.display = 'block';
+        return;
+    }
+    errEl.style.display = 'none';
+    const existing = (() => { try { return JSON.parse(localStorage.getItem('conception_demo_desc') || '{}'); } catch(e) { return {}; } })();
+    function applyAndSave(imgData) {
+        const data = { title, body, img: imgData || existing.img || null };
+        localStorage.setItem('conception_demo_desc', JSON.stringify(data));
+        document.getElementById('demo-desc-title').textContent = title;
+        document.getElementById('demo-desc-body').innerHTML  = body;
+        if (data.img) {
+            document.getElementById('demo-desc-img').src = data.img;
+            document.getElementById('demo-desc-img').style.display = 'block';
+            document.getElementById('demo-desc-img-placeholder').style.display = 'none';
+            document.getElementById('demo-desc-img-wrap').style.border = 'none';
+            document.getElementById('demo-desc-img-wrap').style.background = 'transparent';
+        }
+        closeDemoDescEdit();
+    }
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) { applyAndSave(e.target.result); };
+        reader.readAsDataURL(file);
+    } else {
+        applyAndSave(null);
+    }
+}
+// Load saved demo description on page load
+loadDemoDesc();
 
-// ═══════════════════════════════════════════════════
-// DEMO JAVASCRIPT (unchanged from applesandcandydemo.html)
-// ═══════════════════════════════════════════════════
+// ─── ABOUT US (persistent via localStorage) ───
+function loadAboutPage() {
+    const isAdmin = window._conceptionAdmin === true;
+    document.getElementById('about-admin-bar').style.display = isAdmin ? 'block' : 'none';
+    document.getElementById('about-sub-editbtn-wrap').style.display = isAdmin ? 'block' : 'none';
+    try {
+        const d = JSON.parse(localStorage.getItem('conception_about') || '{}');
+        if (d.text1 !== undefined) document.getElementById('about-text-1').innerHTML = d.text1;
+        if (d.text2 !== undefined) document.getElementById('about-text-2').innerHTML = d.text2;
+        _applyAboutImg(1, d.img1 || null);
+        _applyAboutImg(2, d.img2 || null);
+        // Load page subtitle
+        const subs = JSON.parse(localStorage.getItem('conception_page_subs') || '{}');
+        if (subs.about) document.getElementById('about-page-sub').textContent = subs.about;
+        if (isAdmin) {
+            document.getElementById('about-edit-text-1').innerHTML = d.text1 || document.getElementById('about-text-1').innerHTML;
+            document.getElementById('about-edit-text-2').innerHTML = d.text2 || document.getElementById('about-text-2').innerHTML;
+            document.getElementById('about-edit-img-1-note').textContent = d.img1 ? 'Image 1 saved. Upload to replace.' : 'No image set.';
+            document.getElementById('about-edit-img-2-note').textContent = d.img2 ? 'Image 2 saved. Upload to replace.' : 'No image set.';
+        }
+    } catch(e) {}
+}
+function _applyAboutImg(n, src) {
+    const img = document.getElementById('about-img-' + n);
+    const ph  = document.getElementById('about-img-' + n + '-placeholder');
+    const wrap = document.getElementById('about-img-' + n + '-wrap');
+    if (src) {
+        img.src = src;
+        img.style.display = 'block';
+        ph.style.display = 'none';
+        wrap.style.background = 'transparent';
+        wrap.style.minHeight = '0';
+    } else {
+        img.style.display = 'none';
+        ph.style.display = 'block';
+        wrap.style.background = '#e8ecf5';
+        wrap.style.minHeight = '180px';
+    }
+}
+function saveAbout() {
+    const text1 = document.getElementById('about-edit-text-1').innerHTML;
+    const text2 = document.getElementById('about-edit-text-2').innerHTML;
+    const file1 = document.getElementById('about-edit-img-1').files[0];
+    const file2 = document.getElementById('about-edit-img-2').files[0];
+    const existing = (() => { try { return JSON.parse(localStorage.getItem('conception_about') || '{}'); } catch(e) { return {}; } })();
 
-        let data = { l: { a: 0, c: 0 }, r: { a: 0, c: 0 } };
+    function finish(img1, img2) {
+        const d = { text1, text2, img1, img2 };
+        localStorage.setItem('conception_about', JSON.stringify(d));
+        document.getElementById('about-text-1').innerHTML = text1;
+        document.getElementById('about-text-2').innerHTML = text2;
+        _applyAboutImg(1, img1);
+        _applyAboutImg(2, img2);
+        document.getElementById('about-edit-img-1-note').textContent = img1 ? 'Image 1 saved. Upload to replace.' : 'No image set.';
+        document.getElementById('about-edit-img-2-note').textContent = img2 ? 'Image 2 saved. Upload to replace.' : 'No image set.';
+        document.getElementById('about-edit-img-1').value = '';
+        document.getElementById('about-edit-img-2').value = '';
+        alert('About Us saved!');
+    }
+
+    function readFile(file, cb) {
+        if (!file) { cb(null); return; }
+        const r = new FileReader();
+        r.onload = e => cb(e.target.result);
+        r.readAsDataURL(file);
+    }
+
+    readFile(file1, function(img1Result) {
+        readFile(file2, function(img2Result) {
+            finish(img1Result || existing.img1 || null, img2Result || existing.img2 || null);
+        });
+    });
+}
+
+// ─── CONTACT (persistent via localStorage) ───
+function loadContactPage() {
+    const isAdmin = window._conceptionAdmin === true;
+    document.getElementById('contact-admin-bar').style.display = isAdmin ? 'block' : 'none';
+    document.getElementById('contact-sub-editbtn-wrap').style.display = isAdmin ? 'block' : 'none';
+    try {
+        const d = JSON.parse(localStorage.getItem('conception_contact') || '{}');
+        const phoneEl = document.getElementById('contact-phone-display');
+        const emailEl = document.getElementById('contact-email-display');
+        phoneEl.innerHTML = d.phone ? d.phone : '<span class="contact-placeholder-text">Not set yet</span>';
+        emailEl.innerHTML = d.email ? `<a href="mailto:${d.email}" style="color:#1a2a4a;text-decoration:none;">${d.email}</a>` : '<span class="contact-placeholder-text">Not set yet</span>';
+        // Load page subtitle
+        const subs = JSON.parse(localStorage.getItem('conception_page_subs') || '{}');
+        if (subs.contact) document.getElementById('contact-page-sub').textContent = subs.contact;
+        if (isAdmin) {
+            document.getElementById('contact-edit-phone').value = d.phone || '';
+            document.getElementById('contact-edit-email').value = d.email || '';
+        }
+    } catch(e) {}
+}
+function saveContact() {
+    const phone = document.getElementById('contact-edit-phone').value.trim();
+    const email = document.getElementById('contact-edit-email').value.trim();
+    localStorage.setItem('conception_contact', JSON.stringify({ phone, email }));
+    loadContactPage();
+    alert('Contact info saved!');
+}
+
+// ─── ANNOUNCEMENTS (persistent via localStorage) ───
+function getAnnouncements() {
+    try { return JSON.parse(localStorage.getItem('conception_announcements') || '[]'); }
+    catch(e) { return []; }
+}
+function saveAnnouncements(list) {
+    localStorage.setItem('conception_announcements', JSON.stringify(list));
+}
+function loadAnnouncementsPage() {
+    const isAdmin = window._conceptionAdmin === true;
+    const panel = document.getElementById('ann-admin-panel');
+    if (panel) panel.style.display = isAdmin ? 'block' : 'none';
+    renderAnnouncements();
+}
+function renderAnnouncements() {
+    const list = getAnnouncements();
+    const container = document.getElementById('ann-list');
+    const isAdmin = window._conceptionAdmin === true;
+    if (!container) return;
+    if (list.length === 0) {
+        container.innerHTML = '<p class="ann-empty-msg">No announcements yet.</p>';
+        return;
+    }
+    container.innerHTML = list.slice().reverse().map((ann, revIdx) => {
+        const realIdx = list.length - 1 - revIdx;
+        return `
+        <div class="ann-card">
+          <div class="ann-card-header">
+            <span class="ann-card-date">${ann.date}</span>
+            ${isAdmin ? `
+            <div class="ann-card-actions">
+              <button class="ann-card-edit" style="display:inline-block;" onclick="openEditAnnouncement(${realIdx})" title="Edit announcement">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                Edit
+              </button>
+              <button class="ann-card-delete" style="display:inline-block;" onclick="deleteAnnouncement(${realIdx})" title="Delete announcement">&#x2715;</button>
+            </div>` : ''}
+          </div>
+          <div class="ann-card-body">
+            <div class="ann-card-text">${ann.text}</div>
+            ${ann.img ? `<img class="ann-card-img" src="${ann.img}" alt="Announcement image" />` : ''}
+          </div>
+        </div>`;
+    }).join('');
+}
+function postAnnouncement() {
+    const editorEl = document.getElementById('ann-editor');
+    const imgEl    = document.getElementById('ann-img-input');
+    const errEl    = document.getElementById('ann-error');
+    const editIdx  = parseInt(document.getElementById('ann-edit-index').value);
+    const text     = editorEl.innerHTML.trim();
+    const isEditing = editIdx >= 0;
+
+    if (!text || text === '<br>') {
+        errEl.style.display = 'block';
+        return;
+    }
+    errEl.style.display = 'none';
+
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    const file = imgEl.files[0];
+    const list = getAnnouncements();
+
+    function save(imgData) {
+        if (isEditing) {
+            // Keep existing date when editing; keep existing img if no new one provided
+            const existing = list[editIdx];
+            list[editIdx] = {
+                text,
+                date: existing.date,
+                img: imgData !== undefined ? imgData : existing.img
+            };
+        } else {
+            list.push({ text, date: dateStr, img: imgData || null });
+        }
+        saveAnnouncements(list);
+        resetAnnForm();
+        renderAnnouncements();
+    }
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = e => save(e.target.result);
+        reader.readAsDataURL(file);
+    } else {
+        save(isEditing ? undefined : null);
+    }
+}
+function resetAnnForm() {
+    const editorEl = document.getElementById('ann-editor');
+    const imgEl    = document.getElementById('ann-img-input');
+    const postBtn  = document.getElementById('ann-post-btn');
+    const cancelBtn = document.getElementById('ann-cancel-edit-btn');
+    const panel    = document.querySelector('.ann-admin-panel h3');
+    editorEl.innerHTML = '';
+    imgEl.value = '';
+    document.getElementById('ann-edit-index').value = '-1';
+    postBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:5px;"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Post Announcement';
+    cancelBtn.style.display = 'none';
+}
+function openEditAnnouncement(index) {
+    const list = getAnnouncements();
+    const ann = list[index];
+    const editorEl = document.getElementById('ann-editor');
+    const postBtn  = document.getElementById('ann-post-btn');
+    const cancelBtn = document.getElementById('ann-cancel-edit-btn');
+    editorEl.innerHTML = ann.text;
+    document.getElementById('ann-edit-index').value = index;
+    postBtn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px; margin-right:5px;"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Save Changes';
+    cancelBtn.style.display = 'inline-block';
+    // Scroll to admin panel
+    document.getElementById('ann-admin-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function cancelEditAnnouncement() {
+    resetAnnForm();
+}
+function deleteAnnouncement(index) {
+    if (!confirm('Delete this announcement?')) return;
+    const list = getAnnouncements();
+    list.splice(index, 1);
+    saveAnnouncements(list);
+    // If we were editing this one, reset the form
+    const editIdx = parseInt(document.getElementById('ann-edit-index').value);
+    if (editIdx === index) resetAnnForm();
+    renderAnnouncements();
+}
+        let data = { l:{a:0,c:0}, r:{a:0,c:0} };
         let historyStack = [], redoStack = [], journalStack = [], redoJournalStack = [];
 
         function pushState() {
@@ -2633,6 +4338,100 @@ function showPage(page) {
 
 
 
+        // ─── HAMBURGER ACCORDION ───
+        function toggleHamburgerAccordion(el) {
+            const sub = document.getElementById('hamburger-sub-lr');
+            const chevron = el.querySelector('.hni-chevron');
+            const isOpen = sub.style.display === 'block';
+            sub.style.display = isOpen ? 'none' : 'block';
+            if (chevron) chevron.style.transform = isOpen ? '' : 'rotate(180deg)';
+        }
+
+        // ─── RICH TEXT FORMATTING ───
+        function rtFormat(targetId, type) {
+            const el = document.getElementById(targetId);
+            if (!el) return;
+            el.focus();
+            const colorInputMap = {
+                'about-edit-text-1': 'rt-about1-color',
+                'about-edit-text-2': 'rt-about2-color',
+                'dde-body': 'rt-dde-color',
+                'tmf-desc': 'rt-tmf-color',
+                'eme-desc': 'rt-eme-color',
+                'ann-editor': 'rt-ann-color'
+            };
+            if (type === 'bold') {
+                document.execCommand('bold', false, null);
+            } else if (type === 'italic') {
+                document.execCommand('italic', false, null);
+            } else if (type === 'underline') {
+                document.execCommand('underline', false, null);
+            } else if (type === 'color') {
+                const colorId = colorInputMap[targetId];
+                const color = colorId ? document.getElementById(colorId).value : '#FF1C1C';
+                document.execCommand('foreColor', false, color);
+            } else if (type === 'link') {
+                const sel = window.getSelection();
+                let savedRange = null;
+                if (sel && sel.rangeCount > 0) {
+                    savedRange = sel.getRangeAt(0).cloneRange();
+                }
+                const url = prompt('Enter URL (include https://):', 'https://');
+                if (url && url !== 'https://' && url.trim() !== '') {
+                    if (savedRange) {
+                        sel.removeAllRanges();
+                        sel.addRange(savedRange);
+                    }
+                    el.focus();
+                    document.execCommand('createLink', false, url.trim());
+                    el.querySelectorAll('a').forEach(a => { a.target = '_blank'; a.rel = 'noopener noreferrer'; });
+                }
+            }
+        }
+
+        // ─── PAGE SUBTITLE EDITING ───
+        function openPageSubEdit(page) {
+            const subEl = document.getElementById(page + '-page-sub');
+            const inputEl = document.getElementById(page + '-sub-input');
+            const editWrap = document.getElementById(page + '-sub-edit-wrap');
+            const btnWrap  = document.getElementById(page + '-sub-editbtn-wrap');
+            if (inputEl) inputEl.value = subEl ? subEl.textContent : '';
+            if (editWrap) editWrap.style.display = 'flex';
+            if (btnWrap)  btnWrap.style.display  = 'none';
+        }
+        function savePageSub(page) {
+            const inputEl = document.getElementById(page + '-sub-input');
+            const subEl   = document.getElementById(page + '-page-sub');
+            const editWrap = document.getElementById(page + '-sub-edit-wrap');
+            const btnWrap  = document.getElementById(page + '-sub-editbtn-wrap');
+            const val = inputEl ? inputEl.value.trim() : '';
+            if (!val) return;
+            if (subEl) subEl.textContent = val;
+            try {
+                const subs = JSON.parse(localStorage.getItem('conception_page_subs') || '{}');
+                subs[page] = val;
+                localStorage.setItem('conception_page_subs', JSON.stringify(subs));
+            } catch(e) {}
+            if (editWrap) editWrap.style.display = 'none';
+            if (btnWrap)  btnWrap.style.display  = 'block';
+        }
+        function cancelPageSubEdit(page) {
+            const editWrap = document.getElementById(page + '-sub-edit-wrap');
+            const btnWrap  = document.getElementById(page + '-sub-editbtn-wrap');
+            if (editWrap) editWrap.style.display = 'none';
+            if (btnWrap)  btnWrap.style.display  = 'block';
+        }
+
+        // Load all page subtitles on init
+        (function() {
+            try {
+                const subs = JSON.parse(localStorage.getItem('conception_page_subs') || '{}');
+                if (subs.team    && document.getElementById('team-page-sub'))    document.getElementById('team-page-sub').textContent    = subs.team;
+                if (subs.about   && document.getElementById('about-page-sub'))   document.getElementById('about-page-sub').textContent   = subs.about;
+                if (subs.contact && document.getElementById('contact-page-sub')) document.getElementById('contact-page-sub').textContent = subs.contact;
+            } catch(e) {}
+        })();
+
         // ─── HAMBURGER MENU ───
         function toggleHamburger() {
             const drawer  = document.getElementById('hamburger-drawer');
@@ -2648,8 +4447,62 @@ function showPage(page) {
             document.getElementById('hamburger-overlay').classList.remove('open');
             document.getElementById('hamburger-btn').classList.remove('open');
         }
+
+        // ─── SIGN IN ───
+        function openSignIn() {
+            document.getElementById('signin-overlay').classList.add('open');
+            document.getElementById('signin-modal').classList.add('open');
+            document.getElementById('signin-username').focus();
+            document.getElementById('signin-error').style.display = 'none';
+            document.getElementById('signin-username').value = '';
+            document.getElementById('signin-password').value = '';
+        }
+        function closeSignIn() {
+            document.getElementById('signin-overlay').classList.remove('open');
+            document.getElementById('signin-modal').classList.remove('open');
+        }
+        function attemptSignIn() {
+            const user = document.getElementById('signin-username').value;
+            const pass = document.getElementById('signin-password').value;
+            if (user === 'ADMIN' && pass === 'e7Xk9Qw') {
+                window._conceptionAdmin = true;
+                closeSignIn();
+                const btn = document.getElementById('signin-btn');
+                btn.textContent = 'Log Out';
+                btn.onclick = logOut;
+                if (document.body.classList.contains('team-active'))    renderTeamMembers();
+                if (document.body.classList.contains('about-active'))   loadAboutPage();
+                if (document.body.classList.contains('contact-active')) loadContactPage();
+                if (document.body.classList.contains('announcements-active')) loadAnnouncementsPage();
+                document.getElementById('demo-desc-edit-btn-wrap').style.display = 'block';
+            } else {
+                document.getElementById('signin-error').style.display = 'block';
+            }
+        }
+        function logOut() {
+            window._conceptionAdmin = false;
+            const btn = document.getElementById('signin-btn');
+            btn.textContent = 'Sign In';
+            btn.onclick = openSignIn;
+            if (document.body.classList.contains('team-active'))    renderTeamMembers();
+            if (document.body.classList.contains('about-active'))   loadAboutPage();
+            if (document.body.classList.contains('contact-active')) loadContactPage();
+            if (document.body.classList.contains('announcements-active')) loadAnnouncementsPage();
+            document.getElementById('demo-desc-edit-btn-wrap').style.display = 'none';
+            // Hide all subtitle edit controls
+            ['team','about','contact'].forEach(function(p) {
+                var b = document.getElementById(p + '-sub-editbtn-wrap');
+                var e = document.getElementById(p + '-sub-edit-wrap');
+                if (b) b.style.display = 'none';
+                if (e) e.style.display = 'none';
+            });
+            closeDemoDescEdit();
+        }
+        // Allow Enter key in sign-in fields
+        document.getElementById('signin-username').addEventListener('keydown', function(e){ if(e.key==='Enter') attemptSignIn(); });
+        document.getElementById('signin-password').addEventListener('keydown', function(e){ if(e.key==='Enter') attemptSignIn(); });
 </script>
 </body>
 </html>
-index_fixed (39).html
-Displaying index_fixed (39).html.
+index - 2026-04-26T215209.064.html
+Displaying index - 2026-04-26T215209.064.html.
