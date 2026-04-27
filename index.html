@@ -2431,8 +2431,8 @@ body.intro-fade-in > #drag-ghost {
     <input type="text" id="signin-username" autocomplete="username" placeholder="Enter username" />
   </div>
   <div class="signin-field">
-    <label for="signin-password">Password</label>
-    <input type="password" id="signin-password" autocomplete="current-password" placeholder="Enter password" />
+    <label for="signin-password">GitHub Token</label>
+    <input type="password" id="signin-password" autocomplete="off" placeholder="github_pat_..." />
   </div>
   <p id="signin-error" style="display:none; color:#e74c3c; font-size:0.85rem; margin:0 0 0.5rem 0;">Incorrect username or password.</p>
   <button class="signin-submit-btn" onclick="attemptSignIn()">Sign In</button>
@@ -3280,8 +3280,8 @@ function countUp(el,target,sfx){
 // ═══════════════════════════════════════════════════
 
 const GH = {
-    token:  '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',       // ← paste your Personal Access Token
-    repo:   'Not-A-Robot-Really/Not-A-Robot-Really.github.io',    // ← e.g. 'janesmith/conception-site'
+    token:  '',                                                 // ← set at login from admin's token input
+    repo:   'Not-A-Robot-Really/Not-A-Robot-Really.github.io',
     branch: 'main',
     path:   'data.json'
 };
@@ -4512,22 +4512,47 @@ function deleteAnnouncement(index) {
             document.getElementById('signin-modal').classList.remove('open');
         }
         function attemptSignIn() {
-            const user = document.getElementById('signin-username').value;
-            const pass = document.getElementById('signin-password').value;
-            if (user === 'ADMIN' && pass === 'e7Xk9Qw') {
-                window._conceptionAdmin = true;
-                closeSignIn();
-                const btn = document.getElementById('signin-btn');
-                btn.textContent = 'Log Out';
-                btn.onclick = logOut;
-                if (document.body.classList.contains('team-active'))    renderTeamMembers();
-                if (document.body.classList.contains('about-active'))   loadAboutPage();
-                if (document.body.classList.contains('contact-active')) loadContactPage();
-                if (document.body.classList.contains('announcements-active')) loadAnnouncementsPage();
-                document.getElementById('demo-desc-edit-btn-wrap').style.display = 'block';
-            } else {
-                document.getElementById('signin-error').style.display = 'block';
+            const user  = document.getElementById('signin-username').value.trim();
+            const token = document.getElementById('signin-password').value.trim();
+            const errEl = document.getElementById('signin-error');
+            if (user !== 'ADMIN' || !token) {
+                errEl.textContent = 'Incorrect username or token.';
+                errEl.style.display = 'block';
+                return;
             }
+            errEl.style.display = 'none';
+            errEl.textContent = 'Verifying…';
+            errEl.style.color = '#888';
+            errEl.style.display = 'block';
+            // Verify token by attempting a real GitHub API call
+            fetch(`https://api.github.com/repos/${GH.repo}/contents/${GH.path}`, {
+                headers: { 'Authorization': `token ${token}` }
+            }).then(res => {
+                if (res.status === 200 || res.status === 404) {
+                    // 200 = file exists, 404 = repo accessible but file missing — both mean valid token
+                    GH.token = token;
+                    window._conceptionAdmin = true;
+                    errEl.style.display = 'none';
+                    errEl.style.color = '#e74c3c';
+                    closeSignIn();
+                    const btn = document.getElementById('signin-btn');
+                    btn.textContent = 'Log Out';
+                    btn.onclick = logOut;
+                    if (document.body.classList.contains('team-active'))    renderTeamMembers();
+                    if (document.body.classList.contains('about-active'))   loadAboutPage();
+                    if (document.body.classList.contains('contact-active')) loadContactPage();
+                    if (document.body.classList.contains('announcements-active')) loadAnnouncementsPage();
+                    document.getElementById('demo-desc-edit-btn-wrap').style.display = 'block';
+                } else {
+                    errEl.textContent = 'Invalid token — check and try again.';
+                    errEl.style.color = '#e74c3c';
+                    errEl.style.display = 'block';
+                }
+            }).catch(() => {
+                errEl.textContent = 'Network error — please try again.';
+                errEl.style.color = '#e74c3c';
+                errEl.style.display = 'block';
+            });
         }
         function logOut() {
             window._conceptionAdmin = false;
@@ -4554,5 +4579,5 @@ function deleteAnnouncement(index) {
 </script>
 </body>
 </html>
-index - 2026-04-26T221306.552.html
-Displaying index - 2026-04-26T221306.552.html.
+index - 2026-04-26T225320.660.html
+Displaying index - 2026-04-26T225320.660.html.
