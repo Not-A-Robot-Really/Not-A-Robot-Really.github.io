@@ -2036,23 +2036,23 @@ body.demo-active #action-journal       { top: 91px;  }   /* was 15px  + 76 */
   display: block;
   width: fit-content;
   margin: 0 auto 3rem;
-  background: var(--red);
+  background: var(--navy);
   color: #fff;
   font-family: 'DM Sans', sans-serif;
-  font-weight: 800;
-  font-size: 1.2rem;
-  letter-spacing: 0.06em;
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   text-decoration: none;
-  padding: 1.1rem 3rem;
-  border-radius: 10px;
-  box-shadow: 0 6px 24px rgba(255,28,28,0.25);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  padding: 1rem 2.8rem;
+  border-radius: 8px;
+  border: 2px solid var(--navy);
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 .member-cta-btn:hover {
-  transform: translateY(-3px) scale(1.03);
-  box-shadow: 0 12px 32px rgba(255,28,28,0.35);
-  background: #d90000;
+  background: #fff;
+  color: var(--navy);
+  border-color: var(--navy);
 }
 .member-body-section {
   background: #fff;
@@ -2506,8 +2506,6 @@ body.intro-fade-in > #drag-ghost {
     </li>
     <li><a href="#" class="nav-link" onclick="showPage('team'); return false;">Our Team</a></li>
     <li><a href="#" class="nav-link" onclick="showPage('about'); return false;">About Us</a></li>
-    <li><a href="#" class="nav-link" onclick="showPage('announcements'); return false;">Announcements</a></li>
-    <li><a href="#" class="nav-link" onclick="showPage('member'); return false;">Become a Member</a></li>
     <li><a href="#" class="nav-link" onclick="showPage('contact'); return false;">Contact</a></li>
   </ul>
   <button class="signin-btn" id="signin-btn" onclick="openSignIn()">Sign In</button>
@@ -3565,6 +3563,34 @@ async function ghWrite(data) {
 async function ghGet(key)        { const d = await ghRead(); return d[key]; }
 async function ghSet(key, value) { const d = await ghRead(); d[key] = value; await ghWrite(d); }
 
+// Upload an image file to /images/ in the repo, return its public raw URL
+async function ghUploadImage(file) {
+    _ghStatus('Uploading image…');
+    // Read file as base64
+    const base64 = await new Promise((resolve, reject) => {
+        const r = new FileReader();
+        r.onload  = e => resolve(e.target.result.split(',')[1]); // strip data:...;base64, prefix
+        r.onerror = () => reject(new Error('File read failed'));
+        r.readAsDataURL(file);
+    });
+    // Build a unique filename: timestamp + sanitised original name
+    const ext      = file.name.split('.').pop().toLowerCase();
+    const safeName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+    const filename = `images/${Date.now()}_${safeName}`;
+    const apiUrl   = `https://api.github.com/repos/${GH.repo}/contents/${filename}`;
+    const headers  = { 'Authorization': `token ${GH.token}`, 'Content-Type': 'application/json' };
+
+    const res = await fetch(apiUrl, {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify({ message: 'Upload image', content: base64, branch: GH.branch })
+    });
+    if (!res.ok) { const err = await res.json(); throw new Error(err.message || 'image upload failed'); }
+
+    // Return the CDN-busted raw URL
+    return `https://raw.githubusercontent.com/${GH.repo}/${GH.branch}/${filename}`;
+}
+
 // ═══════════════════════════════════════════════════
 // PAGE SWITCHING
 // ═══════════════════════════════════════════════════
@@ -3650,13 +3676,14 @@ function addTeamMember() {
     }
     errEl.style.display = 'none';
     if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
+        ghUploadImage(file).then(url => {
             const members = getTeamMembers();
-            members.push({ name, role, desc, photo: e.target.result });
+            members.push({ name, role, desc, photo: url });
             saveTeamMembers(members).then(() => { clearTeamForm(); renderTeamMembers(); });
-        };
-        reader.readAsDataURL(file);
+        }).catch(e => {
+            errEl.textContent = 'Image upload failed: ' + e.message;
+            errEl.style.display = 'block';
+        });
     } else {
         const members = getTeamMembers();
         members.push({ name, role, desc, photo: null });
@@ -3706,12 +3733,13 @@ function saveEditMember() {
     const members = getTeamMembers();
     const existing = members[_editingMemberIndex];
     if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            members[_editingMemberIndex] = { name, role, desc, photo: e.target.result };
+        ghUploadImage(file).then(url => {
+            members[_editingMemberIndex] = { name, role, desc, photo: url };
             saveTeamMembers(members).then(() => { closeEditMember(); renderTeamMembers(); });
-        };
-        reader.readAsDataURL(file);
+        }).catch(e => {
+            errEl.textContent = 'Image upload failed: ' + e.message;
+            errEl.style.display = 'block';
+        });
     } else {
         members[_editingMemberIndex] = { name, role, desc, photo: existing.photo || null };
         saveTeamMembers(members).then(() => { closeEditMember(); renderTeamMembers(); });
@@ -3773,14 +3801,14 @@ function saveDemoDesc() {
         });
     }
     if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) { applyAndSave(e.target.result); };
-        reader.readAsDataURL(file);
+        ghUploadImage(file).then(url => applyAndSave(url)).catch(e => {
+            errEl.textContent = 'Image upload failed: ' + e.message;
+            errEl.style.display = 'block';
+        });
     } else {
         applyAndSave(null);
     }
 }
-// Load saved demo description on page load (after ghRead resolves)
 ghRead().then(() => loadDemoDesc());
 
 // ─── ABOUT US (persistent via GitHub) ───
@@ -3841,18 +3869,16 @@ function saveAbout() {
         });
     }
 
-    function readFile(file, cb) {
-        if (!file) { cb(null); return; }
-        const r = new FileReader();
-        r.onload = e => cb(e.target.result);
-        r.readAsDataURL(file);
+    async function resolveImg(file, existing) {
+        if (file) return await ghUploadImage(file);
+        return existing || null;
     }
 
-    readFile(file1, function(img1Result) {
-        readFile(file2, function(img2Result) {
-            finish(img1Result || existing.img1 || null, img2Result || existing.img2 || null);
+    resolveImg(file1, existing.img1 || null).then(img1 => {
+        resolveImg(file2, existing.img2 || null).then(img2 => {
+            finish(img1, img2);
         });
-    });
+    }).catch(e => alert('Image upload failed: ' + e.message));
 }
 
 // ─── CONTACT (persistent via GitHub) ───
@@ -3965,9 +3991,10 @@ function saveMemberPage() {
 
     const file = fileEl.files[0];
     if (file) {
-        const reader = new FileReader();
-        reader.onload = e => doSave(e.target.result);
-        reader.readAsDataURL(file);
+        ghUploadImage(file).then(url => doSave(url)).catch(e => {
+            errEl.textContent = 'Image upload failed: ' + e.message;
+            errEl.style.display = 'block';
+        });
     } else {
         doSave(undefined);
     }
@@ -4037,9 +4064,7 @@ function postAnnouncement() {
     }
 
     if (file) {
-        const reader = new FileReader();
-        reader.onload = e => save(e.target.result);
-        reader.readAsDataURL(file);
+        ghUploadImage(file).then(url => save(url)).catch(e => alert('Image upload failed: ' + e.message));
     } else {
         save(isEditing ? undefined : null);
     }
@@ -4884,5 +4909,5 @@ function deleteAnnouncement(index) {
 </script>
 </body>
 </html>
-index - 2026-04-27T175401.389.html
-Displaying index - 2026-04-27T175401.389.html.
+index - 2026-04-27T191438.445.html
+Displaying index - 2026-04-27T191438.445.html.
