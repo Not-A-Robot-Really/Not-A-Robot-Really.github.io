@@ -4,5 +4,7 @@
   "demo_desc": {},
   "about": {},
   "contact": {},
-  "page_subs": {}
+  "page_subs": {
+    "about": "Learn more about what we do and why we do it!"
+  }
 }
