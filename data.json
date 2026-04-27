@@ -3,7 +3,10 @@
   "announcements": [],
   "demo_desc": {},
   "about": {},
-  "contact": {},
+  "contact": {
+    "phone": "8578002166",
+    "email": "conceptionfoundation@gmail.com"
+  },
   "page_subs": {
     "about": "Learn more about what we do and why we do it!",
     "team": "Meet the people behind Conception!",
