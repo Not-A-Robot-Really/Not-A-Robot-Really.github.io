@@ -2,7 +2,12 @@
   "team": [],
   "announcements": [],
   "demo_desc": {},
-  "about": {},
+  "about": {
+    "text1": "Conception is a <b>non-profit fundraiser</b> created by a group of freshmen at <i>Needham High School </i>with one thing in common: A love of <font color=\"#001dfa\"><b>math</b></font>.",
+    "text2": "We want to share our love of learning to younger audiences by teaching more complex mathematical ideas to younger elementary students in <b>creative</b> and <b>visual</b> ways. That way, it is easy to understand <i>AND</i> fun to learn! By associating math with fun experiences, we can help <b>educate</b> and bring back interest in math at a time of decreasing interest (see home page for more info).",
+    "img1": null,
+    "img2": null
+  },
   "contact": {
     "phone": "8578002166",
     "email": "conceptionfoundation@gmail.com"
