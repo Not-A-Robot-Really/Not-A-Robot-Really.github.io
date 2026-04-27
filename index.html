@@ -3276,6 +3276,84 @@ function countUp(el,target,sfx){
 }
 
 // ═══════════════════════════════════════════════════
+// GITHUB DATA LAYER — replace localStorage with GitHub API
+// ═══════════════════════════════════════════════════
+
+const GH = {
+    token:  'YOUR_GITHUB_PAT_HERE',       // ← paste your Personal Access Token
+    repo:   'YOUR_USERNAME/YOUR_REPO',    // ← e.g. 'janesmith/conception-site'
+    branch: 'main',
+    path:   'data.json'
+};
+
+// In-memory cache — populated on first ghRead(), kept in sync on writes
+let _ghCache = null;
+
+// Show/hide a small saving indicator in the top-right corner
+function _ghStatus(msg, isError) {
+    let el = document.getElementById('_gh_status');
+    if (!el) {
+        el = document.createElement('div');
+        el.id = '_gh_status';
+        el.style.cssText = 'position:fixed;bottom:1.2rem;right:1.2rem;z-index:9999;padding:8px 16px;border-radius:8px;font-family:DM Sans,sans-serif;font-size:0.82rem;font-weight:700;letter-spacing:0.04em;pointer-events:none;transition:opacity 0.4s ease;opacity:0;';
+        document.body.appendChild(el);
+    }
+    el.textContent = msg;
+    el.style.background = isError ? '#FF1C1C' : '#1A2B45';
+    el.style.color = '#fff';
+    el.style.opacity = '1';
+    clearTimeout(el._hide);
+    if (!isError) el._hide = setTimeout(() => { el.style.opacity = '0'; }, 2200);
+}
+
+// Fetch the full data.json from GitHub (uses raw CDN, bypasses rate limits)
+async function ghRead() {
+    if (_ghCache) return _ghCache;
+    try {
+        const url = `https://raw.githubusercontent.com/${GH.repo}/${GH.branch}/${GH.path}?t=${Date.now()}`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('fetch failed');
+        _ghCache = await res.json();
+    } catch(e) {
+        // Fallback to empty structure if file doesn't exist yet
+        _ghCache = { team:[], announcements:[], demo_desc:{}, about:{}, contact:{}, page_subs:{} };
+    }
+    return _ghCache;
+}
+
+// Write the full data.json back to GitHub via the Contents API
+async function ghWrite(data) {
+    _ghStatus('Saving…');
+    try {
+        const apiBase = `https://api.github.com/repos/${GH.repo}/contents/${GH.path}`;
+        const headers = { 'Authorization': `token ${GH.token}`, 'Content-Type': 'application/json' };
+
+        // Get current SHA (required for updates; null if file is new)
+        let sha = null;
+        try {
+            const meta = await fetch(apiBase, { headers });
+            if (meta.ok) { const j = await meta.json(); sha = j.sha; }
+        } catch(e) {}
+
+        const body = { message: 'Update site content', content: btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2)))), branch: GH.branch };
+        if (sha) body.sha = sha;
+
+        const res = await fetch(apiBase, { method: 'PUT', headers, body: JSON.stringify(body) });
+        if (!res.ok) { const err = await res.json(); throw new Error(err.message || 'write failed'); }
+
+        _ghCache = data;   // keep cache in sync
+        _ghStatus('Saved ✓');
+    } catch(e) {
+        _ghStatus('Save failed: ' + e.message, true);
+        throw e;
+    }
+}
+
+// Helpers — get/set a single top-level key in data.json
+async function ghGet(key)        { const d = await ghRead(); return d[key]; }
+async function ghSet(key, value) { const d = await ghRead(); d[key] = value; await ghWrite(d); }
+
+// ═══════════════════════════════════════════════════
 // PAGE SWITCHING
 // ═══════════════════════════════════════════════════
 
@@ -3301,13 +3379,12 @@ function showPage(page) {
     if (window._updateMathLayer) setTimeout(window._updateMathLayer, 50);
 }
 
-// ─── TEAM MEMBERS (persistent via localStorage) ───
+// ─── TEAM MEMBERS (persistent via GitHub) ───
 function getTeamMembers() {
-    try { return JSON.parse(localStorage.getItem('conception_team') || '[]'); }
-    catch(e) { return []; }
+    return (_ghCache && _ghCache.team) ? _ghCache.team : [];
 }
-function saveTeamMembers(members) {
-    localStorage.setItem('conception_team', JSON.stringify(members));
+async function saveTeamMembers(members) {
+    await ghSet('team', members);
 }
 function renderTeamMembers() {
     const grid = document.getElementById('team-members-grid');
@@ -3337,16 +3414,13 @@ function renderTeamMembers() {
     document.getElementById('team-admin-panel').style.display = isAdmin ? 'block' : 'none';
     document.getElementById('team-sub-editbtn-wrap').style.display = isAdmin ? 'block' : 'none';
     // Load team page subtitle
-    try {
-        const subs = JSON.parse(localStorage.getItem('conception_page_subs') || '{}');
-        if (subs.team) document.getElementById('team-page-sub').textContent = subs.team;
-    } catch(e) {}
+    const subs = (_ghCache && _ghCache.page_subs) ? _ghCache.page_subs : {};
+    if (subs.team) document.getElementById('team-page-sub').textContent = subs.team;
 }
 function deleteTeamMember(index) {
     const members = getTeamMembers();
     members.splice(index, 1);
-    saveTeamMembers(members);
-    renderTeamMembers();
+    saveTeamMembers(members).then(() => renderTeamMembers());
 }
 function addTeamMember() {
     const name  = document.getElementById('tmf-name').value.trim();
@@ -3365,17 +3439,13 @@ function addTeamMember() {
         reader.onload = function(e) {
             const members = getTeamMembers();
             members.push({ name, role, desc, photo: e.target.result });
-            saveTeamMembers(members);
-            clearTeamForm();
-            renderTeamMembers();
+            saveTeamMembers(members).then(() => { clearTeamForm(); renderTeamMembers(); });
         };
         reader.readAsDataURL(file);
     } else {
         const members = getTeamMembers();
         members.push({ name, role, desc, photo: null });
-        saveTeamMembers(members);
-        clearTeamForm();
-        renderTeamMembers();
+        saveTeamMembers(members).then(() => { clearTeamForm(); renderTeamMembers(); });
     }
 }
 function clearTeamForm() {
@@ -3424,36 +3494,30 @@ function saveEditMember() {
         const reader = new FileReader();
         reader.onload = function(e) {
             members[_editingMemberIndex] = { name, role, desc, photo: e.target.result };
-            saveTeamMembers(members);
-            closeEditMember();
-            renderTeamMembers();
+            saveTeamMembers(members).then(() => { closeEditMember(); renderTeamMembers(); });
         };
         reader.readAsDataURL(file);
     } else {
         members[_editingMemberIndex] = { name, role, desc, photo: existing.photo || null };
-        saveTeamMembers(members);
-        closeEditMember();
-        renderTeamMembers();
+        saveTeamMembers(members).then(() => { closeEditMember(); renderTeamMembers(); });
     }
 }
 
-// ─── DEMO DESCRIPTION (persistent via localStorage) ───
-function loadDemoDesc() {
-    try {
-        const saved = JSON.parse(localStorage.getItem('conception_demo_desc') || '{}');
-        if (saved.title) document.getElementById('demo-desc-title').textContent = saved.title;
-        if (saved.body)  document.getElementById('demo-desc-body').innerHTML  = saved.body;
-        if (saved.img) {
-            document.getElementById('demo-desc-img').src = saved.img;
-            document.getElementById('demo-desc-img').style.display = 'block';
-            document.getElementById('demo-desc-img-placeholder').style.display = 'none';
-            document.getElementById('demo-desc-img-wrap').style.border = 'none';
-            document.getElementById('demo-desc-img-wrap').style.background = 'transparent';
-        }
-    } catch(e) {}
+// ─── DEMO DESCRIPTION (persistent via GitHub) ───
+async function loadDemoDesc() {
+    const saved = (_ghCache && _ghCache.demo_desc) ? _ghCache.demo_desc : {};
+    if (saved.title) document.getElementById('demo-desc-title').textContent = saved.title;
+    if (saved.body)  document.getElementById('demo-desc-body').innerHTML  = saved.body;
+    if (saved.img) {
+        document.getElementById('demo-desc-img').src = saved.img;
+        document.getElementById('demo-desc-img').style.display = 'block';
+        document.getElementById('demo-desc-img-placeholder').style.display = 'none';
+        document.getElementById('demo-desc-img-wrap').style.border = 'none';
+        document.getElementById('demo-desc-img-wrap').style.background = 'transparent';
+    }
 }
 function openDemoDescEdit() {
-    const saved = (() => { try { return JSON.parse(localStorage.getItem('conception_demo_desc') || '{}'); } catch(e) { return {}; } })();
+    const saved = (_ghCache && _ghCache.demo_desc) ? _ghCache.demo_desc : {};
     document.getElementById('dde-title').value = saved.title || document.getElementById('demo-desc-title').textContent;
     document.getElementById('dde-body').innerHTML  = saved.body  || document.getElementById('demo-desc-body').innerHTML;
     document.getElementById('dde-img-current').textContent = saved.img ? 'Current image saved. Upload a new one to replace.' : 'No image set yet.';
@@ -3477,20 +3541,21 @@ function saveDemoDesc() {
         return;
     }
     errEl.style.display = 'none';
-    const existing = (() => { try { return JSON.parse(localStorage.getItem('conception_demo_desc') || '{}'); } catch(e) { return {}; } })();
+    const existing = (_ghCache && _ghCache.demo_desc) ? _ghCache.demo_desc : {};
     function applyAndSave(imgData) {
         const data = { title, body, img: imgData || existing.img || null };
-        localStorage.setItem('conception_demo_desc', JSON.stringify(data));
-        document.getElementById('demo-desc-title').textContent = title;
-        document.getElementById('demo-desc-body').innerHTML  = body;
-        if (data.img) {
-            document.getElementById('demo-desc-img').src = data.img;
-            document.getElementById('demo-desc-img').style.display = 'block';
-            document.getElementById('demo-desc-img-placeholder').style.display = 'none';
-            document.getElementById('demo-desc-img-wrap').style.border = 'none';
-            document.getElementById('demo-desc-img-wrap').style.background = 'transparent';
-        }
-        closeDemoDescEdit();
+        ghSet('demo_desc', data).then(() => {
+            document.getElementById('demo-desc-title').textContent = title;
+            document.getElementById('demo-desc-body').innerHTML  = body;
+            if (data.img) {
+                document.getElementById('demo-desc-img').src = data.img;
+                document.getElementById('demo-desc-img').style.display = 'block';
+                document.getElementById('demo-desc-img-placeholder').style.display = 'none';
+                document.getElementById('demo-desc-img-wrap').style.border = 'none';
+                document.getElementById('demo-desc-img-wrap').style.background = 'transparent';
+            }
+            closeDemoDescEdit();
+        });
     }
     if (file) {
         const reader = new FileReader();
@@ -3500,30 +3565,27 @@ function saveDemoDesc() {
         applyAndSave(null);
     }
 }
-// Load saved demo description on page load
-loadDemoDesc();
+// Load saved demo description on page load (after ghRead resolves)
+ghRead().then(() => loadDemoDesc());
 
-// ─── ABOUT US (persistent via localStorage) ───
+// ─── ABOUT US (persistent via GitHub) ───
 function loadAboutPage() {
     const isAdmin = window._conceptionAdmin === true;
     document.getElementById('about-admin-bar').style.display = isAdmin ? 'block' : 'none';
     document.getElementById('about-sub-editbtn-wrap').style.display = isAdmin ? 'block' : 'none';
-    try {
-        const d = JSON.parse(localStorage.getItem('conception_about') || '{}');
-        if (d.text1 !== undefined) document.getElementById('about-text-1').innerHTML = d.text1;
-        if (d.text2 !== undefined) document.getElementById('about-text-2').innerHTML = d.text2;
-        _applyAboutImg(1, d.img1 || null);
-        _applyAboutImg(2, d.img2 || null);
-        // Load page subtitle
-        const subs = JSON.parse(localStorage.getItem('conception_page_subs') || '{}');
-        if (subs.about) document.getElementById('about-page-sub').textContent = subs.about;
-        if (isAdmin) {
-            document.getElementById('about-edit-text-1').innerHTML = d.text1 || document.getElementById('about-text-1').innerHTML;
-            document.getElementById('about-edit-text-2').innerHTML = d.text2 || document.getElementById('about-text-2').innerHTML;
-            document.getElementById('about-edit-img-1-note').textContent = d.img1 ? 'Image 1 saved. Upload to replace.' : 'No image set.';
-            document.getElementById('about-edit-img-2-note').textContent = d.img2 ? 'Image 2 saved. Upload to replace.' : 'No image set.';
-        }
-    } catch(e) {}
+    const d = (_ghCache && _ghCache.about) ? _ghCache.about : {};
+    const subs = (_ghCache && _ghCache.page_subs) ? _ghCache.page_subs : {};
+    if (d.text1 !== undefined) document.getElementById('about-text-1').innerHTML = d.text1;
+    if (d.text2 !== undefined) document.getElementById('about-text-2').innerHTML = d.text2;
+    _applyAboutImg(1, d.img1 || null);
+    _applyAboutImg(2, d.img2 || null);
+    if (subs.about) document.getElementById('about-page-sub').textContent = subs.about;
+    if (isAdmin) {
+        document.getElementById('about-edit-text-1').innerHTML = d.text1 || document.getElementById('about-text-1').innerHTML;
+        document.getElementById('about-edit-text-2').innerHTML = d.text2 || document.getElementById('about-text-2').innerHTML;
+        document.getElementById('about-edit-img-1-note').textContent = d.img1 ? 'Image 1 saved. Upload to replace.' : 'No image set.';
+        document.getElementById('about-edit-img-2-note').textContent = d.img2 ? 'Image 2 saved. Upload to replace.' : 'No image set.';
+    }
 }
 function _applyAboutImg(n, src) {
     const img = document.getElementById('about-img-' + n);
@@ -3547,20 +3609,21 @@ function saveAbout() {
     const text2 = document.getElementById('about-edit-text-2').innerHTML;
     const file1 = document.getElementById('about-edit-img-1').files[0];
     const file2 = document.getElementById('about-edit-img-2').files[0];
-    const existing = (() => { try { return JSON.parse(localStorage.getItem('conception_about') || '{}'); } catch(e) { return {}; } })();
+    const existing = (_ghCache && _ghCache.about) ? _ghCache.about : {};
 
     function finish(img1, img2) {
         const d = { text1, text2, img1, img2 };
-        localStorage.setItem('conception_about', JSON.stringify(d));
-        document.getElementById('about-text-1').innerHTML = text1;
-        document.getElementById('about-text-2').innerHTML = text2;
-        _applyAboutImg(1, img1);
-        _applyAboutImg(2, img2);
-        document.getElementById('about-edit-img-1-note').textContent = img1 ? 'Image 1 saved. Upload to replace.' : 'No image set.';
-        document.getElementById('about-edit-img-2-note').textContent = img2 ? 'Image 2 saved. Upload to replace.' : 'No image set.';
-        document.getElementById('about-edit-img-1').value = '';
-        document.getElementById('about-edit-img-2').value = '';
-        alert('About Us saved!');
+        ghSet('about', d).then(() => {
+            document.getElementById('about-text-1').innerHTML = text1;
+            document.getElementById('about-text-2').innerHTML = text2;
+            _applyAboutImg(1, img1);
+            _applyAboutImg(2, img2);
+            document.getElementById('about-edit-img-1-note').textContent = img1 ? 'Image 1 saved. Upload to replace.' : 'No image set.';
+            document.getElementById('about-edit-img-2-note').textContent = img2 ? 'Image 2 saved. Upload to replace.' : 'No image set.';
+            document.getElementById('about-edit-img-1').value = '';
+            document.getElementById('about-edit-img-2').value = '';
+            alert('About Us saved!');
+        });
     }
 
     function readFile(file, cb) {
@@ -3577,41 +3640,35 @@ function saveAbout() {
     });
 }
 
-// ─── CONTACT (persistent via localStorage) ───
+// ─── CONTACT (persistent via GitHub) ───
 function loadContactPage() {
     const isAdmin = window._conceptionAdmin === true;
     document.getElementById('contact-admin-bar').style.display = isAdmin ? 'block' : 'none';
     document.getElementById('contact-sub-editbtn-wrap').style.display = isAdmin ? 'block' : 'none';
-    try {
-        const d = JSON.parse(localStorage.getItem('conception_contact') || '{}');
-        const phoneEl = document.getElementById('contact-phone-display');
-        const emailEl = document.getElementById('contact-email-display');
-        phoneEl.innerHTML = d.phone ? d.phone : '<span class="contact-placeholder-text">Not set yet</span>';
-        emailEl.innerHTML = d.email ? `<a href="mailto:${d.email}" style="color:#1a2a4a;text-decoration:none;">${d.email}</a>` : '<span class="contact-placeholder-text">Not set yet</span>';
-        // Load page subtitle
-        const subs = JSON.parse(localStorage.getItem('conception_page_subs') || '{}');
-        if (subs.contact) document.getElementById('contact-page-sub').textContent = subs.contact;
-        if (isAdmin) {
-            document.getElementById('contact-edit-phone').value = d.phone || '';
-            document.getElementById('contact-edit-email').value = d.email || '';
-        }
-    } catch(e) {}
+    const d = (_ghCache && _ghCache.contact) ? _ghCache.contact : {};
+    const subs = (_ghCache && _ghCache.page_subs) ? _ghCache.page_subs : {};
+    const phoneEl = document.getElementById('contact-phone-display');
+    const emailEl = document.getElementById('contact-email-display');
+    phoneEl.innerHTML = d.phone ? d.phone : '<span class="contact-placeholder-text">Not set yet</span>';
+    emailEl.innerHTML = d.email ? `<a href="mailto:${d.email}" style="color:#1a2a4a;text-decoration:none;">${d.email}</a>` : '<span class="contact-placeholder-text">Not set yet</span>';
+    if (subs.contact) document.getElementById('contact-page-sub').textContent = subs.contact;
+    if (isAdmin) {
+        document.getElementById('contact-edit-phone').value = d.phone || '';
+        document.getElementById('contact-edit-email').value = d.email || '';
+    }
 }
 function saveContact() {
     const phone = document.getElementById('contact-edit-phone').value.trim();
     const email = document.getElementById('contact-edit-email').value.trim();
-    localStorage.setItem('conception_contact', JSON.stringify({ phone, email }));
-    loadContactPage();
-    alert('Contact info saved!');
+    ghSet('contact', { phone, email }).then(() => { loadContactPage(); alert('Contact info saved!'); });
 }
 
-// ─── ANNOUNCEMENTS (persistent via localStorage) ───
+// ─── ANNOUNCEMENTS (persistent via GitHub) ───
 function getAnnouncements() {
-    try { return JSON.parse(localStorage.getItem('conception_announcements') || '[]'); }
-    catch(e) { return []; }
+    return (_ghCache && _ghCache.announcements) ? _ghCache.announcements : [];
 }
-function saveAnnouncements(list) {
-    localStorage.setItem('conception_announcements', JSON.stringify(list));
+async function saveAnnouncements(list) {
+    await ghSet('announcements', list);
 }
 function loadAnnouncementsPage() {
     const isAdmin = window._conceptionAdmin === true;
@@ -3671,7 +3728,6 @@ function postAnnouncement() {
 
     function save(imgData) {
         if (isEditing) {
-            // Keep existing date when editing; keep existing img if no new one provided
             const existing = list[editIdx];
             list[editIdx] = {
                 text,
@@ -3681,9 +3737,7 @@ function postAnnouncement() {
         } else {
             list.push({ text, date: dateStr, img: imgData || null });
         }
-        saveAnnouncements(list);
-        resetAnnForm();
-        renderAnnouncements();
+        saveAnnouncements(list).then(() => { resetAnnForm(); renderAnnouncements(); });
     }
 
     if (file) {
@@ -3726,11 +3780,11 @@ function deleteAnnouncement(index) {
     if (!confirm('Delete this announcement?')) return;
     const list = getAnnouncements();
     list.splice(index, 1);
-    saveAnnouncements(list);
-    // If we were editing this one, reset the form
     const editIdx = parseInt(document.getElementById('ann-edit-index').value);
-    if (editIdx === index) resetAnnForm();
-    renderAnnouncements();
+    saveAnnouncements(list).then(() => {
+        if (editIdx === index) resetAnnForm();
+        renderAnnouncements();
+    });
 }
         let data = { l:{a:0,c:0}, r:{a:0,c:0} };
         let historyStack = [], redoStack = [], journalStack = [], redoJournalStack = [];
@@ -4407,11 +4461,9 @@ function deleteAnnouncement(index) {
             const val = inputEl ? inputEl.value.trim() : '';
             if (!val) return;
             if (subEl) subEl.textContent = val;
-            try {
-                const subs = JSON.parse(localStorage.getItem('conception_page_subs') || '{}');
-                subs[page] = val;
-                localStorage.setItem('conception_page_subs', JSON.stringify(subs));
-            } catch(e) {}
+            const subs = (_ghCache && _ghCache.page_subs) ? _ghCache.page_subs : {};
+            subs[page] = val;
+            ghSet('page_subs', subs);
             if (editWrap) editWrap.style.display = 'none';
             if (btnWrap)  btnWrap.style.display  = 'block';
         }
@@ -4422,15 +4474,13 @@ function deleteAnnouncement(index) {
             if (btnWrap)  btnWrap.style.display  = 'block';
         }
 
-        // Load all page subtitles on init
-        (function() {
-            try {
-                const subs = JSON.parse(localStorage.getItem('conception_page_subs') || '{}');
-                if (subs.team    && document.getElementById('team-page-sub'))    document.getElementById('team-page-sub').textContent    = subs.team;
-                if (subs.about   && document.getElementById('about-page-sub'))   document.getElementById('about-page-sub').textContent   = subs.about;
-                if (subs.contact && document.getElementById('contact-page-sub')) document.getElementById('contact-page-sub').textContent = subs.contact;
-            } catch(e) {}
-        })();
+        // Load all page subtitles on init (after ghRead resolves)
+        ghRead().then(() => {
+            const subs = (_ghCache && _ghCache.page_subs) ? _ghCache.page_subs : {};
+            if (subs.team    && document.getElementById('team-page-sub'))    document.getElementById('team-page-sub').textContent    = subs.team;
+            if (subs.about   && document.getElementById('about-page-sub'))   document.getElementById('about-page-sub').textContent   = subs.about;
+            if (subs.contact && document.getElementById('contact-page-sub')) document.getElementById('contact-page-sub').textContent = subs.contact;
+        });
 
         // ─── HAMBURGER MENU ───
         function toggleHamburger() {
@@ -4504,5 +4554,5 @@ function deleteAnnouncement(index) {
 </script>
 </body>
 </html>
-index - 2026-04-26T215209.064.html
-Displaying index - 2026-04-26T215209.064.html.
+index - 2026-04-26T221306.552.html
+Displaying index - 2026-04-26T221306.552.html.
