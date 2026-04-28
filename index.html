@@ -70,11 +70,18 @@ nav{
 nav ul{
   list-style:none;
   display:flex;
+  align-items:center;
   gap:3rem
 }
 
+nav ul li{
+  display:flex;
+  align-items:center;
+}
+
 nav a.nav-link{
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   color: #FFFFFF; 
   text-decoration:none;
   font-size:1.05rem;
@@ -853,13 +860,21 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
 }
 
 #piles-area {
-    position: absolute; left: -210px; bottom: -30px; width: 400px;
-    height: 120px; display: flex; gap: 60px; align-items: flex-end; z-index: 10;
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 10;
 }
 
 .pile-container {
-    position: relative; width: 150px; height: 80px; cursor: grab;
-    display: flex; justify-content: center;
+    position: absolute; bottom: -30px; width: 150px; height: 80px;
+    cursor: grab; display: flex; justify-content: center; pointer-events: auto;
+}
+
+.candy-pile-wrapper {
+    left: -120px;
+}
+
+.apple-pile-wrapper {
+    right: -164px;
 }
 
 .pile-item { position: absolute; width: 50px; height: 50px; pointer-events: none; }
@@ -924,7 +939,7 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
     padding: 25px 20px; display: flex; justify-content: center; gap: 10px;
     align-items: center; margin-top: auto; border-top: 2.5px solid #000;
     box-shadow: none;
-    flex-wrap: nowrap; /* Prevents wrapping, forcing everything perfectly inline horizontally */
+    flex-wrap: wrap; /* Allowed wrapping so everything fits horizontally */
 }
 
 .control-group {
@@ -1266,7 +1281,7 @@ body.practice-mode #cg-practice-actions { display: flex; }
     #left-panel { position: relative; top: auto; left: auto; transform: scale(0.85); flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 8px; z-index: 10; padding: 8px; }
     #history-controls { position: relative; top: auto; left: auto; justify-content: center; margin: 8px 0; }
     #equation-container { left: 0; font-size: 1.6rem; padding: 10px 25px; gap: 15px; }
-    #bottom-bar { flex-wrap: wrap; padding: 12px 8px; gap: 8px; }
+    #bottom-bar { flex-wrap: wrap; padding: 12px 0; gap: 8px; }
     .control-group { border-right: none; border-bottom: 2px solid #eee; padding: 8px 10px; width: 100%; }
     .control-group > div[style] { width: 100% !important; }
     #mode-toggle-group { width: 100%; justify-content: center; padding: 0; margin-top: 0px;}
@@ -3104,10 +3119,10 @@ body.intro-fade-in > #drag-ghost {
 
     <div id="stage">
         <div id="piles-area">
-            <div class="pile-container" draggable="true" ondragstart="drag(event, 'apple')">
+            <div class="pile-container apple-pile-wrapper" draggable="true" ondragstart="drag(event, 'apple')">
                 <div id="apple-pile-visual"></div>
             </div>
-            <div class="pile-container" draggable="true" ondragstart="drag(event, 'candy')">
+            <div class="pile-container candy-pile-wrapper" draggable="true" ondragstart="drag(event, 'candy')">
                 <div id="candy-pile-visual"></div>
             </div>
         </div>
@@ -4908,6 +4923,30 @@ function deleteAnnouncement(index) {
         // Allow Enter key in sign-in fields
         document.getElementById('signin-username').addEventListener('keydown', function(e){ if(e.key==='Enter') attemptSignIn(); });
         document.getElementById('signin-password').addEventListener('keydown', function(e){ if(e.key==='Enter') attemptSignIn(); });
+
+        // Responsive demo stage
+        function fitDemo() {
+            var stage = document.getElementById('stage');
+            if (!stage) return;
+            var vw = window.innerWidth;
+            // The total width of stage + spilling piles is around 1384px.
+            // Piles go from -120px to 1264px. To keep them all on screen, center the stage and scale based on 1400.
+            var targetWidth = vw - 20; 
+            if (targetWidth < 1400 && targetWidth > 0) {
+                var scale = targetWidth / 1400;
+                stage.style.transform = 'scale(' + scale + ')';
+                stage.style.transformOrigin = 'top center';
+                var originalHeight = 520;
+                var marginOffset = originalHeight * (1 - scale);
+                stage.style.marginBottom = '-' + marginOffset + 'px';
+            } else {
+                stage.style.transform = 'none';
+                stage.style.marginBottom = '0';
+            }
+        }
+        window.addEventListener('resize', fitDemo);
+        window.addEventListener('DOMContentLoaded', fitDemo);
+        fitDemo();
 </script>
 </body>
 </html>
