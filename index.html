@@ -1300,6 +1300,7 @@ body.practice-mode #cg-practice-actions { display: flex; }
 #page-contact { display: none;  }
 #page-announcements { display: none; }
 #page-member  { display: none;  }
+#page-coolwebsites { display: none; }
 body.demo-active    #page-main    { display: none; }
 body.demo-active    #page-demo    { display: block; }
 body.team-active    #page-main    { display: none; }
@@ -1312,6 +1313,253 @@ body.announcements-active #page-main          { display: none; }
 body.announcements-active #page-announcements { display: block; }
 body.member-active #page-main   { display: none; }
 body.member-active #page-member { display: block; }
+body.coolwebsites-active #page-main         { display: none; }
+body.coolwebsites-active #page-coolwebsites { display: block; }
+
+/* ─── COOL WEBSITES PAGE ─── */
+#page-coolwebsites {
+  min-height: 100vh;
+  padding-top: 100px;
+  background: #f4f6fb;
+}
+.cw-page-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 5rem;
+  position: relative;
+  z-index: 4;
+}
+.cw-page-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900;
+  color: #1a2a4a;
+  margin: 0 0 0.4rem 0;
+  text-align: center;
+}
+.cw-page-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.05rem;
+  color: #777;
+  text-align: center;
+  margin: 0 0 2.5rem 0;
+}
+
+/* Padlet-style grid */
+#cw-entries-grid {
+  columns: 3 320px;
+  column-gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+@media(max-width:768px) {
+  #cw-entries-grid { columns: 1; }
+}
+.cw-empty-msg {
+  text-align: center;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  color: #bbb;
+  padding: 3rem 0;
+  font-style: italic;
+  column-span: all;
+}
+
+/* Individual padlet-style entry card */
+.cw-card {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid rgba(0,0,0,0.07);
+  box-shadow: 0 4px 18px rgba(0,0,0,0.07);
+  overflow: hidden;
+  break-inside: avoid;
+  margin-bottom: 1.5rem;
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+.cw-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.13);
+}
+.cw-card-img-wrap {
+  width: 100%;
+  overflow: hidden;
+  background: #eef2ff;
+  max-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cw-card-img {
+  width: 100%;
+  object-fit: cover;
+  display: block;
+  max-height: 200px;
+}
+.cw-card-img-placeholder {
+  padding: 2.5rem 1rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #9aabcc;
+  text-align: center;
+}
+.cw-card-body {
+  padding: 1.2rem 1.4rem 1.4rem;
+}
+.cw-card-title-link {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #3a6fd8;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 0.6rem;
+  word-break: break-word;
+  transition: color 0.2s;
+}
+.cw-card-title-link:hover { color: #1a4ba0; text-decoration: underline; }
+.cw-card-title-link svg { flex-shrink: 0; }
+.cw-card-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.93rem;
+  line-height: 1.65;
+  color: #444;
+}
+.cw-card-desc a { color: #3a6fd8; text-decoration: underline; }
+.cw-card-accent {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #4D9EFF, #FF1C1C);
+  border-radius: 16px 16px 0 0;
+}
+.cw-card-admin-btns {
+  position: absolute;
+  top: 10px; right: 10px;
+  display: flex; gap: 5px;
+}
+.cw-card-admin-btn {
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 26px; height: 26px;
+  font-size: 0.78rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+}
+.cw-card-admin-btn.del:hover { background: #e74c3c; }
+.cw-card-admin-btn.edit-btn:hover { background: #3a6fd8; }
+
+/* Admin compose panel */
+.cw-admin-panel {
+  display: none;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+  padding: 2rem 2rem 1.6rem;
+  margin-bottom: 2rem;
+  border-left: 4px solid #4D9EFF;
+}
+.cw-admin-panel h3 {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 800;
+  color: #1a2a4a;
+  font-size: 1.15rem;
+  margin: 0 0 1.3rem 0;
+}
+.cw-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 1rem;
+}
+.cw-form-field label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #555;
+}
+.cw-form-field input[type="text"],
+.cw-form-field input[type="url"],
+.cw-form-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1.5px solid #ddd;
+  border-radius: 9px;
+  padding: 10px 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.cw-form-field input:focus,
+.cw-form-field textarea:focus { border-color: #1a2a4a; }
+.cw-form-field textarea { min-height: 90px; resize: vertical; line-height: 1.65; }
+.cw-post-btn {
+  background: #1a2a4a;
+  color: #fff;
+  border: none;
+  border-radius: 9px;
+  padding: 11px 26px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 0.4rem;
+}
+.cw-post-btn:hover { background: #243d6e; }
+.cw-cancel-btn {
+  background: #aaa;
+  color: #fff;
+  border: none;
+  border-radius: 9px;
+  padding: 11px 20px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  margin-left: 0.6rem;
+  transition: background 0.2s;
+}
+.cw-cancel-btn:hover { background: #888; }
+.cw-error {
+  display: none;
+  color: #e74c3c;
+  font-size: 0.85rem;
+  font-family: 'DM Sans', sans-serif;
+  margin: 0.3rem 0 0 0;
+}
+/* Edit CW Modal */
+#edit-cw-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 2000; opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+#edit-cw-overlay.open { opacity: 1; pointer-events: all; }
+#edit-cw-modal {
+  position: fixed; top: 50%; left: 50%;
+  transform: translate(-50%, -48%);
+  background: #fff; border-radius: 12px;
+  padding: 2rem 2rem 1.6rem;
+  width: 420px; max-width: 94vw; max-height: 88vh; overflow-y: auto;
+  z-index: 2001;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.22);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+#edit-cw-modal.open { opacity: 1; pointer-events: all; transform: translate(-50%, -50%); }
 
 /* ── Waterfall: fully hidden on demo page ── */
 body.demo-active #math-fixed-layer { opacity: 0 !important; }
@@ -2557,6 +2805,7 @@ body.intro-fade-in > #drag-ghost {
       <a href="#" class="nav-link" onclick="event.preventDefault(); var dd=this.parentElement; dd.classList.toggle('open'); dd.classList.remove('closed');">Learning Resources</a>
       <ul class="dropdown-menu">
         <li><a href="#" id="demo-nav-link" onclick="showPage('demo'); var dd=document.getElementById('nav-dropdown-lr'); dd.classList.remove('open'); dd.classList.add('closed'); return false;">Demo</a></li>
+        <li><a href="#" onclick="showPage('coolwebsites'); var dd=document.getElementById('nav-dropdown-lr'); dd.classList.remove('open'); dd.classList.add('closed'); return false;">Cool Websites</a></li>
       </ul>
     </li>
     <li><a href="#" class="nav-link" onclick="showPage('team'); return false;">Our Team</a></li>
@@ -2591,6 +2840,10 @@ body.intro-fade-in > #drag-ghost {
       <svg width="22" height="22" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M17 16h-4v-3h-2v3H7l-2 5h14l-2-5zm-5-2c.55 0 1-.45 1-1V5h3l-4-3-4 3h3v8c0 .55.45 1 1 1zM4.5 9L2 16h5L4.5 9zm15 0L17 16h5l-2.5-7z"/></svg>
       Demo
     </a>
+    <a class="hamburger-nav-item hamburger-sub-item" href="#" onclick="showPage('coolwebsites'); closeHamburger(); return false;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95c-.32-1.25-.78-2.45-1.38-3.56 1.84.63 3.37 1.91 4.33 3.56zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2 0 .68.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56-1.84-.63-3.37-1.9-4.33-3.56zm2.95-8H5.08c.96-1.66 2.49-2.93 4.33-3.56C8.81 5.55 8.35 6.75 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2 0-.68.07-1.35.16-2h4.68c.09.65.16 1.32.16 2 0 .68-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95c-.96 1.65-2.49 2.93-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2 0-.68-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/></svg>
+      Cool Websites
+    </a>
   </div>
   <a class="hamburger-nav-item" href="#" onclick="showPage('team'); closeHamburger(); return false;">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -2605,7 +2858,7 @@ body.intro-fade-in > #drag-ghost {
     Announcements
   </a>
   <a class="hamburger-nav-item" href="#" onclick="showPage('member'); closeHamburger(); return false;">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M16 2a1 1 0 0 0-1 1v1H9V3a1 1 0 0 0-2 0v1H6a2 2 0 0 0-2 2v1h16V6a2 2 0 0 0-2-2h-1V3a1 1 0 0 0-1-1zM4 9v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9H4zm8 2a1 1 0 0 1 1 1v2h2a1 1 0 0 1 0 2h-2v2a1 1 0 0 1-2 0v-2H9a1 1 0 0 1 0-2h2v-2a1 1 0 0 1 1-1z"/></svg>
     Become a Member
   </a>
   <a class="hamburger-nav-item" href="#" onclick="showPage('contact'); closeHamburger(); return false;">
@@ -2672,7 +2925,7 @@ body.intro-fade-in > #drag-ghost {
 <div id="page-main">
 <section class="hero">
   <div class="hero-parallax-bg" id="heroBg"></div>
-  <p class="hero-quote" style="margin-top:0.7cm; margin-left:1.5cm;">"Wisdom is not a product of schooling but of the lifelong attempt to acquire it." — Albert Einstein</p>
+  <p class="hero-quote" style="margin-top:0.7cm; margin-left:-0.9cm;">"Wisdom is not a product of schooling but of the lifelong attempt to acquire it." — Albert Einstein</p>
   <img src="no9.png" alt="Conception Logo" class="hero-logo" style="margin-top:calc(3rem - 1.0cm); margin-left:0.34cm; width:94.5%; max-width:682px;">
   <p class="hero-sub">Providing young learners the <span class="phrase-bold">spark of learning</span> by helping to provide new, <span class="phrase-bold">hands-on perspectives</span> on high level mathematics that will increase the students' interest in learning math in a classroom setting.</p>
 </section>
@@ -3116,6 +3369,109 @@ body.intro-fade-in > #drag-ghost {
   </div>
 </div>
 
+<!-- ═══ COOL WEBSITES PAGE ═══ -->
+<div id="page-coolwebsites">
+  <div class="cw-page-wrap">
+    <!-- Header -->
+    <h1 class="cw-page-title">Cool Websites</h1>
+    <p class="cw-page-sub" id="coolwebsites-page-sub">Explore our curated collection of awesome learning resources!</p>
+    <!-- Page subtitle edit controls (admin only) -->
+    <div id="coolwebsites-sub-edit-wrap" style="display:none; justify-content:center; align-items:center; gap:7px; margin-bottom:2rem; flex-wrap:wrap;">
+      <input type="text" id="coolwebsites-sub-input" style="border:1.5px solid #1a2a4a; border-radius:6px; padding:5px 10px; font-family:'DM Sans',sans-serif; font-size:0.95rem; outline:none; min-width:260px;" />
+      <button onclick="savePageSub('coolwebsites')" style="background:#1a2a4a;color:#fff;border:none;border-radius:6px;padding:5px 14px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;">Save</button>
+      <button onclick="cancelPageSubEdit('coolwebsites')" style="background:#aaa;color:#fff;border:none;border-radius:6px;padding:5px 14px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;">Cancel</button>
+    </div>
+    <div id="coolwebsites-sub-editbtn-wrap" style="display:none; text-align:center; margin-bottom:1rem;">
+      <button class="page-sub-edit-btn" onclick="openPageSubEdit('coolwebsites')">✏️ Edit subtitle</button>
+    </div>
+
+    <!-- Admin: Add Entry Panel -->
+    <div class="cw-admin-panel" id="cw-admin-panel">
+      <h3>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#1a2a4a" style="vertical-align:-2px; margin-right:6px;"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+        Add New Website Entry
+      </h3>
+      <div class="cw-form-field">
+        <label>Title *</label>
+        <input type="text" id="cw-title-input" placeholder="e.g. Khan Academy" />
+      </div>
+      <div class="cw-form-field">
+        <label>Website URL * (include https://)</label>
+        <input type="url" id="cw-url-input" placeholder="https://example.com" />
+      </div>
+      <div class="cw-form-field">
+        <label>Description *</label>
+        <div class="rt-toolbar">
+          <button class="rt-bold" onclick="rtFormat('cw-desc-editor','bold')" title="Bold"><b>B</b></button>
+          <button class="rt-italic" onclick="rtFormat('cw-desc-editor','italic')" title="Italic"><i>I</i></button>
+          <button class="rt-underline" onclick="rtFormat('cw-desc-editor','underline')" title="Underline"><u>U</u></button>
+          <button onclick="rtFormat('cw-desc-editor','bullet')" title="Bullet List" style="font-size:0.9rem;">• List</button>
+          <button class="rt-link" onclick="rtFormat('cw-desc-editor','link')" title="Add Link"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Link</button>
+          <div class="rt-color-wrap">
+            <span>Color:</span>
+            <input type="color" id="rt-cw-color" value="#FF1C1C" title="Text color" />
+            <button onclick="rtFormat('cw-desc-editor','color')" title="Apply color">A</button>
+          </div>
+        </div>
+        <div class="rt-editable" id="cw-desc-editor" contenteditable="true" placeholder="Describe this website…" style="min-height:80px;"></div>
+      </div>
+      <div class="cw-form-field">
+        <label>Image (optional)</label>
+        <input type="file" id="cw-img-input" accept="image/*" />
+      </div>
+      <p id="cw-add-error" class="cw-error"></p>
+      <div style="display:flex; gap:0.8rem; flex-wrap:wrap; margin-top:0.5rem;">
+        <button class="cw-post-btn" onclick="addCwEntry()">+ Add Entry</button>
+      </div>
+    </div>
+
+    <!-- Entries Grid (padlet-style) -->
+    <div id="cw-entries-grid">
+      <p class="cw-empty-msg" id="cw-empty-msg">No website entries yet. Check back soon!</p>
+    </div>
+  </div>
+</div>
+
+<!-- ─── EDIT COOL WEBSITE MODAL ─── -->
+<div id="edit-cw-overlay" onclick="closeEditCw()"></div>
+<div id="edit-cw-modal">
+  <button class="signin-modal-close" onclick="closeEditCw()" aria-label="Close">&#x2715;</button>
+  <h2 class="signin-modal-title">Edit Website Entry</h2>
+  <div class="cw-form-field">
+    <label>Title *</label>
+    <input type="text" id="ecw-title" placeholder="e.g. Khan Academy" />
+  </div>
+  <div class="cw-form-field">
+    <label>Website URL *</label>
+    <input type="url" id="ecw-url" placeholder="https://example.com" />
+  </div>
+  <div class="cw-form-field">
+    <label>Description *</label>
+    <div class="rt-toolbar">
+      <button class="rt-bold" onclick="rtFormat('ecw-desc','bold')" title="Bold"><b>B</b></button>
+      <button class="rt-italic" onclick="rtFormat('ecw-desc','italic')" title="Italic"><i>I</i></button>
+      <button class="rt-underline" onclick="rtFormat('ecw-desc','underline')" title="Underline"><u>U</u></button>
+      <button onclick="rtFormat('ecw-desc','bullet')" title="Bullet List" style="font-size:0.9rem;">• List</button>
+      <div class="rt-color-wrap">
+        <span>Color:</span>
+        <input type="color" id="rt-ecw-color" value="#FF1C1C" />
+        <button onclick="rtFormat('ecw-desc','color')">A</button>
+      </div>
+    </div>
+    <div class="rt-editable" id="ecw-desc" contenteditable="true" style="min-height:80px;"></div>
+  </div>
+  <div class="cw-form-field">
+    <label>Image (leave blank to keep current)</label>
+    <input type="file" id="ecw-img" accept="image/*" />
+    <p id="ecw-img-current" style="font-size:0.8rem; color:#888; margin:4px 0 0 0;"></p>
+  </div>
+  <p id="ecw-error" class="cw-error"></p>
+  <div style="display:flex; gap:0.8rem; flex-wrap:wrap; margin-top:1rem;">
+    <button class="cw-post-btn" onclick="saveEditCw()">💾 Save Changes</button>
+    <button class="cw-cancel-btn" onclick="closeEditCw()">Cancel</button>
+  </div>
+</div>
+
 <div id="page-demo">
 <div id="demo-wrapper" ondragover="allow(event)" ondrop="trash(event)">
 
@@ -3448,6 +3804,7 @@ body.intro-fade-in > #drag-ghost {
                        !document.body.classList.contains('contact-active') &&
                        !document.body.classList.contains('announcements-active') &&
                        !document.body.classList.contains('member-active') &&
+                       !document.body.classList.contains('coolwebsites-active') &&
                        !document.body.classList.contains('demo-active');
     const pastHero = isMainPage ? (scrollY > heroBottom - 80) : true;
     layer.style.opacity = pastHero ? '1' : '0';
@@ -3658,7 +4015,7 @@ async function ghUploadImage(file) {
 // ═══════════════════════════════════════════════════
 
 function showPage(page) {
-    document.body.classList.remove('demo-active','team-active','about-active','contact-active','announcements-active','member-active');
+    document.body.classList.remove('demo-active','team-active','about-active','contact-active','announcements-active','member-active','coolwebsites-active');
     window.scrollTo(0, 0);
     if (page === 'demo') {
         document.body.classList.add('demo-active');
@@ -3677,6 +4034,9 @@ function showPage(page) {
     } else if (page === 'member') {
         document.body.classList.add('member-active');
         loadMemberPage();
+    } else if (page === 'coolwebsites') {
+        document.body.classList.add('coolwebsites-active');
+        loadCoolWebsitesPage();
     }
     // Refresh math symbol layer visibility for the new page
     if (window._updateMathLayer) setTimeout(window._updateMathLayer, 50);
@@ -4875,6 +5235,7 @@ function deleteAnnouncement(index) {
             if (subs.about   && document.getElementById('about-page-sub'))   document.getElementById('about-page-sub').textContent   = subs.about;
             if (subs.contact && document.getElementById('contact-page-sub')) document.getElementById('contact-page-sub').textContent = subs.contact;
             if (subs.member  && document.getElementById('member-page-sub'))  document.getElementById('member-page-sub').textContent  = subs.member;
+            if (subs.coolwebsites && document.getElementById('coolwebsites-page-sub')) document.getElementById('coolwebsites-page-sub').textContent = subs.coolwebsites;
         });
 
         // ─── HAMBURGER MENU ───
@@ -4938,6 +5299,7 @@ function deleteAnnouncement(index) {
                     if (document.body.classList.contains('contact-active')) loadContactPage();
                     if (document.body.classList.contains('announcements-active')) loadAnnouncementsPage();
                     if (document.body.classList.contains('member-active'))  loadMemberPage();
+                    if (document.body.classList.contains('coolwebsites-active')) loadCoolWebsitesPage();
                     document.getElementById('demo-desc-edit-btn-wrap').style.display = 'block';
                 } else {
                     errEl.textContent = 'Invalid token — check and try again.';
@@ -4960,9 +5322,10 @@ function deleteAnnouncement(index) {
             if (document.body.classList.contains('contact-active')) loadContactPage();
             if (document.body.classList.contains('announcements-active')) loadAnnouncementsPage();
             if (document.body.classList.contains('member-active'))  loadMemberPage();
+            if (document.body.classList.contains('coolwebsites-active')) loadCoolWebsitesPage();
             document.getElementById('demo-desc-edit-btn-wrap').style.display = 'none';
             // Hide all subtitle edit controls
-            ['team','about','contact','member'].forEach(function(p) {
+            ['team','about','contact','member','coolwebsites'].forEach(function(p) {
                 var b = document.getElementById(p + '-sub-editbtn-wrap');
                 var e = document.getElementById(p + '-sub-edit-wrap');
                 if (b) b.style.display = 'none';
@@ -4978,6 +5341,155 @@ function deleteAnnouncement(index) {
         // Allow Enter key in sign-in fields
         document.getElementById('signin-username').addEventListener('keydown', function(e){ if(e.key==='Enter') attemptSignIn(); });
         document.getElementById('signin-password').addEventListener('keydown', function(e){ if(e.key==='Enter') attemptSignIn(); });
+
+        // ─── COOL WEBSITES (persistent via GitHub) ───
+        function getCwEntries() {
+            return (_ghCache && _ghCache.cool_websites) ? _ghCache.cool_websites : [];
+        }
+        async function saveCwEntries(list) {
+            await ghSet('cool_websites', list);
+        }
+        function loadCoolWebsitesPage() {
+            const isAdmin = window._conceptionAdmin === true;
+            const panel = document.getElementById('cw-admin-panel');
+            if (panel) panel.style.display = isAdmin ? 'block' : 'none';
+            const subEditBtn = document.getElementById('coolwebsites-sub-editbtn-wrap');
+            if (subEditBtn) subEditBtn.style.display = isAdmin ? 'block' : 'none';
+            // Load subtitle
+            const subs = (_ghCache && _ghCache.page_subs) ? _ghCache.page_subs : {};
+            if (subs.coolwebsites) document.getElementById('coolwebsites-page-sub').textContent = subs.coolwebsites;
+            renderCwEntries();
+        }
+        // Accent colors for variety (cycles through)
+        const CW_ACCENTS = [
+            'linear-gradient(90deg,#4D9EFF,#001dfa)',
+            'linear-gradient(90deg,#FF1C1C,#f0a400)',
+            'linear-gradient(90deg,#b000f0,#4D9EFF)',
+            'linear-gradient(90deg,#27ae60,#4D9EFF)',
+            'linear-gradient(90deg,#f0a400,#FF1C1C)',
+            'linear-gradient(90deg,#001dfa,#b000f0)',
+        ];
+        function renderCwEntries() {
+            const grid = document.getElementById('cw-entries-grid');
+            const emptyMsg = document.getElementById('cw-empty-msg');
+            const entries = getCwEntries();
+            const isAdmin = window._conceptionAdmin === true;
+            if (entries.length === 0) {
+                grid.innerHTML = '<p class="cw-empty-msg" id="cw-empty-msg">No website entries yet. Check back soon!</p>';
+                return;
+            }
+            grid.innerHTML = entries.map((entry, i) => `
+              <div class="cw-card" onclick="window.open('${entry.url.replace(/'/g,"\\'")}','_blank')" title="Visit ${entry.title}">
+                <div class="cw-card-accent" style="background:${CW_ACCENTS[i % CW_ACCENTS.length]};"></div>
+                ${isAdmin ? `
+                  <div class="cw-card-admin-btns" onclick="event.stopPropagation()">
+                    <button class="cw-card-admin-btn edit-btn" onclick="openEditCw(${i})" title="Edit">✏️</button>
+                    <button class="cw-card-admin-btn del" onclick="deleteCwEntry(${i})" title="Delete">&#x2715;</button>
+                  </div>` : ''}
+                ${entry.img
+                    ? `<div class="cw-card-img-wrap"><img class="cw-card-img" src="${entry.img}" alt="${entry.title}" /></div>`
+                    : ''}
+                <div class="cw-card-body">
+                  <a class="cw-card-title-link" href="${entry.url}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    ${entry.title}
+                  </a>
+                  <div class="cw-card-desc">${entry.desc}</div>
+                </div>
+              </div>`).join('');
+        }
+        function deleteCwEntry(index) {
+            if (!confirm('Delete this entry?')) return;
+            const entries = getCwEntries();
+            entries.splice(index, 1);
+            saveCwEntries(entries).then(() => renderCwEntries());
+        }
+        function addCwEntry() {
+            const title = document.getElementById('cw-title-input').value.trim();
+            const url   = document.getElementById('cw-url-input').value.trim();
+            const desc  = document.getElementById('cw-desc-editor').innerHTML.trim();
+            const file  = document.getElementById('cw-img-input').files[0];
+            const errEl = document.getElementById('cw-add-error');
+            if (!title || !url || !desc || desc === '<br>') {
+                errEl.textContent = 'Title, URL, and description are required.';
+                errEl.style.display = 'block';
+                return;
+            }
+            if (!url.startsWith('http')) {
+                errEl.textContent = 'URL must start with http:// or https://';
+                errEl.style.display = 'block';
+                return;
+            }
+            errEl.style.display = 'none';
+            function doSave(imgUrl) {
+                const entries = getCwEntries();
+                entries.push({ title, url, desc, img: imgUrl || null });
+                saveCwEntries(entries).then(() => {
+                    // Clear form
+                    document.getElementById('cw-title-input').value = '';
+                    document.getElementById('cw-url-input').value = '';
+                    document.getElementById('cw-desc-editor').innerHTML = '';
+                    document.getElementById('cw-img-input').value = '';
+                    renderCwEntries();
+                });
+            }
+            if (file) {
+                ghUploadImage(file).then(u => doSave(u)).catch(e => {
+                    errEl.textContent = 'Image upload failed: ' + e.message;
+                    errEl.style.display = 'block';
+                });
+            } else {
+                doSave(null);
+            }
+        }
+
+        // ─── EDIT COOL WEBSITE ENTRY ───
+        let _editingCwIndex = -1;
+        function openEditCw(index) {
+            const entries = getCwEntries();
+            const e = entries[index];
+            _editingCwIndex = index;
+            document.getElementById('ecw-title').value = e.title;
+            document.getElementById('ecw-url').value = e.url;
+            document.getElementById('ecw-desc').innerHTML = normalizeContent(e.desc);
+            document.getElementById('ecw-img-current').textContent = e.img ? 'Image set. Upload to replace.' : 'No image set.';
+            document.getElementById('ecw-img').value = '';
+            document.getElementById('ecw-error').style.display = 'none';
+            document.getElementById('edit-cw-overlay').classList.add('open');
+            document.getElementById('edit-cw-modal').classList.add('open');
+        }
+        function closeEditCw() {
+            document.getElementById('edit-cw-overlay').classList.remove('open');
+            document.getElementById('edit-cw-modal').classList.remove('open');
+            _editingCwIndex = -1;
+        }
+        function saveEditCw() {
+            const title = document.getElementById('ecw-title').value.trim();
+            const url   = document.getElementById('ecw-url').value.trim();
+            const desc  = document.getElementById('ecw-desc').innerHTML.trim();
+            const file  = document.getElementById('ecw-img').files[0];
+            const errEl = document.getElementById('ecw-error');
+            if (!title || !url || !desc || desc === '<br>') {
+                errEl.textContent = 'Title, URL, and description are required.';
+                errEl.style.display = 'block';
+                return;
+            }
+            errEl.style.display = 'none';
+            const entries = getCwEntries();
+            const existing = entries[_editingCwIndex];
+            function doSave(imgUrl) {
+                entries[_editingCwIndex] = { title, url, desc, img: imgUrl };
+                saveCwEntries(entries).then(() => { closeEditCw(); renderCwEntries(); });
+            }
+            if (file) {
+                ghUploadImage(file).then(u => doSave(u)).catch(e => {
+                    errEl.textContent = 'Image upload failed: ' + e.message;
+                    errEl.style.display = 'block';
+                });
+            } else {
+                doSave(existing.img || null);
+            }
+        }
 
         // Responsive demo stage
         function fitDemo() {
@@ -5005,5 +5517,3 @@ function deleteAnnouncement(index) {
 </script>
 </body>
 </html>
-index (45).html
-Displaying index (45).html.
