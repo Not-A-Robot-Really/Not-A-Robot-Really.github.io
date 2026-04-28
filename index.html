@@ -2128,6 +2128,44 @@ body.demo-active #action-journal       { top: 91px;  }   /* was 15px  + 76 */
   transition: background 0.2s;
 }
 .member-save-btn:hover { background: #243d6e; }
+
+/* ─── RICH TEXT DISPLAY AREAS ─── */
+/* Ensures content saved from contenteditable renders with proper spacing */
+.about-body-text ul, .member-body-text ul, .ann-card-text ul,
+#demo-desc-body ul {
+  list-style: disc;
+  padding-left: 1.5em;
+  margin: 0.5em 0;
+}
+.about-body-text ol, .member-body-text ol, .ann-card-text ol,
+#demo-desc-body ol {
+  list-style: decimal;
+  padding-left: 1.5em;
+  margin: 0.5em 0;
+}
+.about-body-text li, .member-body-text li, .ann-card-text li,
+#demo-desc-body li {
+  margin: 0.25em 0;
+}
+.about-body-text div, .member-body-text div, .ann-card-text div,
+#demo-desc-body div,
+.about-body-text p, .member-body-text p, .ann-card-text p,
+#demo-desc-body p {
+  margin: 0;
+  min-height: 1em;
+}
+/* Bullet lists inside rt-editable editor */
+.rt-editable ul {
+  list-style: disc;
+  padding-left: 1.5em;
+  margin: 0.3em 0;
+}
+.rt-editable ol {
+  list-style: decimal;
+  padding-left: 1.5em;
+  margin: 0.3em 0;
+}
+.rt-editable li { margin: 0.2em 0; }
 </style>
 </head>
 <body>
@@ -2597,6 +2635,7 @@ body.intro-fade-in > #drag-ghost {
       <button class="rt-bold" onclick="rtFormat('eme-desc','bold')" title="Bold"><b>B</b></button>
       <button class="rt-italic" onclick="rtFormat('eme-desc','italic')" title="Italic"><i>I</i></button>
       <button class="rt-underline" onclick="rtFormat('eme-desc','underline')" title="Underline"><u>U</u></button>
+      <button onclick="rtFormat('eme-desc','bullet')" title="Bullet List" style="font-size:0.9rem;">• List</button>
       <button class="rt-link" onclick="rtFormat('eme-desc','link')" title="Add Link"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Link</button>
       <div class="rt-color-wrap">
         <span>Color:</span>
@@ -2795,6 +2834,7 @@ body.intro-fade-in > #drag-ghost {
             <button class="rt-bold" onclick="rtFormat('tmf-desc','bold')" title="Bold"><b>B</b></button>
             <button class="rt-italic" onclick="rtFormat('tmf-desc','italic')" title="Italic"><i>I</i></button>
             <button class="rt-underline" onclick="rtFormat('tmf-desc','underline')" title="Underline"><u>U</u></button>
+            <button onclick="rtFormat('tmf-desc','bullet')" title="Bullet List" style="font-size:0.9rem;">• List</button>
             <button class="rt-link" onclick="rtFormat('tmf-desc','link')" title="Add Link"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Link</button>
             <div class="rt-color-wrap">
               <span>Color:</span>
@@ -2831,14 +2871,14 @@ body.intro-fade-in > #drag-ghost {
 
     <!-- View mode -->
     <div id="about-view">
-      <p id="about-text-1" class="about-body-text">Tell your story here. Who are you, what do you do, and why does it matter? Add as much detail as you like — this section supports multiple paragraphs.</p>
+      <div id="about-text-1" class="about-body-text">Tell your story here. Who are you, what do you do, and why does it matter? Add as much detail as you like — this section supports multiple paragraphs.</div>
 
       <div class="about-img-block" id="about-img-1-wrap">
         <img id="about-img-1" src="" alt="About image 1" style="display:none;" />
         <p class="about-img-placeholder" id="about-img-1-placeholder">[ Image 1 — set by admin ]</p>
       </div>
 
-      <p id="about-text-2" class="about-body-text">Continue your story here. This second block of text appears between the two images. Share your mission, history, or values.</p>
+      <div id="about-text-2" class="about-body-text">Continue your story here. This second block of text appears between the two images. Share your mission, history, or values.</div>
 
       <div class="about-img-block" id="about-img-2-wrap">
         <img id="about-img-2" src="" alt="About image 2" style="display:none;" />
@@ -2855,6 +2895,7 @@ body.intro-fade-in > #drag-ghost {
         <button class="rt-bold" onclick="rtFormat('about-edit-text-1','bold')" title="Bold"><b>B</b></button>
         <button class="rt-italic" onclick="rtFormat('about-edit-text-1','italic')" title="Italic"><i>I</i></button>
         <button class="rt-underline" onclick="rtFormat('about-edit-text-1','underline')" title="Underline"><u>U</u></button>
+        <button onclick="rtFormat('about-edit-text-1','bullet')" title="Bullet List" style="font-size:0.9rem;">• List</button>
         <button class="rt-link" onclick="rtFormat('about-edit-text-1','link')" title="Add Link"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Link</button>
         <div class="rt-color-wrap">
           <span>Color:</span>
@@ -2873,6 +2914,7 @@ body.intro-fade-in > #drag-ghost {
         <button class="rt-bold" onclick="rtFormat('about-edit-text-2','bold')" title="Bold"><b>B</b></button>
         <button class="rt-italic" onclick="rtFormat('about-edit-text-2','italic')" title="Italic"><i>I</i></button>
         <button class="rt-underline" onclick="rtFormat('about-edit-text-2','underline')" title="Underline"><u>U</u></button>
+        <button onclick="rtFormat('about-edit-text-2','bullet')" title="Bullet List" style="font-size:0.9rem;">• List</button>
         <button class="rt-link" onclick="rtFormat('about-edit-text-2','link')" title="Add Link"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Link</button>
         <div class="rt-color-wrap">
           <span>Color:</span>
@@ -2957,6 +2999,7 @@ body.intro-fade-in > #drag-ghost {
           <button class="rt-bold" onclick="rtFormat('ann-editor','bold')" title="Bold"><b>B</b></button>
           <button class="rt-italic" onclick="rtFormat('ann-editor','italic')" title="Italic"><i>I</i></button>
           <button class="rt-underline" onclick="rtFormat('ann-editor','underline')" title="Underline"><u>U</u></button>
+          <button onclick="rtFormat('ann-editor','bullet')" title="Bullet List" style="font-size:0.9rem;">• List</button>
           <button class="rt-link" onclick="rtFormat('ann-editor','link')" title="Add Link"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Link</button>
           <div class="rt-color-wrap">
             <span>Color:</span>
@@ -3030,6 +3073,7 @@ body.intro-fade-in > #drag-ghost {
           <button class="rt-bold" onclick="rtFormat('member-edit-body','bold')" title="Bold"><b>B</b></button>
           <button class="rt-italic" onclick="rtFormat('member-edit-body','italic')" title="Italic"><i>I</i></button>
           <button class="rt-underline" onclick="rtFormat('member-edit-body','underline')" title="Underline"><u>U</u></button>
+          <button onclick="rtFormat('member-edit-body','bullet')" title="Bullet List" style="font-size:0.9rem;">• List</button>
           <button class="rt-link" onclick="rtFormat('member-edit-body','link')" title="Add Link"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Link</button>
           <div class="rt-color-wrap">
             <span>Color:</span>
@@ -3240,7 +3284,7 @@ body.intro-fade-in > #drag-ghost {
     <!-- View mode -->
     <div id="demo-desc-view">
       <h2 id="demo-desc-title" style="font-family:'Playfair Display',serif; font-size:clamp(2rem,4vw,3.2rem); font-weight:900; color:#1A2B45; margin-bottom:1.5rem;">Demo Title Here</h2>
-      <p id="demo-desc-body" style="font-size:1.2rem; line-height:1.85; color:#333333; margin-bottom:3rem;">Replace this paragraph with a description of the demo. Explain what the balance scale represents, how apples and candy map to algebraic variables, and how students can use the experimental and practice modes to build intuition for solving equations.</p>
+      <div id="demo-desc-body" style="font-size:1.2rem; line-height:1.85; color:#333333; margin-bottom:3rem;">Replace this paragraph with a description of the demo. Explain what the balance scale represents, how apples and candy map to algebraic variables, and how students can use the experimental and practice modes to build intuition for solving equations.</div>
       <div id="demo-desc-img-wrap" style="width:100%; min-height:320px; background:#F9FBFF; border:2.5px dashed #4D9EFF; border-radius:14px; display:flex; align-items:center; justify-content:center;">
         <span id="demo-desc-img-placeholder" style="font-family:'DM Sans',sans-serif; font-size:1rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#4D9EFF;">[ Image placeholder — replace with &lt;img&gt; tag ]</span>
         <img id="demo-desc-img" src="" alt="Demo image" style="display:none; width:100%; border-radius:12px; object-fit:contain; max-height:480px;" />
@@ -3264,6 +3308,7 @@ body.intro-fade-in > #drag-ghost {
           <button class="rt-bold" onclick="rtFormat('dde-body','bold')" title="Bold"><b>B</b></button>
           <button class="rt-italic" onclick="rtFormat('dde-body','italic')" title="Italic"><i>I</i></button>
           <button class="rt-underline" onclick="rtFormat('dde-body','underline')" title="Underline"><u>U</u></button>
+          <button onclick="rtFormat('dde-body','bullet')" title="Bullet List" style="font-size:0.9rem;">• List</button>
           <button class="rt-link" onclick="rtFormat('dde-body','link')" title="Add Link"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Link</button>
           <div class="rt-color-wrap">
             <span>Color:</span>
@@ -3708,7 +3753,7 @@ function openEditMember(index) {
     _editingMemberIndex = index;
     document.getElementById('eme-name').value = m.name;
     document.getElementById('eme-role').value = m.role;
-    document.getElementById('eme-desc').innerHTML = m.desc;
+    document.getElementById('eme-desc').innerHTML = normalizeContent(m.desc);
     document.getElementById('eme-photo-current').textContent = m.photo ? 'Current photo saved. Upload a new one to replace it.' : 'No photo set.';
     document.getElementById('eme-photo').value = '';
     document.getElementById('eme-error').style.display = 'none';
@@ -3752,7 +3797,7 @@ function saveEditMember() {
 async function loadDemoDesc() {
     const saved = (_ghCache && _ghCache.demo_desc) ? _ghCache.demo_desc : {};
     if (saved.title) document.getElementById('demo-desc-title').textContent = saved.title;
-    if (saved.body)  document.getElementById('demo-desc-body').innerHTML  = saved.body;
+    if (saved.body)  document.getElementById('demo-desc-body').innerHTML  = normalizeContent(saved.body);
     if (saved.img) {
         document.getElementById('demo-desc-img').src = saved.img;
         document.getElementById('demo-desc-img').style.display = 'block';
@@ -3764,7 +3809,7 @@ async function loadDemoDesc() {
 function openDemoDescEdit() {
     const saved = (_ghCache && _ghCache.demo_desc) ? _ghCache.demo_desc : {};
     document.getElementById('dde-title').value = saved.title || document.getElementById('demo-desc-title').textContent;
-    document.getElementById('dde-body').innerHTML  = saved.body  || document.getElementById('demo-desc-body').innerHTML;
+    document.getElementById('dde-body').innerHTML  = normalizeContent(saved.body  || document.getElementById('demo-desc-body').innerHTML);
     document.getElementById('dde-img-current').textContent = saved.img ? 'Current image saved. Upload a new one to replace.' : 'No image set yet.';
     document.getElementById('dde-img').value = '';
     document.getElementById('dde-error').style.display = 'none';
@@ -3820,14 +3865,14 @@ function loadAboutPage() {
     document.getElementById('about-sub-editbtn-wrap').style.display = isAdmin ? 'block' : 'none';
     const d = (_ghCache && _ghCache.about) ? _ghCache.about : {};
     const subs = (_ghCache && _ghCache.page_subs) ? _ghCache.page_subs : {};
-    if (d.text1 !== undefined) document.getElementById('about-text-1').innerHTML = d.text1;
-    if (d.text2 !== undefined) document.getElementById('about-text-2').innerHTML = d.text2;
+    if (d.text1 !== undefined) document.getElementById('about-text-1').innerHTML = normalizeContent(d.text1);
+    if (d.text2 !== undefined) document.getElementById('about-text-2').innerHTML = normalizeContent(d.text2);
     _applyAboutImg(1, d.img1 || null);
     _applyAboutImg(2, d.img2 || null);
     if (subs.about) document.getElementById('about-page-sub').textContent = subs.about;
     if (isAdmin) {
-        document.getElementById('about-edit-text-1').innerHTML = d.text1 || document.getElementById('about-text-1').innerHTML;
-        document.getElementById('about-edit-text-2').innerHTML = d.text2 || document.getElementById('about-text-2').innerHTML;
+        document.getElementById('about-edit-text-1').innerHTML = normalizeContent(d.text1 || document.getElementById('about-text-1').innerHTML);
+        document.getElementById('about-edit-text-2').innerHTML = normalizeContent(d.text2 || document.getElementById('about-text-2').innerHTML);
         document.getElementById('about-edit-img-1-note').textContent = d.img1 ? 'Image 1 saved. Upload to replace.' : 'No image set.';
         document.getElementById('about-edit-img-2-note').textContent = d.img2 ? 'Image 2 saved. Upload to replace.' : 'No image set.';
     }
@@ -3935,7 +3980,7 @@ function loadMemberPage() {
         const bodyEl = document.getElementById('member-body-text');
         const bodySection = document.getElementById('member-body-section');
         if (m.body && m.body.trim()) {
-            bodyEl.innerHTML = m.body;
+            bodyEl.innerHTML = normalizeContent(m.body);
             bodySection.style.display = 'block';
         } else {
             bodySection.style.display = 'none';
@@ -3958,7 +4003,7 @@ function loadMemberPage() {
         }
         // Pre-fill edit fields if admin
         if (isAdmin) {
-            document.getElementById('member-edit-body').innerHTML = m.body || '';
+            document.getElementById('member-edit-body').innerHTML = normalizeContent(m.body || '');
             const curEl = document.getElementById('member-img-current');
             if (curEl) curEl.textContent = m.img ? 'Current image saved.' : 'No image set.';
         }
@@ -4724,6 +4769,14 @@ function deleteAnnouncement(index) {
             if (chevron) chevron.style.transform = isOpen ? '' : 'rotate(180deg)';
         }
 
+        // ─── NORMALIZE CONTENT (convert bare \n to <br> for legacy JSON data) ───
+        function normalizeContent(html) {
+            if (!html) return html;
+            // Replace \n that aren't immediately after a closing > tag
+            // This handles legacy JSON data that stored plain newlines
+            return html.replace(/([^>])\n/g, '$1<br>').replace(/^\n/g, '<br>');
+        }
+
         // ─── RICH TEXT FORMATTING ───
         function rtFormat(targetId, type) {
             const el = document.getElementById(targetId);
@@ -4744,6 +4797,8 @@ function deleteAnnouncement(index) {
                 document.execCommand('italic', false, null);
             } else if (type === 'underline') {
                 document.execCommand('underline', false, null);
+            } else if (type === 'bullet') {
+                document.execCommand('insertUnorderedList', false, null);
             } else if (type === 'color') {
                 const colorId = colorInputMap[targetId];
                 const color = colorId ? document.getElementById(colorId).value : '#FF1C1C';
@@ -4911,3 +4966,5 @@ function deleteAnnouncement(index) {
 </script>
 </body>
 </html>
+index (45).html
+Displaying index (45).html.
