@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
 <title>Conception — Igniting Math Passion</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -728,13 +729,15 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
 
 @media(max-width:768px){
   nav{padding:0.8rem 1.2rem;}
-  .nav-inner-wrap{gap:1.2rem}
-  nav ul{gap:1.2rem}
+  .nav-inner-wrap{flex-direction: row; justify-content: space-between; gap: 0.8rem;}
+  #nav-center-links { display: none !important; }
+  .signin-btn { margin-left: auto; margin-right: 8px; padding: 6px 12px; font-size: 0.75rem; background: #FFFFFF !important; color: var(--navy) !important; border-color: #FFFFFF !important; }
+  .hamburger-btn span { background: #FFFFFF !important; }
   .logo-img{height:36px}
   .hero{padding:7rem 1.2rem 4rem; min-height:auto}
-  .hero-quote{font-size:1.1rem; margin-bottom:2rem}
-  .hero-sub{font-size:1rem; margin-bottom:2rem}
-  .hero-logo { max-width: 80%; }
+  .hero-quote{font-size:1.1rem; margin: 0 0 2rem 0 !important;}
+  .hero-sub{font-size:1rem; margin: 0 0 2rem 0 !important;}
+  .hero-logo { max-width: 80%; margin: 1rem 0 !important;}
   .wide-bg{padding:5rem 1.2rem}
   .heading{font-size:clamp(2rem,8vw,3rem)}
   .big-num{font-size:clamp(4rem,16vw,7rem)}
@@ -765,8 +768,7 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
   .dropdown-menu{left:0; transform:none; right:auto}
 }
 @media(max-width:400px){
-  nav ul{gap:0.7rem}
-  nav a.nav-link{font-size:.6rem}
+  .nav-inner-wrap{gap:0.4rem}
   .logo-img{height:30px}
   .cards-grid{grid-template-columns:1fr}
   .bar-txt-col{font-size:.55rem}
@@ -2327,7 +2329,7 @@ body.intro-fade-in > #drag-ghost {
   const MAX_ZOOM = 2.2;
 
   // Total scroll distance (px) the transition occupies
-  const SCROLL_RANGE = window.innerHeight * 2.8;
+  const SCROLL_RANGE = window.innerHeight * 1.4;
 
   function easeInOutCubic(t) {
     return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
@@ -2470,11 +2472,11 @@ body.intro-fade-in > #drag-ghost {
     document.body.classList.remove('intro-active');
     document.body.classList.add('intro-fade-in');
 
-    // ── 1-second scroll freeze so the user doesn't over-scroll into the page ──
+    // ── 0.3-second scroll freeze so the user doesn't over-scroll into the page ──
     document.body.classList.add('scroll-frozen');
     setTimeout(function() {
       document.body.classList.remove('scroll-frozen');
-    }, 1000);
+    }, 300);
 
     // Let the RAF loop finish the opacity fade on scene naturally,
     // then clean up once it's fully transparent.
