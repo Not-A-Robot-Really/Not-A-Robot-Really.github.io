@@ -8,32 +8,38 @@
     },
     {
       "name": "Itay Kedem",
-      "role": "Founding Member",
+      "role": "Lesson Design Manager",
       "desc": "<font color=\"#1f1f1f\" face=\"Roboto, Arial, sans-serif\"><span style=\"font-size: 14px; letter-spacing: 0.2px; white-space-collapse: preserve-breaks;\">Freshman at Needham High School and tutor at RSM</span></font>",
       "photo": "https://raw.githubusercontent.com/Not-A-Robot-Really/Not-A-Robot-Really.github.io/main/images/1777331959051_IMG_0382_-_Itay_Kedem__2029_.jpeg"
     },
     {
       "name": "Daniel Choi",
-      "role": "Founding Member",
+      "role": "Lesson Design Manager",
       "desc": "<font color=\"#1f1f1f\" face=\"Roboto, Arial, sans-serif\"><span style=\"font-size: 14px; letter-spacing: 0.2px; white-space-collapse: preserve-breaks;\">Daniel Choi is a Freshman at Needham High School.</span></font>",
       "photo": "https://raw.githubusercontent.com/Not-A-Robot-Really/Not-A-Robot-Really.github.io/main/images/1777331970677_1755877455281_-_Daniel_E_Choi__2029_.jpg"
     },
     {
       "name": "Karan Krishnan",
-      "role": "Founding Member",
+      "role": "Software Manager",
       "desc": "<span style=\"color: rgb(31, 31, 31); font-family: Roboto, Arial, sans-serif; font-size: 14px; letter-spacing: 0.2px;\">A high school freshman at Needham High</span>",
       "photo": "https://raw.githubusercontent.com/Not-A-Robot-Really/Not-A-Robot-Really.github.io/main/images/1777332577340_IMG_6084_-_Karan_M_Krishnan__2029_.jpeg"
+    },
+    {
+      "name": "Hai Dang",
+      "role": "Outreach Manager",
+      "desc": "<font color=\"#1f1f1f\" face=\"Roboto, Arial, sans-serif\"><span style=\"font-size: 14px; letter-spacing: 0.2px;\">Hai dang is  currently in 9th grade and attends the school located in Needham that is also known as Needham High School.</span></font>",
+      "photo": "https://raw.githubusercontent.com/Not-A-Robot-Really/Not-A-Robot-Really.github.io/main/images/1777340917543_WIN_20260427_21_30_37_Pro.jpg"
     }
   ],
   "announcements": [],
   "demo_desc": {
     "title": "Solving Two-Step Equations",
-    "body": "This mathematics visualization helps students learn and solve basic <b>two step equations</b> with one variable. Students will have to experiment with the features of the demo, interact with the objects (<font color=\"#ff1c1c\">apples</font> and <font color=\"#ff1acd\">candies</font>), and investigate what rules make the scale <b>equal</b>. \n\n\nOur demonstration promotes <b>visual</b> and <b>hands-on learning</b>, as opposed to instruction guided memorization techniques. We will guide students in the right direction, but students playing with the demo for <b>5-10 minutes </b>should receive a basic sense of how to solve basic equations <i><font color=\"#341aff\">(2x+12=5x+3)</font></i>. The many visualization techniques in the demo should help kids visualize the objects on the scale, inspiring <b>creativity</b> and <b>deep thinking</b>.\n\n\nStudents can also try very simple, automatically generated practice problems in a visual manner.",
+    "body": "This mathematics visualization/simulation helps students learn and solve basic <b>two step equations</b> with one variable. Students will have to experiment with the features of the demo, interact with the objects (<font color=\"#ff1c1c\">apples</font> and <font color=\"#ff1acd\">candies</font>), and investigate what rules make the scale <b>equal</b>. <br>\n<br>Our demonstration promotes <b>visual</b> and <b>hands-on learning</b>, as opposed to instruction guided memorization techniques. We will guide students in the right direction, but students playing with the demo for <b>5-10 minutes </b>should receive a basic sense of how to solve basic equations <i><font color=\"#341aff\">(2x+12=5x+3)</font></i>. The many visualization techniques in the demo should help kids visualize the objects on the scale, inspiring <b>creativity</b> and <b>deep thinking</b>.<br>\n<br>Students can also try <u>very simple,</u> automatically generated <b><font color=\"#04eb00\">practice problems</font></b> in a visual manner.",
     "img": "https://raw.githubusercontent.com/Not-A-Robot-Really/Not-A-Robot-Really.github.io/main/images/1777332143022_geralt-geometry-1044090.jpg"
   },
   "about": {
     "text1": "Conception is a <b>non-profit fundraiser</b> created by a group of freshmen at <i>Needham High School </i>with one thing in common: A love of <font color=\"#001dfa\"><b>math</b></font>.",
-    "text2": "We want to share our love of learning to younger audiences by teaching more complex mathematical ideas to younger elementary students in <b><font color=\"#ff1c1c\">creative</font></b> and <b><font color=\"#f0a400\">visual</font></b> ways. For instance, we will teach students how to solve <i>two-step equations </i>with <font color=\"#b000f0\">visual demos.</font> That way, it is easy to understand <i>AND</i> fun to learn! By associating math with fun experiences, we can help <b>educate</b> and bring back interest in math at a time of decreasing interest (see home page for more info).",
+    "text2": "We want to share our love of learning to younger audiences by teaching more complex mathematical ideas to younger elementary students in <b><font color=\"#ff1c1c\">creative</font></b> and <b><font color=\"#f0a400\">visual</font></b> ways. \n\nFor instance, we will teach students how to solve <i>two-step equations </i>with <font color=\"#b000f0\">visual demos.</font> That way, it is easy to understand <i>AND</i> fun to learn! By associating math with fun experiences, we can help <b>educate</b> and bring back interest in math at a time of decreasing interest (see home page for more info).",
     "img1": "https://raw.githubusercontent.com/Not-A-Robot-Really/Not-A-Robot-Really.github.io/main/images/1777331993842_Screenshot_2026-04-26_8.38.00_PM.png",
     "img2": "https://raw.githubusercontent.com/Not-A-Robot-Really/Not-A-Robot-Really.github.io/main/images/1777332122584_Screenshot_2026-04-27_7.21.50_PM.png"
   },
@@ -48,7 +54,7 @@
     "member": "Join us and be part of something amazing!"
   },
   "member": {
-    "body": "Becoming a member is <b><font color=\"#21c700\">easy</font></b>!\n- Apply the form and receive approval (almost always accepted)!\n\n<b>Perks of being a Conception member:</b><div>- Being an early member of a <font color=\"#196df5\"><b>non profit organization\n</b></font>- Improve your public <font color=\"#f51919\"><b>speaking &amp; presentation</b></font> abilities\n- Earn <b><font color=\"#19f533\">community service</font> </b>hours with ease!\n- Help <font color=\"#f59a19\"><b>improve</b></font> students' math skills\n- College application <font color=\"#dc19f5\" style=\"font-weight: bold;\">boost\n</font>- It's just simply <font color=\"#19e7f5\"><b>fun</b>!</font><b>\n\n</b></div>",
+    "body": "<b>Becoming a member is <font color=\"#21c700\">easy</font>!</b><br>- Apply the form and receive approval (almost always accepted)!<br>\n<b>Perks of being a Conception member:</b><div>- Being an early member of a <font color=\"#196df5\"><b>non profit organization<br></b></font>- Improve your public <font color=\"#f51919\"><b>speaking &amp; presentation</b></font> abilities<br>- Earn <b><font color=\"#19f533\">community service</font> </b>hours with ease!<br>- Help <font color=\"#f59a19\"><b>improve</b></font> students' math skills<br>- College application <font color=\"#dc19f5\" style=\"font-weight: bold;\">boost<br></font>- It's just simply <font color=\"#19e7f5\"><b>fun</b>!</font><b>\n<br></b></div>",
     "img": "https://raw.githubusercontent.com/Not-A-Robot-Really/Not-A-Robot-Really.github.io/main/images/1777332441188_friendc.jpg"
   }
 }
