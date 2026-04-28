@@ -28,13 +28,13 @@
       "name": "Hai Dang",
       "role": "Outreach Manager",
       "desc": "<font color=\"#1f1f1f\" face=\"Roboto, Arial, sans-serif\"><span style=\"font-size: 14px; letter-spacing: 0.2px;\">Hai dang is  currently in 9th grade and attends the school located in Needham that is also known as Needham High School.</span></font>",
-      "photo": "https://raw.githubusercontent.com/Not-A-Robot-Really/Not-A-Robot-Really.github.io/main/images/1777340120770_WIN_20260427_21_30_37_Pro.jpg"
+      "photo": "https://raw.githubusercontent.com/Not-A-Robot-Really/Not-A-Robot-Really.github.io/main/images/1777339585608_Mountain_-_Hai_Dang.png"
     }
   ],
   "announcements": [],
   "demo_desc": {
     "title": "Solving Two-Step Equations",
-    "body": "This mathematics visualization helps students learn and solve basic <b>two step equations</b> with one variable. Students will have to experiment with the features of the demo, interact with the objects (<font color=\"#ff1c1c\">apples</font> and <font color=\"#ff1acd\">candies</font>), and investigate what rules make the scale <b>equal</b>. \n\n\nOur demonstration promotes <b>visual</b> and <b>hands-on learning</b>, as opposed to instruction guided memorization techniques. We will guide students in the right direction, but students playing with the demo for <b>5-10 minutes </b>should receive a basic sense of how to solve basic equations <i><font color=\"#341aff\">(2x+12=5x+3)</font></i>. The many visualization techniques in the demo should help kids visualize the objects on the scale, inspiring <b>creativity</b> and <b>deep thinking</b>.\n\n\nStudents can also try very simple, automatically generated practice problems in a visual manner.",
+    "body": "This mathematics visualization helps students learn and solve basic <b>two step equations</b> with one variable. Students will have to experiment with the features of the demo, interact with the objects (<font color=\"#ff1c1c\">apples</font> and <font color=\"#ff1acd\">candies</font>), and investigate what rules make the scale <b>equal</b>. <br><br><br>Our demonstration promotes <b>visual</b> and <b>hands-on learning</b>, as opposed to instruction guided memorization techniques. We will guide students in the right direction, but students playing with the demo for <b>5-10 minutes </b>should receive a basic sense of how to solve basic equations <i><font color=\"#341aff\">(2x+12=5x+3)</font></i>. The many visualization techniques in the demo should help kids visualize the objects on the scale, inspiring <b>creativity</b> and <b>deep thinking</b>.<br><br><br>Students can also try very simple, automatically generated practice problems in a visual manner.",
     "img": "https://raw.githubusercontent.com/Not-A-Robot-Really/Not-A-Robot-Really.github.io/main/images/1777332143022_geralt-geometry-1044090.jpg"
   },
   "about": {
@@ -54,7 +54,7 @@
     "member": "Join us and be part of something amazing!"
   },
   "member": {
-    "body": "Becoming a member is <b><font color=\"#21c700\">easy</font></b>!\n- Apply the form and receive approval (almost always accepted)!\n\n<b>Perks of being a Conception member:</b><div>- Being an early member of a <font color=\"#196df5\"><b>non profit organization\n</b></font>- Improve your public <font color=\"#f51919\"><b>speaking &amp; presentation</b></font> abilities\n- Earn <b><font color=\"#19f533\">community service</font> </b>hours with ease!\n- Help <font color=\"#f59a19\"><b>improve</b></font> students' math skills\n- College application <font color=\"#dc19f5\" style=\"font-weight: bold;\">boost\n</font>- It's just simply <font color=\"#19e7f5\"><b>fun</b>!</font><b>\n\n</b></div>",
+    "body": "Becoming a member is <b><font color=\"#21c700\">easy</font></b>!<br>- Apply the form and receive approval (almost always accepted)!<br><br><b>Perks of being a Conception member:</b><div>- Being an early member of a <font color=\"#196df5\"><b>non profit organization<br></b></font>- Improve your public <font color=\"#f51919\"><b>speaking &amp; presentation</b></font> abilities<br>- Earn <b><font color=\"#19f533\">community service</font> </b>hours with ease!<br>- Help <font color=\"#f59a19\"><b>improve</b></font> students' math skills<br>- College application <font color=\"#dc19f5\" style=\"font-weight: bold;\">boost<br></font>- It's just simply <font color=\"#19e7f5\"><b>fun</b>!</font><b><br><br></b></div>",
     "img": "https://raw.githubusercontent.com/Not-A-Robot-Really/Not-A-Robot-Really.github.io/main/images/1777332441188_friendc.jpg"
   }
 }
