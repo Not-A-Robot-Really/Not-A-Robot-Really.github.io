@@ -73,6 +73,13 @@
       "desc": "<span style=\"color: rgb(68, 68, 68); white-space-collapse: collapse;\">A website with free math tutorials and videos for&nbsp;</span><span style=\"white-space-collapse: collapse;\"><b style=\"color: rgb(0, 69, 230);\">k-12 math.&nbsp;</b></span><span style=\"color: rgb(68, 68, 68); white-space-collapse: collapse;\">Contains many education videos dedicated to teaching middle/high school math.</span>",
       "img": null,
       "theme": "navywhite"
+    },
+    {
+      "title": "The Organic Chemistry Tutor",
+      "url": "https://www.youtube.com/@TheOrganicChemistryTutor",
+      "desc": "<span style=\"color: rgb(68, 68, 68); white-space-collapse: collapse;\">Awesome YouTube channel for math and science topics. Has a lot of videos on all sorts of topics including basic math, algebra, calculus, chemistry, physics, and biology.&nbsp;</span><b style=\"color: rgb(68, 68, 68); white-space-collapse: collapse;\"><font color=\"#ff1c1c\">Very comprehensive.</font></b>",
+      "img": null,
+      "theme": "white"
     }
   ]
 }
