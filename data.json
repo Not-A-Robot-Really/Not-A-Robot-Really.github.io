@@ -66,6 +66,13 @@
       "desc": "<span style=\"color: rgb(68, 68, 68); white-space-collapse: collapse;\">Website with&nbsp;</span><b style=\"white-space-collapse: collapse;\"><font style=\"\" color=\"#04e600\">free</font></b><span style=\"color: rgb(68, 68, 68); white-space-collapse: collapse;\">&nbsp;videos and practice problems for anything math related. Helpful for learning and practicing math!</span>",
       "img": null,
       "theme": "white"
+    },
+    {
+      "title": "MathTV",
+      "url": "https://www.mathtv.com/",
+      "desc": "<span style=\"color: rgb(68, 68, 68); white-space-collapse: collapse;\">A website with free math tutorials and videos for&nbsp;</span><b style=\"white-space-collapse: collapse;\"><font style=\"\" color=\"#0045e6\">k-12 math.</font></b>",
+      "img": null,
+      "theme": "dark"
     }
   ]
 }
