@@ -64,6 +64,12 @@
       "url": "https://www.khanacademy.org/",
       "desc": "Website with <b><font color=\"#ff1c1c\">free</font></b> videos and practice problems for anything math related. Helpful for learning and practicing math!",
       "img": null
+    },
+    {
+      "title": "Prodigy",
+      "url": "https://play.prodigygame.com/",
+      "desc": "Fun yet educational math <font color=\"#ff1c1c\">video game</font> for kids.",
+      "img": null
     }
   ]
 }
