@@ -80,6 +80,13 @@
       "desc": "<span style=\"color: rgb(68, 68, 68); white-space-collapse: collapse;\">Awesome YouTube channel for math and science topics. Has a lot of videos on all sorts of topics including basic math, algebra, calculus, chemistry, physics, and biology.&nbsp;</span><b style=\"color: rgb(68, 68, 68); white-space-collapse: collapse;\"><font color=\"#ff1c1c\">Very comprehensive.</font></b>",
       "img": null,
       "theme": "white"
+    },
+    {
+      "title": "Prodigy",
+      "url": "https://play.prodigygame.com/",
+      "desc": "<span style=\"color: rgb(68, 68, 68); white-space-collapse: collapse;\">Fun yet educational math</span><span style=\"white-space-collapse: collapse;\"><font color=\"#e66700\">&nbsp;</font></span><b style=\"white-space-collapse: collapse;\"><font color=\"#e66700\">video game</font><font color=\"#e69d00\">&nbsp;</font></b><span style=\"color: rgb(68, 68, 68); white-space-collapse: collapse;\">for kids.&nbsp;</span>",
+      "img": null,
+      "theme": "white"
     }
   ]
 }
