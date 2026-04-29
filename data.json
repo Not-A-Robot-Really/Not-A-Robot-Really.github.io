@@ -39,7 +39,7 @@
   },
   "about": {
     "text1": "Conception is a <b>non-profit fundraiser</b> created by a group of freshmen at <i>Needham High School </i>with one thing in common: A love of <font color=\"#001dfa\"><b>math</b></font>.",
-    "text2": "We want to share our love of learning to younger audiences by teaching more complex mathematical ideas to younger elementary students in <b><font color=\"#ff1c1c\">creative</font></b> and <b><font color=\"#f0a400\">visual</font></b> ways. <br>\nFor instance, we will <font color=\"#57ff1a\"><b>teach</b></font> students how to solve <i>two-step equations </i>with <font color=\"#b000f0\"><b>visual demos</b>.</font> That way, it is easy to understand <i>AND</i> fun to learn! By associating math with fun experiences, we can help <b>educate</b> and bring back interest in math at a time of decreasing interest (see home page for more info).",
+    "text2": "We want to share our love of learning to younger audiences by teaching more complex mathematical ideas to younger elementary students in <b><font color=\"#ff1c1c\">creative</font></b> and <b><font color=\"#f0a400\">visual</font></b> ways. \n\nFor instance, we will teach students how to solve <i>two-step equations </i>with <font color=\"#b000f0\">visual demos.</font> That way, it is easy to understand <i>AND</i> fun to learn! By associating math with fun experiences, we can help <b>educate</b> and bring back interest in math at a time of decreasing interest (see home page for more info).",
     "img1": "https://raw.githubusercontent.com/Not-A-Robot-Really/Not-A-Robot-Really.github.io/main/images/1777331993842_Screenshot_2026-04-26_8.38.00_PM.png",
     "img2": "https://raw.githubusercontent.com/Not-A-Robot-Really/Not-A-Robot-Really.github.io/main/images/1777332122584_Screenshot_2026-04-27_7.21.50_PM.png"
   },
@@ -52,42 +52,12 @@
     "team": "Meet the people behind Conception!",
     "contact": "We'd love to hear from you!",
     "member": "Join us and be part of something amazing!",
-    "coolwebsites": "Helpful, fun, and quirky website resources for math!"
+    "coolwebsites": "Explore our curated collection of awesome learning resources!",
+    "announcements": "Stay up to date with the latest news from Conception."
   },
   "member": {
     "body": "<b>Becoming a member is <font color=\"#21c700\">easy</font>!</b><br>- Apply the form and receive approval (almost always accepted)!<br>\n<b>Perks of being a Conception member:</b><div>- Being an early member of a <font color=\"#196df5\"><b>non profit organization<br></b></font>- Improve your public <font color=\"#f51919\"><b>speaking &amp; presentation</b></font> abilities<br>- Earn <b><font color=\"#19f533\">community service</font> </b>hours with ease!<br>- Help <font color=\"#f59a19\"><b>improve</b></font> students' math skills<br>- College application <font color=\"#dc19f5\" style=\"font-weight: bold;\">boost<br></font>- It's just simply <font color=\"#19e7f5\"><b>fun</b>!</font><b>\n<br></b></div>",
     "img": "https://raw.githubusercontent.com/Not-A-Robot-Really/Not-A-Robot-Really.github.io/main/images/1777332441188_friendc.jpg"
   },
-  "cool_websites": [
-    {
-      "title": "Khan Academy",
-      "url": "https://www.khanacademy.org/",
-      "desc": "Website with <b><font color=\"#ff1c1c\">free</font></b> videos and practice problems for anything math related. Helpful for learning and practicing math!",
-      "img": null
-    },
-    {
-      "title": "Prodigy",
-      "url": "https://play.prodigygame.com/",
-      "desc": "Fun yet educational math <b><font color=\"#ff1c1c\">video game</font> </b>for kids.",
-      "img": null
-    },
-    {
-      "title": "MathTV",
-      "url": "https://www.mathtv.com/",
-      "desc": "A website with free math tutorials and videos for <b><font color=\"#ff1c1c\">k-12 math.</font></b>",
-      "img": null
-    },
-    {
-      "title": "Mathantics",
-      "url": "https://www.youtube.com/@mathantics/videos",
-      "desc": "One of the best<font color=\"#ff1c1c\"><b> YouTube channels </b></font>for learning new math topics. Easy to learn and very intuitive.",
-      "img": null
-    },
-    {
-      "title": "The Organic Chemistry Tutor",
-      "url": "https://www.youtube.com/@TheOrganicChemistryTutor",
-      "desc": "Awesome YouTube channel for math and science topics. Has a lot of videos on all sorts of topics. <b><font color=\"#ff1c1c\">Very comprehensive.</font></b>",
-      "img": null
-    }
-  ]
+  "cool_websites": []
 }
