@@ -58,5 +58,12 @@
     "body": "<b>Becoming a member is <font color=\"#21c700\">easy</font>!</b><br>- Apply the form and receive approval (almost always accepted)!<br>\n<b>Perks of being a Conception member:</b><div>- Being an early member of a <font color=\"#196df5\"><b>non profit organization<br></b></font>- Improve your public <font color=\"#f51919\"><b>speaking &amp; presentation</b></font> abilities<br>- Earn <b><font color=\"#19f533\">community service</font> </b>hours with ease!<br>- Help <font color=\"#f59a19\"><b>improve</b></font> students' math skills<br>- College application <font color=\"#dc19f5\" style=\"font-weight: bold;\">boost<br></font>- It's just simply <font color=\"#19e7f5\"><b>fun</b>!</font><b>\n<br></b></div>",
     "img": "https://raw.githubusercontent.com/Not-A-Robot-Really/Not-A-Robot-Really.github.io/main/images/1777332441188_friendc.jpg"
   },
-  "cool_websites": []
+  "cool_websites": [
+    {
+      "title": "Khan Academy",
+      "url": "https://www.khanacademy.org/",
+      "desc": "Website with <b><font color=\"#ff1c1c\">free</font></b> videos and practice problems for anything math related. Helpful for learning and practicing math!",
+      "img": null
+    }
+  ]
 }
