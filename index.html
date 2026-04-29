@@ -581,7 +581,7 @@ footer{ background:var(--bg-alt); padding:10rem 2rem; text-align:center; border-
 
 /* ─── HAMBURGER ACCORDION ─── */
 .hni-accordion { user-select: none; }
-.hamburger-sub-menu { padding-left: 0.5rem; border-left: 2px solid rgba(255,255,255,0.2); margin-left: 1rem; }
+.hamburger-sub-menu { padding-left: 0.5rem; border-left: 4px solid rgba(255,255,255,0.55); margin-left: 1rem; }
 .hamburger-sub-item { padding: 0.55rem 0.5rem; font-size: 0.8rem; }
 
 /* ─── RICH TEXT TOOLBAR ─── */
@@ -2111,7 +2111,8 @@ body.demo-active #action-journal       { top: 91px;  }   /* was 15px  + 76 */
 }
 .contact-admin-bar input[type="text"],
 .contact-admin-bar input[type="email"],
-.contact-admin-bar input[type="tel"] {
+.contact-admin-bar input[type="tel"],
+.contact-admin-bar input[type="url"] {
   width: 100%;
   box-sizing: border-box;
   border: 1.5px solid #ddd;
@@ -2122,6 +2123,28 @@ body.demo-active #action-journal       { top: 91px;  }   /* was 15px  + 76 */
   outline: none;
   transition: border-color 0.2s;
   margin-bottom: 0.9rem;
+}
+.contact-admin-bar .contact-field-group {
+  margin-bottom: 0.2rem;
+}
+.contact-admin-bar .contact-field-group-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #888;
+  margin: 0 0 5px 0;
+  display: block;
+}
+.contact-item-value a {
+  color: #1a2a4a;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.contact-item-value a:hover {
+  color: #3a6fd8;
+  text-decoration: underline;
 }
 .contact-admin-bar input:focus { border-color: #1a2a4a; }
 .contact-save-btn {
@@ -3325,6 +3348,29 @@ body.intro-fade-in > #drag-ghost {
           <p class="contact-item-value" id="contact-email-display"><span class="contact-placeholder-text">Not set yet</span></p>
         </div>
       </div>
+      <div class="contact-item">
+        <div class="contact-icon">
+          <!-- Instagram gradient icon -->
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="ig-grad" x1="0%" y1="100%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#f09433"/>
+                <stop offset="25%" stop-color="#e6683c"/>
+                <stop offset="50%" stop-color="#dc2743"/>
+                <stop offset="75%" stop-color="#cc2366"/>
+                <stop offset="100%" stop-color="#bc1888"/>
+              </linearGradient>
+            </defs>
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="url(#ig-grad)"/>
+            <circle cx="12" cy="12" r="4.2" fill="none" stroke="#fff" stroke-width="1.8"/>
+            <circle cx="17.2" cy="6.8" r="1.1" fill="#fff"/>
+          </svg>
+        </div>
+        <div>
+          <p class="contact-item-label">Instagram</p>
+          <p class="contact-item-value" id="contact-instagram-display"><span class="contact-placeholder-text">Not set yet</span></p>
+        </div>
+      </div>
     </div>
 
     <!-- Admin edit panel -->
@@ -3334,6 +3380,10 @@ body.intro-fade-in > #drag-ghost {
       <input type="tel" id="contact-edit-phone" placeholder="e.g. (555) 123-4567" />
       <label class="about-section-label">Email Address</label>
       <input type="email" id="contact-edit-email" placeholder="e.g. hello@conception.org" />
+      <label class="about-section-label">Instagram Username</label>
+      <input type="text" id="contact-edit-ig-name" placeholder="e.g. @conceptionfoundation" />
+      <label class="about-section-label">Instagram Link</label>
+      <input type="url" id="contact-edit-ig-url" placeholder="e.g. https://instagram.com/conceptionfoundation" />
       <button class="contact-save-btn" onclick="saveContact()">💾 Save</button>
     </div>
   </div>
@@ -4452,18 +4502,30 @@ function loadContactPage() {
     const subs = (_ghCache && _ghCache.page_subs) ? _ghCache.page_subs : {};
     const phoneEl = document.getElementById('contact-phone-display');
     const emailEl = document.getElementById('contact-email-display');
+    const igEl    = document.getElementById('contact-instagram-display');
     phoneEl.innerHTML = d.phone ? d.phone : '<span class="contact-placeholder-text">Not set yet</span>';
-    emailEl.innerHTML = d.email ? `<a href="mailto:${d.email}" style="color:#1a2a4a;text-decoration:none;">${d.email}</a>` : '<span class="contact-placeholder-text">Not set yet</span>';
+    emailEl.innerHTML = d.email ? `<a href="mailto:${d.email}">${d.email}</a>` : '<span class="contact-placeholder-text">Not set yet</span>';
+    if (d.igName && d.igUrl) {
+        igEl.innerHTML = `<a href="${d.igUrl}" target="_blank" rel="noopener noreferrer">${d.igName}</a>`;
+    } else if (d.igName) {
+        igEl.innerHTML = d.igName;
+    } else {
+        igEl.innerHTML = '<span class="contact-placeholder-text">Not set yet</span>';
+    }
     if (subs.contact) document.getElementById('contact-page-sub').textContent = subs.contact;
     if (isAdmin) {
         document.getElementById('contact-edit-phone').value = d.phone || '';
         document.getElementById('contact-edit-email').value = d.email || '';
+        document.getElementById('contact-edit-ig-name').value = d.igName || '';
+        document.getElementById('contact-edit-ig-url').value = d.igUrl || '';
     }
 }
 function saveContact() {
-    const phone = document.getElementById('contact-edit-phone').value.trim();
-    const email = document.getElementById('contact-edit-email').value.trim();
-    ghSet('contact', { phone, email }).then(() => { loadContactPage(); alert('Contact info saved!'); });
+    const phone  = document.getElementById('contact-edit-phone').value.trim();
+    const email  = document.getElementById('contact-edit-email').value.trim();
+    const igName = document.getElementById('contact-edit-ig-name').value.trim();
+    const igUrl  = document.getElementById('contact-edit-ig-url').value.trim();
+    ghSet('contact', { phone, email, igName, igUrl }).then(() => { loadContactPage(); alert('Contact info saved!'); });
 }
 
 // ─── ANNOUNCEMENTS (persistent via GitHub) ───
@@ -5666,5 +5728,5 @@ function deleteAnnouncement(index) {
 </script>
 </body>
 </html>
-index - 2026-04-28T213141.559.html
-Displaying index - 2026-04-28T213141.559.html.
+index - 2026-04-28T220034.677.html
+Displaying index - 2026-04-28T220034.677.html.
