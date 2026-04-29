@@ -70,7 +70,7 @@
     {
       "title": "MathTV",
       "url": "https://www.mathtv.com/",
-      "desc": "<span style=\"color: rgb(68, 68, 68); white-space-collapse: collapse;\">A website with free math tutorials and videos for&nbsp;</span><b style=\"white-space-collapse: collapse;\"><font style=\"\" color=\"#0045e6\">k-12 math.</font></b>",
+      "desc": "<span style=\"color: rgb(68, 68, 68); white-space-collapse: collapse;\">A website with free math tutorials and videos for&nbsp;</span><span style=\"white-space-collapse: collapse;\"><b style=\"color: rgb(0, 69, 230);\">k-12 math.&nbsp;</b></span><span style=\"color: rgb(68, 68, 68); white-space-collapse: collapse;\">Contains many education videos dedicated to teaching middle/high school math.</span>",
       "img": null,
       "theme": "navywhite"
     }
