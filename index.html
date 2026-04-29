@@ -1411,9 +1411,9 @@ body.coolwebsites-active #page-coolwebsites { display: block; }
 }
 .cw-card-title-link {
   font-family: 'DM Sans', sans-serif;
-  font-size: 1.05rem;
+  font-size: 1.25rem;
   font-weight: 800;
-  color: #3a6fd8;
+  color: #1a2a4a;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
@@ -1422,7 +1422,7 @@ body.coolwebsites-active #page-coolwebsites { display: block; }
   word-break: break-word;
   transition: color 0.2s;
 }
-.cw-card-title-link:hover { color: #1a4ba0; text-decoration: underline; }
+.cw-card-title-link:hover { color: #2d4e9a; text-decoration: underline; }
 .cw-card-title-link svg { flex-shrink: 0; }
 .cw-card-desc {
   font-family: 'DM Sans', sans-serif;
@@ -1435,9 +1435,99 @@ body.coolwebsites-active #page-coolwebsites { display: block; }
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #4D9EFF, #FF1C1C);
+  background: #1a2a4a;
   border-radius: 16px 16px 0 0;
 }
+
+/* ── Card colour themes ── */
+/* theme: white (default — no extra class needed) */
+.cw-card.theme-white {
+  background: #ffffff;
+  border-color: rgba(0,0,0,0.07);
+}
+.cw-card.theme-white .cw-card-accent        { background: #1a2a4a; }
+.cw-card.theme-white .cw-card-title-link     { color: #1a2a4a; }
+.cw-card.theme-white .cw-card-title-link:hover { color: #2d4e9a; }
+.cw-card.theme-white .cw-card-title-link svg { stroke: #1a2a4a; }
+.cw-card.theme-white .cw-card-desc          { color: #444; }
+
+/* theme: dark navy */
+.cw-card.theme-dark {
+  background: #1a2a4a;
+  border-color: rgba(255,255,255,0.08);
+  box-shadow: 0 4px 18px rgba(0,0,0,0.22);
+}
+.cw-card.theme-dark .cw-card-accent         { background: #ffffff; }
+.cw-card.theme-dark .cw-card-title-link     { color: #ffffff; }
+.cw-card.theme-dark .cw-card-title-link:hover { color: #aac4f0; text-decoration: underline; }
+.cw-card.theme-dark .cw-card-title-link svg { stroke: #ffffff; }
+.cw-card.theme-dark .cw-card-desc           { color: #c8d8f0; }
+.cw-card.theme-dark .cw-card-desc a         { color: #7db4ff; }
+.cw-card.theme-dark:hover { box-shadow: 0 12px 32px rgba(0,0,0,0.38); }
+
+/* theme: medium blue (#3a6fd8) */
+.cw-card.theme-blue {
+  background: #3a6fd8;
+  border-color: rgba(255,255,255,0.15);
+  box-shadow: 0 4px 18px rgba(58,111,216,0.28);
+}
+.cw-card.theme-blue .cw-card-accent         { background: #ffffff; }
+.cw-card.theme-blue .cw-card-title-link     { color: #ffffff; }
+.cw-card.theme-blue .cw-card-title-link:hover { color: #d0e4ff; text-decoration: underline; }
+.cw-card.theme-blue .cw-card-title-link svg { stroke: #ffffff; }
+.cw-card.theme-blue .cw-card-desc           { color: #ddeaff; }
+.cw-card.theme-blue .cw-card-desc a         { color: #ffffff; }
+.cw-card.theme-blue:hover { box-shadow: 0 12px 32px rgba(58,111,216,0.42); }
+
+/* theme: navy-white (soft light blue) */
+.cw-card.theme-navywhite {
+  background: #eef3ff;
+  border-color: #c4d4f0;
+}
+.cw-card.theme-navywhite .cw-card-accent        { background: #1a2a4a; }
+.cw-card.theme-navywhite .cw-card-title-link    { color: #1a2a4a; }
+.cw-card.theme-navywhite .cw-card-title-link:hover { color: #3a6fd8; }
+.cw-card.theme-navywhite .cw-card-title-link svg { stroke: #1a2a4a; }
+.cw-card.theme-navywhite .cw-card-desc          { color: #2e4070; }
+.cw-card.theme-navywhite .cw-card-desc a        { color: #3a6fd8; }
+
+/* Theme picker in admin forms */
+.cw-theme-picker {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+.cw-theme-swatch {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #333;
+  user-select: none;
+}
+.cw-theme-swatch input[type="radio"] { display: none; }
+.cw-theme-swatch-dot {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2.5px solid transparent;
+  transition: border-color 0.15s, transform 0.15s;
+  flex-shrink: 0;
+}
+.cw-theme-swatch input[type="radio"]:checked + .cw-theme-swatch-dot {
+  border-color: #1a2a4a;
+  transform: scale(1.18);
+}
+.cw-theme-swatch-dot.dot-white      { background: #ffffff; border-color: #c0c8d8; }
+.cw-theme-swatch-dot.dot-dark       { background: #1a2a4a; }
+.cw-theme-swatch-dot.dot-blue       { background: #3a6fd8; }
+.cw-theme-swatch-dot.dot-navywhite  { background: #eef3ff; border-color: #a0b8e0; }
+.cw-theme-swatch input[type="radio"]:checked + .cw-theme-swatch-dot.dot-white     { border-color: #1a2a4a; }
+.cw-theme-swatch input[type="radio"]:checked + .cw-theme-swatch-dot.dot-navywhite { border-color: #1a2a4a; }
 .cw-card-admin-btns {
   position: absolute;
   top: 10px; right: 10px;
@@ -3419,6 +3509,31 @@ body.intro-fade-in > #drag-ghost {
         <label>Image (optional)</label>
         <input type="file" id="cw-img-input" accept="image/*" />
       </div>
+      <div class="cw-form-field">
+        <label>Card Colour Theme</label>
+        <div class="cw-theme-picker">
+          <label class="cw-theme-swatch">
+            <input type="radio" name="cw-theme" value="white" checked />
+            <span class="cw-theme-swatch-dot dot-white"></span>
+            White
+          </label>
+          <label class="cw-theme-swatch">
+            <input type="radio" name="cw-theme" value="dark" />
+            <span class="cw-theme-swatch-dot dot-dark"></span>
+            Dark Navy
+          </label>
+          <label class="cw-theme-swatch">
+            <input type="radio" name="cw-theme" value="blue" />
+            <span class="cw-theme-swatch-dot dot-blue"></span>
+            Blue
+          </label>
+          <label class="cw-theme-swatch">
+            <input type="radio" name="cw-theme" value="navywhite" />
+            <span class="cw-theme-swatch-dot dot-navywhite"></span>
+            Navy &amp; White
+          </label>
+        </div>
+      </div>
       <p id="cw-add-error" class="cw-error"></p>
       <div style="display:flex; gap:0.8rem; flex-wrap:wrap; margin-top:0.5rem;">
         <button class="cw-post-btn" onclick="addCwEntry()">+ Add Entry</button>
@@ -3464,6 +3579,31 @@ body.intro-fade-in > #drag-ghost {
     <label>Image (leave blank to keep current)</label>
     <input type="file" id="ecw-img" accept="image/*" />
     <p id="ecw-img-current" style="font-size:0.8rem; color:#888; margin:4px 0 0 0;"></p>
+  </div>
+  <div class="cw-form-field">
+    <label>Card Colour Theme</label>
+    <div class="cw-theme-picker">
+      <label class="cw-theme-swatch">
+        <input type="radio" name="ecw-theme" value="white" checked />
+        <span class="cw-theme-swatch-dot dot-white"></span>
+        White
+      </label>
+      <label class="cw-theme-swatch">
+        <input type="radio" name="ecw-theme" value="dark" />
+        <span class="cw-theme-swatch-dot dot-dark"></span>
+        Dark Navy
+      </label>
+      <label class="cw-theme-swatch">
+        <input type="radio" name="ecw-theme" value="blue" />
+        <span class="cw-theme-swatch-dot dot-blue"></span>
+        Blue
+      </label>
+      <label class="cw-theme-swatch">
+        <input type="radio" name="ecw-theme" value="navywhite" />
+        <span class="cw-theme-swatch-dot dot-navywhite"></span>
+        Navy &amp; White
+      </label>
+    </div>
   </div>
   <p id="ecw-error" class="cw-error"></p>
   <div style="display:flex; gap:0.8rem; flex-wrap:wrap; margin-top:1rem;">
@@ -4337,6 +4477,11 @@ function loadAnnouncementsPage() {
     const isAdmin = window._conceptionAdmin === true;
     const panel = document.getElementById('ann-admin-panel');
     if (panel) panel.style.display = isAdmin ? 'block' : 'none';
+    // Load subtitle from page_subs
+    const subs = (_ghCache && _ghCache.page_subs) ? _ghCache.page_subs : {};
+    if (subs.announcements && document.getElementById('ann-page-sub')) {
+        document.getElementById('ann-page-sub').textContent = subs.announcements;
+    }
     renderAnnouncements();
 }
 
@@ -5164,7 +5309,9 @@ function deleteAnnouncement(index) {
                 'tmf-desc': 'rt-tmf-color',
                 'eme-desc': 'rt-eme-color',
                 'ann-editor': 'rt-ann-color',
-                'member-edit-body': 'rt-member-color'
+                'member-edit-body': 'rt-member-color',
+                'cw-desc-editor': 'rt-cw-color',
+                'ecw-desc': 'rt-ecw-color'
             };
             if (type === 'bold') {
                 document.execCommand('bold', false, null);
@@ -5236,6 +5383,7 @@ function deleteAnnouncement(index) {
             if (subs.contact && document.getElementById('contact-page-sub')) document.getElementById('contact-page-sub').textContent = subs.contact;
             if (subs.member  && document.getElementById('member-page-sub'))  document.getElementById('member-page-sub').textContent  = subs.member;
             if (subs.coolwebsites && document.getElementById('coolwebsites-page-sub')) document.getElementById('coolwebsites-page-sub').textContent = subs.coolwebsites;
+            if (subs.announcements && document.getElementById('ann-page-sub')) document.getElementById('ann-page-sub').textContent = subs.announcements;
         });
 
         // ─── HAMBURGER MENU ───
@@ -5360,15 +5508,6 @@ function deleteAnnouncement(index) {
             if (subs.coolwebsites) document.getElementById('coolwebsites-page-sub').textContent = subs.coolwebsites;
             renderCwEntries();
         }
-        // Accent colors for variety (cycles through)
-        const CW_ACCENTS = [
-            'linear-gradient(90deg,#4D9EFF,#001dfa)',
-            'linear-gradient(90deg,#FF1C1C,#f0a400)',
-            'linear-gradient(90deg,#b000f0,#4D9EFF)',
-            'linear-gradient(90deg,#27ae60,#4D9EFF)',
-            'linear-gradient(90deg,#f0a400,#FF1C1C)',
-            'linear-gradient(90deg,#001dfa,#b000f0)',
-        ];
         function renderCwEntries() {
             const grid = document.getElementById('cw-entries-grid');
             const emptyMsg = document.getElementById('cw-empty-msg');
@@ -5379,8 +5518,8 @@ function deleteAnnouncement(index) {
                 return;
             }
             grid.innerHTML = entries.map((entry, i) => `
-              <div class="cw-card" onclick="window.open('${entry.url.replace(/'/g,"\\'")}','_blank')" title="Visit ${entry.title}">
-                <div class="cw-card-accent" style="background:${CW_ACCENTS[i % CW_ACCENTS.length]};"></div>
+              <div class="cw-card theme-${entry.theme || 'white'}" onclick="window.open('${entry.url.replace(/'/g,"\\'")}','_blank')" title="Visit ${entry.title}">
+                <div class="cw-card-accent"></div>
                 ${isAdmin ? `
                   <div class="cw-card-admin-btns" onclick="event.stopPropagation()">
                     <button class="cw-card-admin-btn edit-btn" onclick="openEditCw(${i})" title="Edit">✏️</button>
@@ -5405,11 +5544,13 @@ function deleteAnnouncement(index) {
             saveCwEntries(entries).then(() => renderCwEntries());
         }
         function addCwEntry() {
-            const title = document.getElementById('cw-title-input').value.trim();
-            const url   = document.getElementById('cw-url-input').value.trim();
-            const desc  = document.getElementById('cw-desc-editor').innerHTML.trim();
-            const file  = document.getElementById('cw-img-input').files[0];
-            const errEl = document.getElementById('cw-add-error');
+            const title  = document.getElementById('cw-title-input').value.trim();
+            const url    = document.getElementById('cw-url-input').value.trim();
+            const desc   = document.getElementById('cw-desc-editor').innerHTML.trim();
+            const file   = document.getElementById('cw-img-input').files[0];
+            const errEl  = document.getElementById('cw-add-error');
+            const themeEl = document.querySelector('input[name="cw-theme"]:checked');
+            const theme  = themeEl ? themeEl.value : 'white';
             if (!title || !url || !desc || desc === '<br>') {
                 errEl.textContent = 'Title, URL, and description are required.';
                 errEl.style.display = 'block';
@@ -5423,13 +5564,15 @@ function deleteAnnouncement(index) {
             errEl.style.display = 'none';
             function doSave(imgUrl) {
                 const entries = getCwEntries();
-                entries.push({ title, url, desc, img: imgUrl || null });
+                entries.push({ title, url, desc, img: imgUrl || null, theme });
                 saveCwEntries(entries).then(() => {
-                    // Clear form
                     document.getElementById('cw-title-input').value = '';
                     document.getElementById('cw-url-input').value = '';
                     document.getElementById('cw-desc-editor').innerHTML = '';
                     document.getElementById('cw-img-input').value = '';
+                    // Reset theme picker to white
+                    const defaultTheme = document.querySelector('input[name="cw-theme"][value="white"]');
+                    if (defaultTheme) defaultTheme.checked = true;
                     renderCwEntries();
                 });
             }
@@ -5455,6 +5598,10 @@ function deleteAnnouncement(index) {
             document.getElementById('ecw-img-current').textContent = e.img ? 'Image set. Upload to replace.' : 'No image set.';
             document.getElementById('ecw-img').value = '';
             document.getElementById('ecw-error').style.display = 'none';
+            // Pre-select saved theme (default to white)
+            const savedTheme = e.theme || 'white';
+            const themeRadio = document.querySelector(`input[name="ecw-theme"][value="${savedTheme}"]`);
+            if (themeRadio) themeRadio.checked = true;
             document.getElementById('edit-cw-overlay').classList.add('open');
             document.getElementById('edit-cw-modal').classList.add('open');
         }
@@ -5464,11 +5611,13 @@ function deleteAnnouncement(index) {
             _editingCwIndex = -1;
         }
         function saveEditCw() {
-            const title = document.getElementById('ecw-title').value.trim();
-            const url   = document.getElementById('ecw-url').value.trim();
-            const desc  = document.getElementById('ecw-desc').innerHTML.trim();
-            const file  = document.getElementById('ecw-img').files[0];
-            const errEl = document.getElementById('ecw-error');
+            const title   = document.getElementById('ecw-title').value.trim();
+            const url     = document.getElementById('ecw-url').value.trim();
+            const desc    = document.getElementById('ecw-desc').innerHTML.trim();
+            const file    = document.getElementById('ecw-img').files[0];
+            const errEl   = document.getElementById('ecw-error');
+            const themeEl = document.querySelector('input[name="ecw-theme"]:checked');
+            const theme   = themeEl ? themeEl.value : 'white';
             if (!title || !url || !desc || desc === '<br>') {
                 errEl.textContent = 'Title, URL, and description are required.';
                 errEl.style.display = 'block';
@@ -5478,7 +5627,7 @@ function deleteAnnouncement(index) {
             const entries = getCwEntries();
             const existing = entries[_editingCwIndex];
             function doSave(imgUrl) {
-                entries[_editingCwIndex] = { title, url, desc, img: imgUrl };
+                entries[_editingCwIndex] = { title, url, desc, img: imgUrl, theme };
                 saveCwEntries(entries).then(() => { closeEditCw(); renderCwEntries(); });
             }
             if (file) {
@@ -5517,3 +5666,5 @@ function deleteAnnouncement(index) {
 </script>
 </body>
 </html>
+index - 2026-04-28T213141.559.html
+Displaying index - 2026-04-28T213141.559.html.
