@@ -87,6 +87,13 @@
       "desc": "<span style=\"color: rgb(68, 68, 68); white-space-collapse: collapse;\">Fun yet educational math</span><span style=\"white-space-collapse: collapse;\"><font color=\"#e66700\">&nbsp;</font></span><b style=\"white-space-collapse: collapse;\"><font color=\"#e66700\">video game</font><font color=\"#e69d00\">&nbsp;</font></b><span style=\"color: rgb(68, 68, 68); white-space-collapse: collapse;\">for kids.&nbsp;</span>",
       "img": null,
       "theme": "navywhite"
+    },
+    {
+      "title": "Mathantics",
+      "url": "https://www.youtube.com/@mathantics/videos",
+      "desc": "<span style=\"color: rgb(68, 68, 68); white-space-collapse: collapse;\">One of the best</span><font color=\"#ff1c1c\" style=\"white-space-collapse: collapse;\"><b>&nbsp;YouTube channels&nbsp;</b></font><span style=\"color: rgb(68, 68, 68); white-space-collapse: collapse;\">for learning new math topics. Easy to learn and very intuitive.&nbsp;<br><br><b>Staff recommendation ⭐</b></span>",
+      "img": null,
+      "theme": "white"
     }
   ]
 }
