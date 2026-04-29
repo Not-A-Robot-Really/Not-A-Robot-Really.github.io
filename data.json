@@ -76,6 +76,12 @@
       "url": "https://www.mathtv.com/",
       "desc": "A website with free math tutorials and videos for <b><font color=\"#ff1c1c\">k-12 math.</font></b>",
       "img": null
+    },
+    {
+      "title": "Mathantics",
+      "url": "https://www.youtube.com/@mathantics/videos",
+      "desc": "One of the best<font color=\"#ff1c1c\"><b> YouTube channels </b></font>for learning new math topics. Easy to learn and very intuitive.",
+      "img": null
     }
   ]
 }
