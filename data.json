@@ -96,6 +96,13 @@
       "desc": "<span style=\"color: rgb(68, 68, 68); white-space-collapse: collapse;\">One of the best</span><font color=\"#ff1c1c\" style=\"white-space-collapse: collapse;\"><b>&nbsp;YouTube channels&nbsp;</b></font><span style=\"color: rgb(68, 68, 68); white-space-collapse: collapse;\">for learning new math topics. Easy to learn and very intuitive.&nbsp;<br><br><b>Staff recommendation ⭐</b></span>",
       "img": null,
       "theme": "white"
+    },
+    {
+      "title": "3 Blue 1 Brown",
+      "url": "https://www.3blue1brown.com/",
+      "desc": "<font face=\"Google Sans, Roboto, sans-serif\"><span style=\"font-size: 16px; white-space-collapse: collapse;\"><font color=\"#0a0a0a\">&nbsp;A popular YouTube channel created that focuses on teaching higher-level mathematics through </font><font color=\"#1a34ff\"><b>visual animations</b></font><font color=\"#0a0a0a\"> just like us! Check out their YouTube or website for fun &amp; creative demos. Good for an extra challenge.&nbsp;</font></span></font>",
+      "img": null,
+      "theme": "navywhite"
     }
   ]
 }
