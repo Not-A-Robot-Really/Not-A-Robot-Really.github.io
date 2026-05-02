@@ -1300,9 +1300,12 @@ body.practice-mode #cg-practice-actions { display: flex; }
 #page-contact { display: none;  }
 #page-announcements { display: none; }
 #page-member  { display: none;  }
+#page-test-demo { display: none; }
 #page-coolwebsites { display: none; }
 body.demo-active    #page-main    { display: none; }
 body.demo-active    #page-demo    { display: block; }
+body.test-demo-active #page-main      { display: none; }
+body.test-demo-active #page-test-demo { display: block; }
 body.team-active    #page-main    { display: none; }
 body.team-active    #page-team    { display: block; }
 body.about-active   #page-main    { display: none; }
@@ -1317,10 +1320,25 @@ body.coolwebsites-active #page-main         { display: none; }
 body.coolwebsites-active #page-coolwebsites { display: block; }
 
 /* ─── COOL WEBSITES PAGE ─── */
+#page-test-demo,
 #page-coolwebsites {
   min-height: 100vh;
   padding-top: 100px;
   background: #f4f6fb;
+}
+
+#test-demo-shell:fullscreen {
+  width: 100vw !important;
+  max-width: none !important;
+  height: 100vh;
+  padding: 24px;
+  background: #f4f6fb;
+}
+
+#test-demo-shell:fullscreen #test-demo-sketch {
+  width: 100% !important;
+  max-width: none !important;
+  min-height: calc(100vh - 120px);
 }
 .cw-page-wrap {
   max-width: 1100px;
@@ -2536,6 +2554,7 @@ body.intro-active > nav,
 body.intro-active > #math-fixed-layer,
 body.intro-active > #page-main,
 body.intro-active > #page-demo,
+body.intro-active > #page-test-demo,
 body.intro-active > #hamburger-overlay,
 body.intro-active > #hamburger-drawer,
 body.intro-active > #drag-ghost {
@@ -2560,6 +2579,7 @@ body.intro-fade-in > nav,
 body.intro-fade-in > #math-fixed-layer,
 body.intro-fade-in > #page-main,
 body.intro-fade-in > #page-demo,
+body.intro-fade-in > #page-test-demo,
 body.intro-fade-in > #hamburger-overlay,
 body.intro-fade-in > #hamburger-drawer,
 body.intro-fade-in > #drag-ghost {
@@ -3069,6 +3089,15 @@ body.intro-fade-in > #drag-ghost {
   <p style="font-weight: 600; color: var(--text-muted); font-size: 1.1rem;">Hands-on math education for the <span class="phrase-bold">next generation of thinkers</span>.</p>
   <p class="footer-copy">© 2025 Conception · Research provided via July 2025 RAND Study & NIH 2018</p>
 </footer>
+</div><div id="page-test-demo">
+  <div class="cw-page-wrap" style="text-align:center; max-width:760px;">
+    <h1 class="cw-page-title">Test Demo Deprecated</h1>
+    <p class="cw-page-sub">The p5.js prototype has been deprecated and is no longer maintained.</p>
+    <div style="background:#ffffff; border-radius:18px; box-shadow:0 12px 32px rgba(0,0,0,0.10); padding:32px 28px; margin-top:1.5rem; font-family:'DM Sans',sans-serif; color:#334155;">
+      <p style="font-size:1.05rem; line-height:1.7; margin:0 0 1rem 0;">Use the main balance-scale demo for the current supported experience.</p>
+      <button onclick="showPage('demo')" style="background:#1a2a4a; color:#fff; border:none; border-radius:999px; padding:12px 20px; font-family:'DM Sans',sans-serif; font-weight:700; font-size:0.95rem; cursor:pointer;">Open Main Demo</button>
+    </div>
+  </div>
 </div><div id="page-team">
   <div class="team-page-wrap">
     <h1 class="team-page-title">Our Team</h1>
@@ -4014,11 +4043,357 @@ async function ghUploadImage(file) {
 // PAGE SWITCHING
 // ═══════════════════════════════════════════════════
 
+function buildTestDemoState() {
+  return {
+    xValue: 5,
+    left: { apples: 2, candies: 3 },
+    right: { apples: 1, candies: 8 }
+  };
+}
+
+function getTestDemoState() {
+  if (!window._testDemoState) {
+    window._testDemoState = buildTestDemoState();
+  }
+  return window._testDemoState;
+}
+
+function formatTestDemoSide(side) {
+  const parts = [];
+  if (side.apples > 0) {
+    parts.push(side.apples === 1 ? 'x' : side.apples + 'x');
+  }
+  if (side.candies > 0) {
+    parts.push(String(side.candies));
+  }
+  return parts.length ? parts.join(' + ') : '0';
+}
+
+function computeTestDemoTotal(side) {
+  const state = getTestDemoState();
+  return side.apples * state.xValue + side.candies;
+}
+
+function syncTestDemoControls() {
+  const state = getTestDemoState();
+  const equationEl = document.getElementById('test-demo-equation');
+  const rangeEl = document.getElementById('test-demo-x');
+  const labelEl = document.getElementById('test-demo-x-label');
+
+  if (equationEl) {
+    equationEl.textContent = formatTestDemoSide(state.left) + ' = ' + formatTestDemoSide(state.right);
+  }
+  if (rangeEl) {
+    rangeEl.value = String(state.xValue);
+  }
+  if (labelEl) {
+    labelEl.textContent = String(state.xValue);
+  }
+}
+
+function setTestDemoXValue(value) {
+  const state = getTestDemoState();
+  state.xValue = Math.max(1, Math.min(9, parseInt(value, 10) || 1));
+  syncTestDemoControls();
+}
+
+function adjustTestDemo(sideName, itemName, delta) {
+  const state = getTestDemoState();
+  const side = state[sideName];
+  if (!side || !Object.prototype.hasOwnProperty.call(side, itemName)) {
+    return;
+  }
+  side[itemName] = Math.max(0, Math.min(12, side[itemName] + delta));
+  syncTestDemoControls();
+}
+
+function setTestDemoPreset(name) {
+  const state = getTestDemoState();
+  if (name === 'balanced') {
+    state.xValue = 4;
+    state.left = { apples: 1, candies: 4 };
+    state.right = { apples: 1, candies: 4 };
+  } else if (name === 'challenge') {
+    state.xValue = 3;
+    state.left = { apples: 1, candies: 4 };
+    state.right = { apples: 2, candies: 1 };
+  } else {
+    state.xValue = 5;
+    state.left = { apples: 2, candies: 3 };
+    state.right = { apples: 1, candies: 8 };
+  }
+  syncTestDemoControls();
+}
+
+function resizeTestDemoSketch() {
+  if (!window._testDemoP5) {
+    return;
+  }
+
+  const shell = document.getElementById('test-demo-shell');
+  const host = document.getElementById('test-demo-sketch');
+  if (!host || !shell) {
+    return;
+  }
+
+  const fullscreenEl = document.fullscreenElement;
+  const shellPadding = fullscreenEl && fullscreenEl.id === 'test-demo-shell' ? 48 : 0;
+  const shellWidth = Math.max(320, shell.clientWidth - shellPadding);
+  const maxWidth = fullscreenEl && fullscreenEl.id === 'test-demo-shell' ? shellWidth : Math.min(640, shellWidth);
+  const width = Math.max(320, maxWidth);
+  window._testDemoP5.resizeCanvas(width, Math.round(width * 0.625));
+}
+
+function syncTestDemoFullscreenButton() {
+  const button = document.getElementById('test-demo-fullscreen-btn');
+  if (!button) {
+    return;
+  }
+
+  button.textContent = document.fullscreenElement && document.fullscreenElement.id === 'test-demo-shell'
+    ? 'Exit Fullscreen'
+    : 'Fullscreen';
+}
+
+async function toggleTestDemoFullscreen() {
+  const shell = document.getElementById('test-demo-shell');
+  if (!shell) {
+    return;
+  }
+
+  if (document.fullscreenElement === shell) {
+    await document.exitFullscreen();
+  } else {
+    await shell.requestFullscreen();
+  }
+}
+
+document.addEventListener('fullscreenchange', function() {
+  syncTestDemoFullscreenButton();
+  resizeTestDemoSketch();
+});
+
+window.addEventListener('resize', resizeTestDemoSketch, { passive: true });
+
+function initTestDemoSketch() {
+  const host = document.getElementById('test-demo-sketch');
+  if (!host || host.dataset.ready === 'true' || typeof p5 === 'undefined') {
+    return;
+  }
+
+  host.dataset.ready = 'true';
+  syncTestDemoControls();
+  window._testDemoP5 = new p5(function(sketch) {
+    const colors = {
+      bg: sketch.color(245, 248, 255),
+      grid: sketch.color(228, 234, 247),
+      navy: sketch.color(26, 42, 74),
+      text: sketch.color(71, 85, 105),
+      apple: sketch.color(231, 76, 60),
+      appleDark: sketch.color(185, 28, 28),
+      leaf: sketch.color(46, 125, 50),
+      candy: sketch.color(255, 90, 165),
+      candyLight: sketch.color(255, 205, 227),
+      beam: sketch.color(71, 85, 105),
+      stand: sketch.color(148, 163, 184),
+      pan: sketch.color(255, 255, 255),
+      success: sketch.color(39, 174, 96),
+      warning: sketch.color(240, 164, 0)
+    };
+
+    function canvasSize() {
+        const shell = document.getElementById('test-demo-shell');
+        if (!shell) {
+          return 640;
+        }
+        const fullscreenEl = document.fullscreenElement;
+        const shellPadding = fullscreenEl && fullscreenEl.id === 'test-demo-shell' ? 48 : 0;
+        const shellWidth = Math.max(320, shell.clientWidth - shellPadding);
+        return fullscreenEl && fullscreenEl.id === 'test-demo-shell'
+          ? shellWidth
+          : Math.min(640, shellWidth);
+    }
+
+    function drawApple(x, y, size) {
+      sketch.push();
+      sketch.translate(x, y);
+      sketch.noStroke();
+      sketch.fill(colors.apple);
+      sketch.ellipse(-size * 0.16, 0, size * 0.7, size * 0.72);
+      sketch.ellipse(size * 0.16, 0, size * 0.7, size * 0.72);
+      sketch.fill(colors.appleDark);
+      sketch.rect(-size * 0.05, -size * 0.52, size * 0.1, size * 0.24, size * 0.05);
+      sketch.fill(colors.leaf);
+      sketch.ellipse(size * 0.2, -size * 0.42, size * 0.32, size * 0.16);
+      sketch.pop();
+    }
+
+    function drawCandy(x, y, size) {
+      sketch.push();
+      sketch.translate(x, y);
+      sketch.noStroke();
+      sketch.fill(colors.candy);
+      sketch.rectMode(sketch.CENTER);
+      sketch.rect(0, 0, size * 0.72, size * 0.42, size * 0.2);
+      sketch.fill(colors.candyLight);
+      sketch.triangle(-size * 0.62, 0, -size * 0.4, -size * 0.22, -size * 0.4, size * 0.22);
+      sketch.triangle(size * 0.62, 0, size * 0.4, -size * 0.22, size * 0.4, size * 0.22);
+      sketch.stroke(255, 255, 255, 120);
+      sketch.line(-size * 0.15, -size * 0.12, size * 0.2, size * 0.12);
+      sketch.pop();
+    }
+
+    function drawItems(side, anchorX, anchorY, itemSize) {
+      const items = [];
+      let index = 0;
+      for (index = 0; index < side.apples; index += 1) {
+        items.push('apple');
+      }
+      for (index = 0; index < side.candies; index += 1) {
+        items.push('candy');
+      }
+
+      const cols = 4;
+      items.forEach(function(item, itemIndex) {
+        const col = itemIndex % cols;
+        const row = Math.floor(itemIndex / cols);
+        const x = anchorX + (col - 1.5) * itemSize * 0.96;
+        const y = anchorY - row * itemSize * 0.78;
+        if (item === 'apple') {
+          drawApple(x, y, itemSize);
+        } else {
+          drawCandy(x, y, itemSize);
+        }
+      });
+    }
+
+    function drawStatusPill(label, fillColor, x, y) {
+      sketch.push();
+      sketch.rectMode(sketch.CENTER);
+      sketch.noStroke();
+      sketch.fill(fillColor);
+      sketch.rect(x, y, 138, 36, 18);
+      sketch.fill(255);
+      sketch.textAlign(sketch.CENTER, sketch.CENTER);
+      sketch.textSize(14);
+      sketch.textStyle(sketch.BOLD);
+      sketch.text(label, x, y + 1);
+      sketch.pop();
+    }
+
+    sketch.setup = function() {
+      const size = canvasSize();
+      const canvas = sketch.createCanvas(size, Math.round(size * 0.625));
+      canvas.parent(host);
+    };
+
+    sketch.windowResized = function() {
+      resizeTestDemoSketch();
+    };
+
+    sketch.draw = function() {
+      const state = getTestDemoState();
+      const leftTotal = computeTestDemoTotal(state.left);
+      const rightTotal = computeTestDemoTotal(state.right);
+      const diff = rightTotal - leftTotal;
+      const tilt = sketch.constrain(diff * 0.018, -0.24, 0.24);
+      const centerX = sketch.width / 2;
+      const beamY = sketch.height * 0.45;
+      const beamHalf = sketch.width * 0.28;
+      const itemSize = sketch.width < 420 ? 24 : 30.4;
+      const panWidth = sketch.width < 420 ? 164 : 188;
+
+      sketch.background(colors.bg);
+
+      for (let row = 0; row < sketch.height; row += 28) {
+        sketch.stroke(colors.grid);
+        sketch.line(0, row, sketch.width, row);
+      }
+
+      sketch.noStroke();
+      sketch.fill(colors.navy);
+      sketch.textAlign(sketch.CENTER, sketch.CENTER);
+      sketch.textSize(sketch.width < 420 ? 19 : 24);
+      sketch.text('p5 Algebra Scale', centerX, 34);
+
+      sketch.push();
+      sketch.rectMode(sketch.CENTER);
+      sketch.fill(255);
+      sketch.stroke(colors.grid);
+      sketch.strokeWeight(2);
+      sketch.rect(centerX, 72, Math.min(320, sketch.width - 36), 46, 23);
+      sketch.noStroke();
+      sketch.fill(colors.text);
+      sketch.textSize(18);
+      sketch.text(formatTestDemoSide(state.left) + ' = ' + formatTestDemoSide(state.right), centerX, 72);
+      sketch.pop();
+
+      if (Math.abs(diff) < 0.001) {
+        drawStatusPill('Balanced', colors.success, centerX, 116);
+      } else if (leftTotal > rightTotal) {
+        drawStatusPill('Left heavier', colors.warning, centerX, 116);
+      } else {
+        drawStatusPill('Right heavier', colors.warning, centerX, 116);
+      }
+
+      sketch.stroke(colors.stand);
+      sketch.strokeWeight(14);
+      sketch.line(centerX, beamY + 12, centerX, sketch.height * 0.76);
+      sketch.line(centerX - 64, sketch.height * 0.82, centerX + 64, sketch.height * 0.82);
+      sketch.noStroke();
+      sketch.fill(colors.stand);
+      sketch.circle(centerX, beamY + 4, 18);
+
+      const leftX = centerX - Math.cos(tilt) * beamHalf;
+      const leftY = beamY - Math.sin(tilt) * beamHalf;
+      const rightX = centerX + Math.cos(tilt) * beamHalf;
+      const rightY = beamY + Math.sin(tilt) * beamHalf;
+
+      sketch.stroke(colors.beam);
+      sketch.strokeWeight(12);
+      sketch.line(leftX, leftY, rightX, rightY);
+
+      sketch.stroke(colors.stand);
+      sketch.strokeWeight(4);
+      sketch.line(leftX, leftY, leftX, leftY + 48);
+      sketch.line(rightX, rightY, rightX, rightY + 48);
+
+      sketch.noStroke();
+      sketch.fill(colors.pan);
+      sketch.stroke(colors.beam);
+      sketch.strokeWeight(3);
+      sketch.ellipse(leftX, leftY + 60, panWidth, 22);
+      sketch.ellipse(rightX, rightY + 60, panWidth, 22);
+
+      drawItems(state.left, leftX, leftY + 34, itemSize);
+      drawItems(state.right, rightX, rightY + 34, itemSize);
+
+      sketch.noStroke();
+      sketch.fill(colors.text);
+      sketch.textSize(14);
+      sketch.textStyle(sketch.BOLD);
+      sketch.text('Left total: ' + leftTotal, leftX, leftY + 102);
+      sketch.text('Right total: ' + rightTotal, rightX, rightY + 102);
+
+      sketch.textStyle(sketch.NORMAL);
+      sketch.fill(colors.navy);
+      sketch.text('APPLE = x   CANDY = 1', centerX, sketch.height - 28);
+    };
+  }, host);
+
+  syncTestDemoFullscreenButton();
+}
+
 function showPage(page) {
-    document.body.classList.remove('demo-active','team-active','about-active','contact-active','announcements-active','member-active','coolwebsites-active');
+  document.body.classList.remove('demo-active','test-demo-active','team-active','about-active','contact-active','announcements-active','member-active','coolwebsites-active');
     window.scrollTo(0, 0);
     if (page === 'demo') {
         document.body.classList.add('demo-active');
+  } else if (page === 'test-demo') {
+    document.body.classList.add('test-demo-active');
+    syncTestDemoControls();
+    initTestDemoSketch();
+    resizeTestDemoSketch();
     } else if (page === 'team') {
         document.body.classList.add('team-active');
         renderTeamMembers();
